@@ -1,0 +1,12 @@
+/* 
+  Localizable.strings
+  FriendBNB
+
+  Created by Anders Tai on 2023-10-29.
+  
+*/
+
+
+"Login.UsernameField.Title" = "Username";
+"Login.PasswordField.Title" = "Password";
+"Login.LoginButton.Title" = "Login";
