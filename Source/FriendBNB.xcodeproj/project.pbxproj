@@ -189,6 +189,7 @@
 				565198392AA7DCF200866F0B /* Frameworks */,
 				5651983A2AA7DCF200866F0B /* Resources */,
 				19F3D67DDDB123131DE5F0F5 /* [CP] Embed Pods Frameworks */,
+				56E24E782AEE3620005393C7 /* SwiftLint */,
 			);
 			buildRules = (
 			);
@@ -347,6 +348,25 @@
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-FriendBNB/Pods-FriendBNB-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
+		};
+		56E24E782AEE3620005393C7 /* SwiftLint */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = SwiftLint;
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/SwiftLint/swiftlint\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 

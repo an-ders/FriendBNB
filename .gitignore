@@ -1,3 +1,6 @@
 Source/FriendBNB.xcworkspace/xcuserdata/
 Source/Pods/
 Source/Podfile.lock
+Source/FriendBNB/GoogleService-Info.plist
+.DS_Store
+../.DS_Store

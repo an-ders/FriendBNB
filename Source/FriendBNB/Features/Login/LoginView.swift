@@ -16,7 +16,7 @@ struct LoginView: View {
             Spacer()
             Text("FriendBNB")
             Spacer()
-            TextField("Login.UsernameField.Title".localized, text: $viewModel.username)
+            TextField("Login.UsernameField.Title", text: $viewModel.username)
                 .autocapitalization(.none)
                 .disableAutocorrection(true)
             Divider()
@@ -26,14 +26,13 @@ struct LoginView: View {
             
             Button(action: {
                 viewModel.login()
-            }) {
+            }, label: {
                 Text("Sign In")
-            }
+            })
             Spacer()
         }
         .padding()
     }
-    
     
 }
 
@@ -43,7 +42,8 @@ extension LoginView {
         @Published var password = ""
         
         func login() {
-            Auth.auth().signIn(withEmail: self.username, password: self.password) { (result, error) in
+            Auth.auth().signIn(withEmail: self.username,
+                               password: self.password) { (result, error) in
                 if error != nil {
                     print(error?.localizedDescription ?? "")
                 } else {
