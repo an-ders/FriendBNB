@@ -15,31 +15,34 @@ struct LoginView: View {
         VStack {
             Spacer()
             Text("FriendBNB")
+                .font(.system(size: 36, weight: .bold))
             Spacer()
-            TextField("Login.UsernameField.Title", text: $viewModel.username)
+            TextField("Login.UsernameField.Title".localized, text: $viewModel.username)
                 .autocapitalization(.none)
                 .disableAutocorrection(true)
             Divider()
-            SecureField("Password", text: $viewModel.password)
+            SecureField("Login.PasswordField.Title".localized, text: $viewModel.password)
             Divider()
             Spacer()
             
             Button(action: {
                 viewModel.login()
             }, label: {
-                Text("Sign In")
+                Text("Login.LoginButton.Title".localized)
+                    .font(.system(size: 20, weight: .bold))
             })
             Spacer()
         }
-        .padding()
+        .padding(25)
     }
     
 }
 
 extension LoginView {
     class ViewModel: ObservableObject {
-        @Published var username = ""
-        @Published var password = ""
+        @Published var username: String = ""
+        @Published var password: String = ""
+        @Published var error: String?
         
         func login() {
             Auth.auth().signIn(withEmail: self.username,

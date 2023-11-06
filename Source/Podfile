@@ -8,6 +8,8 @@ target 'FriendBNB' do
   # Pods for FriendBNB
   pod 'FirebaseAuth'
   pod 'FirebaseCore'
+  pod 'FirebaseFirestore'
+  
   pod 'SwiftLint'
 
 #  target 'FriendBNBTests' do

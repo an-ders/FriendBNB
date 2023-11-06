@@ -16,7 +16,7 @@ struct FriendBNBApp: App {
     
     var body: some Scene {
         WindowGroup {
-            LoginView()
+            RootView()
         }
     }
 }

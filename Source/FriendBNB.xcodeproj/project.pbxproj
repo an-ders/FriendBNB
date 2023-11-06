@@ -10,7 +10,7 @@
 		1950532290672558B022FD94 /* Pods_FriendBNB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E19B548CCA72EEB2AD42091C /* Pods_FriendBNB.framework */; };
 		565198402AA7DCF200866F0B /* FriendBNBApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5651983F2AA7DCF200866F0B /* FriendBNBApp.swift */; };
 		565198422AA7DCF200866F0B /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 565198412AA7DCF200866F0B /* LoginView.swift */; };
-		565198442AA7DCF200866F0B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 565198432AA7DCF200866F0B /* Assets.xcassets */; };
+		565198442AA7DCF200866F0B /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 565198432AA7DCF200866F0B /* Colors.xcassets */; };
 		565198472AA7DCF200866F0B /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 565198462AA7DCF200866F0B /* Preview Assets.xcassets */; };
 		565198512AA7DCF200866F0B /* FriendBNBTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 565198502AA7DCF200866F0B /* FriendBNBTests.swift */; };
 		5651985B2AA7DCF200866F0B /* FriendBNBUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5651985A2AA7DCF200866F0B /* FriendBNBUITests.swift */; };
@@ -18,7 +18,15 @@
 		5651986C2AA7DE8100866F0B /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5651986B2AA7DE8100866F0B /* GoogleService-Info.plist */; };
 		5651986D2AA7DE8100866F0B /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5651986B2AA7DE8100866F0B /* GoogleService-Info.plist */; };
 		5651986E2AA7DE8100866F0B /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5651986B2AA7DE8100866F0B /* GoogleService-Info.plist */; };
+		56D7B0C42AF2F630002B65DD /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = 56D7B0C32AF2F630002B65DD /* .swiftlint.yml */; };
+		56D7B0C82AF2FB95002B65DD /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D7B0C72AF2FB95002B65DD /* RootView.swift */; };
+		56D7B0CB2AF358BF002B65DD /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D7B0CA2AF358BF002B65DD /* HomeView.swift */; };
+		56D7B0CE2AF4BD92002B65DD /* HomeTileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D7B0CD2AF4BD92002B65DD /* HomeTileView.swift */; };
+		56D7B0D02AF4BE97002B65DD /* PropertyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D7B0CF2AF4BE97002B65DD /* PropertyModel.swift */; };
+		56D7B0D22AF74E09002B65DD /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D7B0D12AF74E09002B65DD /* Colors.swift */; };
+		56D7B0D52AF8CCE0002B65DD /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D7B0D42AF8CCE0002B65DD /* SettingsView.swift */; };
 		56E24E772AEE30CA005393C7 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 56E24E762AEE30CA005393C7 /* Localizable.strings */; };
+		56E24E7C2AF2EFE5005393C7 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56E24E7B2AF2EFE5005393C7 /* String.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -42,7 +50,7 @@
 		5651983C2AA7DCF200866F0B /* FriendBNB.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FriendBNB.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5651983F2AA7DCF200866F0B /* FriendBNBApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendBNBApp.swift; sourceTree = "<group>"; };
 		565198412AA7DCF200866F0B /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
-		565198432AA7DCF200866F0B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		565198432AA7DCF200866F0B /* Colors.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Colors.xcassets; sourceTree = "<group>"; };
 		565198462AA7DCF200866F0B /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		5651984C2AA7DCF200866F0B /* FriendBNBTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FriendBNBTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		565198502AA7DCF200866F0B /* FriendBNBTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendBNBTests.swift; sourceTree = "<group>"; };
@@ -51,7 +59,15 @@
 		5651985C2AA7DCF200866F0B /* FriendBNBUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendBNBUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		5651986B2AA7DE8100866F0B /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		569A8FEB2AA82DCD003B3A44 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		56D7B0C32AF2F630002B65DD /* .swiftlint.yml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = SOURCE_ROOT; };
+		56D7B0C72AF2FB95002B65DD /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
+		56D7B0CA2AF358BF002B65DD /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		56D7B0CD2AF4BD92002B65DD /* HomeTileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTileView.swift; sourceTree = "<group>"; };
+		56D7B0CF2AF4BE97002B65DD /* PropertyModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PropertyModel.swift; sourceTree = "<group>"; };
+		56D7B0D12AF74E09002B65DD /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
+		56D7B0D42AF8CCE0002B65DD /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		56E24E762AEE30CA005393C7 /* Localizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
+		56E24E7B2AF2EFE5005393C7 /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
 		89B92C97B306D5AD425B48AB /* Pods-FriendBNB.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FriendBNB.release.xcconfig"; path = "Target Support Files/Pods-FriendBNB/Pods-FriendBNB.release.xcconfig"; sourceTree = "<group>"; };
 		A88517334A19E262D7241542 /* Pods-FriendBNB.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FriendBNB.debug.xcconfig"; path = "Target Support Files/Pods-FriendBNB/Pods-FriendBNB.debug.xcconfig"; sourceTree = "<group>"; };
 		E19B548CCA72EEB2AD42091C /* Pods_FriendBNB.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FriendBNB.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -117,13 +133,16 @@
 		5651983E2AA7DCF200866F0B /* FriendBNB */ = {
 			isa = PBXGroup;
 			children = (
+				56D7B0C32AF2F630002B65DD /* .swiftlint.yml */,
+				56E24E792AF2EF92005393C7 /* Utility */,
 				56E24E722AEE2E6E005393C7 /* Features */,
 				569A8FEB2AA82DCD003B3A44 /* Info.plist */,
 				5651986B2AA7DE8100866F0B /* GoogleService-Info.plist */,
 				5651983F2AA7DCF200866F0B /* FriendBNBApp.swift */,
-				565198432AA7DCF200866F0B /* Assets.xcassets */,
+				565198432AA7DCF200866F0B /* Colors.xcassets */,
 				565198452AA7DCF200866F0B /* Preview Content */,
 				56E24E762AEE30CA005393C7 /* Localizable.strings */,
+				56D7B0C72AF2FB95002B65DD /* RootView.swift */,
 			);
 			path = FriendBNB;
 			sourceTree = "<group>";
@@ -153,10 +172,38 @@
 			path = FriendBNBUITests;
 			sourceTree = "<group>";
 		};
+		56D7B0C92AF358B5002B65DD /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				56D7B0CC2AF4BD55002B65DD /* New Group */,
+				56D7B0CA2AF358BF002B65DD /* HomeView.swift */,
+				56D7B0CD2AF4BD92002B65DD /* HomeTileView.swift */,
+			);
+			path = Home;
+			sourceTree = "<group>";
+		};
+		56D7B0CC2AF4BD55002B65DD /* New Group */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = "New Group";
+			sourceTree = "<group>";
+		};
+		56D7B0D32AF8CCCD002B65DD /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				56D7B0D42AF8CCE0002B65DD /* SettingsView.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
 		56E24E722AEE2E6E005393C7 /* Features */ = {
 			isa = PBXGroup;
 			children = (
+				56D7B0D32AF8CCCD002B65DD /* Settings */,
+				56D7B0C92AF358B5002B65DD /* Home */,
 				56E24E732AEE2E77005393C7 /* Login */,
+				56D7B0CF2AF4BE97002B65DD /* PropertyModel.swift */,
 			);
 			path = Features;
 			sourceTree = "<group>";
@@ -167,6 +214,23 @@
 				565198412AA7DCF200866F0B /* LoginView.swift */,
 			);
 			path = Login;
+			sourceTree = "<group>";
+		};
+		56E24E792AF2EF92005393C7 /* Utility */ = {
+			isa = PBXGroup;
+			children = (
+				56E24E7A2AF2EFD3005393C7 /* Extensions */,
+				56D7B0D12AF74E09002B65DD /* Colors.swift */,
+			);
+			path = Utility;
+			sourceTree = "<group>";
+		};
+		56E24E7A2AF2EFD3005393C7 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				56E24E7B2AF2EFE5005393C7 /* String.swift */,
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 		8ECBAA43417074F06F03BB69 /* Frameworks */ = {
@@ -284,9 +348,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				56D7B0C42AF2F630002B65DD /* .swiftlint.yml in Resources */,
 				565198472AA7DCF200866F0B /* Preview Assets.xcassets in Resources */,
 				56E24E772AEE30CA005393C7 /* Localizable.strings in Resources */,
-				565198442AA7DCF200866F0B /* Assets.xcassets in Resources */,
+				565198442AA7DCF200866F0B /* Colors.xcassets in Resources */,
 				5651986C2AA7DE8100866F0B /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -366,7 +431,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/SwiftLint/swiftlint\"\n";
+			shellScript = "\"${PODS_ROOT}/SwiftLint/swiftlint\" --config \"$SRCROOT/.swiftlint.yml\"\n\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -375,7 +440,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				56D7B0D02AF4BE97002B65DD /* PropertyModel.swift in Sources */,
+				56D7B0C82AF2FB95002B65DD /* RootView.swift in Sources */,
+				56E24E7C2AF2EFE5005393C7 /* String.swift in Sources */,
+				56D7B0D52AF8CCE0002B65DD /* SettingsView.swift in Sources */,
 				565198422AA7DCF200866F0B /* LoginView.swift in Sources */,
+				56D7B0CE2AF4BD92002B65DD /* HomeTileView.swift in Sources */,
+				56D7B0D22AF74E09002B65DD /* Colors.swift in Sources */,
+				56D7B0CB2AF358BF002B65DD /* HomeView.swift in Sources */,
 				565198402AA7DCF200866F0B /* FriendBNBApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
