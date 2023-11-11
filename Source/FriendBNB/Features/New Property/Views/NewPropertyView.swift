@@ -6,6 +6,8 @@
 //
 
 import SwiftUI
+import FirebaseFirestore
+import FirebaseAuth
 
 enum NewPropertyTabs {
     case info
@@ -28,7 +30,10 @@ struct NewPropertyView: View {
                 .tag(NewPropertyTabs.search)
             
             NewPropertyAddressView(currentTab: $viewModel.currentTab,
-                                   location: $viewModel.location)
+                                   location: $viewModel.location) {
+                viewModel.addDocument()
+                sheetToggle = false
+            }
                 .tag(NewPropertyTabs.address)
         }
         .tabViewStyle(.page(indexDisplayMode: .never))
@@ -42,8 +47,28 @@ extension NewPropertyView {
     class ViewModel: ObservableObject {
         @Published var currentTab: NewPropertyTabs = .info
         
-        var location: Location?
+        var location: Location = Location()
         var info: NewPropertyInfo?
+        
+        func addDocument() {
+            let db = Firestore.firestore()
+            var newDict = location.dictonary.merging(info?.dictonary ?? [:]) { (_, new) in new }
+            if let user = Auth.auth().currentUser {
+                newDict = newDict.merging([
+                    "owner": user.uid
+                ]) { (_, new) in new }
+            }
+            
+            db.collection("Properties").document().setData(
+                newDict
+            ) { err in
+              if let err = err {
+                print("Error writing document: \(err)")
+              } else {
+                print("Document successfully written!")
+              }
+            }
+        }
     }
 }
 

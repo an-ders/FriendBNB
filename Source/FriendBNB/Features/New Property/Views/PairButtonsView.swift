@@ -38,7 +38,7 @@ struct PairButtonsView: View {
                     .cornerRadius(20)
             })
         }
-        .padding(.horizontal, Constants.Padding.regular)
+        .padding(.bottom, Constants.Padding.small)
     }
 }
 

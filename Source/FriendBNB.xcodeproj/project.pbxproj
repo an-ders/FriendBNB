@@ -18,6 +18,7 @@
 		5651986C2AA7DE8100866F0B /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5651986B2AA7DE8100866F0B /* GoogleService-Info.plist */; };
 		5651986D2AA7DE8100866F0B /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5651986B2AA7DE8100866F0B /* GoogleService-Info.plist */; };
 		5651986E2AA7DE8100866F0B /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5651986B2AA7DE8100866F0B /* GoogleService-Info.plist */; };
+		565A46542AFF031300D67A03 /* NewPropertyInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 565A46532AFF031300D67A03 /* NewPropertyInfo.swift */; };
 		56D7B0C42AF2F630002B65DD /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = 56D7B0C32AF2F630002B65DD /* .swiftlint.yml */; };
 		56D7B0C82AF2FB95002B65DD /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D7B0C72AF2FB95002B65DD /* RootView.swift */; };
 		56D7B0CB2AF358BF002B65DD /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D7B0CA2AF358BF002B65DD /* HomeView.swift */; };
@@ -36,6 +37,7 @@
 		56D7B0ED2AFE1A9A002B65DD /* CustomStepperView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D7B0EC2AFE1A9A002B65DD /* CustomStepperView.swift */; };
 		56D7B0F02AFE1E5F002B65DD /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D7B0EF2AFE1E5F002B65DD /* Constants.swift */; };
 		56D7B0F22AFE2C25002B65DD /* PairButtonsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D7B0F12AFE2C25002B65DD /* PairButtonsView.swift */; };
+		56D7B0F52AFEF5A9002B65DD /* FloatingPromptTextField in Frameworks */ = {isa = PBXBuildFile; productRef = 56D7B0F42AFEF5A9002B65DD /* FloatingPromptTextField */; };
 		56E24E772AEE30CA005393C7 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 56E24E762AEE30CA005393C7 /* Localizable.strings */; };
 		56E24E7C2AF2EFE5005393C7 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56E24E7B2AF2EFE5005393C7 /* String.swift */; };
 /* End PBXBuildFile section */
@@ -69,6 +71,7 @@
 		5651985A2AA7DCF200866F0B /* FriendBNBUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendBNBUITests.swift; sourceTree = "<group>"; };
 		5651985C2AA7DCF200866F0B /* FriendBNBUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendBNBUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		5651986B2AA7DE8100866F0B /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		565A46532AFF031300D67A03 /* NewPropertyInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPropertyInfo.swift; sourceTree = "<group>"; };
 		569A8FEB2AA82DCD003B3A44 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		56D7B0C32AF2F630002B65DD /* .swiftlint.yml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = SOURCE_ROOT; };
 		56D7B0C72AF2FB95002B65DD /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
@@ -100,6 +103,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				56D7B0F52AFEF5A9002B65DD /* FloatingPromptTextField in Frameworks */,
 				1950532290672558B022FD94 /* Pods_FriendBNB.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -235,6 +239,7 @@
 			children = (
 				56D7B0E12AFC9C9B002B65DD /* Location.swift */,
 				56D7B0E82AFC9E19002B65DD /* AddressSearchResult.swift */,
+				565A46532AFF031300D67A03 /* NewPropertyInfo.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -325,6 +330,9 @@
 			dependencies = (
 			);
 			name = FriendBNB;
+			packageProductDependencies = (
+				56D7B0F42AFEF5A9002B65DD /* FloatingPromptTextField */,
+			);
 			productName = FriendBNB;
 			productReference = 5651983C2AA7DCF200866F0B /* FriendBNB.app */;
 			productType = "com.apple.product-type.application";
@@ -397,6 +405,9 @@
 				Base,
 			);
 			mainGroup = 565198332AA7DCF200866F0B;
+			packageReferences = (
+				56D7B0F32AFEF5A9002B65DD /* XCRemoteSwiftPackageReference "FloatingPromptTextField" */,
+			);
 			productRefGroup = 5651983D2AA7DCF200866F0B /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -514,6 +525,7 @@
 				56D7B0F22AFE2C25002B65DD /* PairButtonsView.swift in Sources */,
 				56D7B0DE2AFACF44002B65DD /* NewPropertySearchView.swift in Sources */,
 				56D7B0E22AFC9C9B002B65DD /* Location.swift in Sources */,
+				565A46542AFF031300D67A03 /* NewPropertyInfo.swift in Sources */,
 				565198422AA7DCF200866F0B /* LoginView.swift in Sources */,
 				56D7B0ED2AFE1A9A002B65DD /* CustomStepperView.swift in Sources */,
 				56D7B0CE2AF4BD92002B65DD /* HomeTileView.swift in Sources */,
@@ -859,6 +871,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		56D7B0F32AFEF5A9002B65DD /* XCRemoteSwiftPackageReference "FloatingPromptTextField" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/EmilioPelaez/FloatingPromptTextField";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.4.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		56D7B0F42AFEF5A9002B65DD /* FloatingPromptTextField */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 56D7B0F32AFEF5A9002B65DD /* XCRemoteSwiftPackageReference "FloatingPromptTextField" */;
+			productName = FloatingPromptTextField;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 565198342AA7DCF200866F0B /* Project object */;
 }

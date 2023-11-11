@@ -10,7 +10,7 @@ import MapKit
 
 struct NewPropertySearchView: View {
     @Binding var currentTab: NewPropertyTabs
-    @Binding var location: Location?
+    @Binding var location: Location
     
     @StateObject var viewModel = NewPropertySearchView.ViewModel()
     @FocusState private var isFocusedTextField: Bool
@@ -19,7 +19,7 @@ struct NewPropertySearchView: View {
         ZStack {
             VStack(alignment: .leading, spacing: 0) {
                 TextField("Type address", text: $viewModel.searchableText)
-                    .padding()
+                    .padding(.vertical)
                     .autocorrectionDisabled()
                     .focused($isFocusedTextField)
                     .font(.title)
@@ -34,51 +34,64 @@ struct NewPropertySearchView: View {
                     .background(Color.init(uiColor: .systemBackground))
                     .overlay {
                         ClearButton(text: $viewModel.searchableText)
-                            .padding(.trailing)
                             .padding(.top, 8)
                     }
                     .onAppear {
                         isFocusedTextField = true
                     }
-                
+
                 List(viewModel.results) { address in
                     AddressRow(address: address) {
                         Task { @MainActor in
                             if let location = await viewModel.getPlace(from: address) {
                                 self.location = location
+                                
+                                withAnimation {
+                                    currentTab = .address
+                                }
                             }
                         }
                     }
+                    .listRowInsets(EdgeInsets(top: 10, leading: 0, bottom: 10, trailing: 0))
                     //.listRowBackground(backgroundColor)
                 }
-                .listStyle(.plain)
+                .frame(maxWidth: .infinity)
+                .listStyle(.inset)
             }
             
+            VStack(spacing: 0) {
+                Spacer()
+                
+                Rectangle()
+                    .fill(
+                        LinearGradient(gradient: Gradient(colors: [.white, .clear]),
+                                       startPoint: .bottom, endPoint: .top)
+                        )
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 50)
+                
+                Rectangle()
+                    .fill(.white)
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 30)
+            
+            }
             VStack {
                 Spacer()
-                ZStack {
-                    Rectangle()
-                        .fill(
-                            LinearGradient(gradient: Gradient(colors: [.white, .clear]),
-                                           startPoint: .bottom, endPoint: .top)
-                            )
-                        .frame(maxWidth: .infinity)
-                        .frame(height: 50)
+                PairButtonsView(prevText: "Back", prevAction: {
+                    withAnimation {
+                        currentTab = .info
+                    }
+                }, nextText: "Skip", nextAction: {
+                    location = Location()
                     
-                    PairButtonsView(prevText: "Back", prevAction: {
-                        withAnimation {
-                            currentTab = .info
-                        }
-                    }, nextText: "Next", nextAction: {
-                        location = Location()
-                        
-                        withAnimation {
-                            currentTab = .address
-                        }
-                    })
-                }
+                    withAnimation {
+                        currentTab = .address
+                    }
+                })
             }
         }
+        .padding(.horizontal, Constants.Padding.regular)
     }
 }
 

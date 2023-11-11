@@ -7,16 +7,11 @@
 
 import SwiftUI
 
-struct NewPropertyInfo {
-    var rooms: Int
-}
-
 struct NewPropertyInfoView: View {
     @Binding var sheetToggle: Bool
     @Binding var currentTab: NewPropertyTabs
     @Binding var info: NewPropertyInfo?
     @StateObject var viewModel: ViewModel = ViewModel()
-    
     
     var body: some View {
         VStack(spacing: Constants.Spacing.regular) {
@@ -54,7 +49,7 @@ extension NewPropertyInfoView {
         @Published var error: String?
         
         func getInfo() -> NewPropertyInfo? {
-            return NewPropertyInfo(rooms: self.rooms)
+            return NewPropertyInfo(rooms: self.rooms, people: self.people)
         }
     }
 }

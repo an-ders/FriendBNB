@@ -15,8 +15,7 @@ struct Location {
     let state: String           // eg. CA
     let zipCode: String         // eg. 95014
     let country: String         // eg. United States
-    let isoCountryCode: String  // eg. US
-
+    
     var formattedAddress: String {
         return """
         \(streetNumber) \(streetName),
@@ -24,7 +23,18 @@ struct Location {
         \(country)
         """
     }
-
+    
+    var dictonary: [String: Any] {
+        [
+            "streetNumber": streetNumber,
+            "streetName": streetName,
+            "city": city,
+            "state": state,
+            "zipCode": zipCode,
+            "country": country,
+        ]
+    }
+    
     init(with placemark: MKPlacemark) {
         self.streetName = placemark.thoroughfare ?? ""
         self.streetNumber = placemark.subThoroughfare ?? ""
@@ -32,7 +42,6 @@ struct Location {
         self.state = placemark.administrativeArea ?? ""
         self.zipCode = placemark.postalCode ?? ""
         self.country = placemark.country ?? ""
-        self.isoCountryCode = placemark.isoCountryCode ?? ""
     }
     
     init() {
@@ -42,6 +51,5 @@ struct Location {
         self.state = ""
         self.zipCode = ""
         self.country = ""
-        self.isoCountryCode = ""
     }
 }

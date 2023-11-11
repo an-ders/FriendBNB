@@ -21,6 +21,9 @@ struct HomeView: View {
                     }
                 }
                 .padding(.top, 2)
+                .onAppear {
+                    viewModel.fetchProperties()
+                }
             }
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
