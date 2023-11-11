@@ -18,6 +18,7 @@
 		5651986C2AA7DE8100866F0B /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5651986B2AA7DE8100866F0B /* GoogleService-Info.plist */; };
 		5651986D2AA7DE8100866F0B /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5651986B2AA7DE8100866F0B /* GoogleService-Info.plist */; };
 		5651986E2AA7DE8100866F0B /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5651986B2AA7DE8100866F0B /* GoogleService-Info.plist */; };
+		565A46542AFF031300D67A03 /* NewPropertyInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 565A46532AFF031300D67A03 /* NewPropertyInfo.swift */; };
 		56D7B0C42AF2F630002B65DD /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = 56D7B0C32AF2F630002B65DD /* .swiftlint.yml */; };
 		56D7B0C82AF2FB95002B65DD /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D7B0C72AF2FB95002B65DD /* RootView.swift */; };
 		56D7B0CB2AF358BF002B65DD /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D7B0CA2AF358BF002B65DD /* HomeView.swift */; };
@@ -25,6 +26,18 @@
 		56D7B0D02AF4BE97002B65DD /* PropertyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D7B0CF2AF4BE97002B65DD /* PropertyModel.swift */; };
 		56D7B0D22AF74E09002B65DD /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D7B0D12AF74E09002B65DD /* Colors.swift */; };
 		56D7B0D52AF8CCE0002B65DD /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D7B0D42AF8CCE0002B65DD /* SettingsView.swift */; };
+		56D7B0D92AF99B83002B65DD /* HomeActionButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D7B0D82AF99B83002B65DD /* HomeActionButtonView.swift */; };
+		56D7B0DB2AF99F25002B65DD /* NewPropertyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D7B0DA2AF99F25002B65DD /* NewPropertyView.swift */; };
+		56D7B0DE2AFACF44002B65DD /* NewPropertySearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D7B0DD2AFACF44002B65DD /* NewPropertySearchView.swift */; };
+		56D7B0E02AFC9C03002B65DD /* NewPropertyInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D7B0DF2AFC9C03002B65DD /* NewPropertyInfoView.swift */; };
+		56D7B0E22AFC9C9B002B65DD /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D7B0E12AFC9C9B002B65DD /* Location.swift */; };
+		56D7B0E72AFC9DB3002B65DD /* NewPropertySearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D7B0E62AFC9DB3002B65DD /* NewPropertySearchViewModel.swift */; };
+		56D7B0E92AFC9E19002B65DD /* AddressSearchResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D7B0E82AFC9E19002B65DD /* AddressSearchResult.swift */; };
+		56D7B0EB2AFDC7AF002B65DD /* NewPropertyAddressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D7B0EA2AFDC7AF002B65DD /* NewPropertyAddressView.swift */; };
+		56D7B0ED2AFE1A9A002B65DD /* CustomStepperView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D7B0EC2AFE1A9A002B65DD /* CustomStepperView.swift */; };
+		56D7B0F02AFE1E5F002B65DD /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D7B0EF2AFE1E5F002B65DD /* Constants.swift */; };
+		56D7B0F22AFE2C25002B65DD /* PairButtonsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D7B0F12AFE2C25002B65DD /* PairButtonsView.swift */; };
+		56D7B0F52AFEF5A9002B65DD /* FloatingPromptTextField in Frameworks */ = {isa = PBXBuildFile; productRef = 56D7B0F42AFEF5A9002B65DD /* FloatingPromptTextField */; };
 		56E24E772AEE30CA005393C7 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 56E24E762AEE30CA005393C7 /* Localizable.strings */; };
 		56E24E7C2AF2EFE5005393C7 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56E24E7B2AF2EFE5005393C7 /* String.swift */; };
 /* End PBXBuildFile section */
@@ -58,6 +71,7 @@
 		5651985A2AA7DCF200866F0B /* FriendBNBUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendBNBUITests.swift; sourceTree = "<group>"; };
 		5651985C2AA7DCF200866F0B /* FriendBNBUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendBNBUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		5651986B2AA7DE8100866F0B /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		565A46532AFF031300D67A03 /* NewPropertyInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPropertyInfo.swift; sourceTree = "<group>"; };
 		569A8FEB2AA82DCD003B3A44 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		56D7B0C32AF2F630002B65DD /* .swiftlint.yml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = SOURCE_ROOT; };
 		56D7B0C72AF2FB95002B65DD /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
@@ -66,6 +80,17 @@
 		56D7B0CF2AF4BE97002B65DD /* PropertyModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PropertyModel.swift; sourceTree = "<group>"; };
 		56D7B0D12AF74E09002B65DD /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
 		56D7B0D42AF8CCE0002B65DD /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		56D7B0D82AF99B83002B65DD /* HomeActionButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeActionButtonView.swift; sourceTree = "<group>"; };
+		56D7B0DA2AF99F25002B65DD /* NewPropertyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPropertyView.swift; sourceTree = "<group>"; };
+		56D7B0DD2AFACF44002B65DD /* NewPropertySearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPropertySearchView.swift; sourceTree = "<group>"; };
+		56D7B0DF2AFC9C03002B65DD /* NewPropertyInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPropertyInfoView.swift; sourceTree = "<group>"; };
+		56D7B0E12AFC9C9B002B65DD /* Location.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
+		56D7B0E62AFC9DB3002B65DD /* NewPropertySearchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPropertySearchViewModel.swift; sourceTree = "<group>"; };
+		56D7B0E82AFC9E19002B65DD /* AddressSearchResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressSearchResult.swift; sourceTree = "<group>"; };
+		56D7B0EA2AFDC7AF002B65DD /* NewPropertyAddressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPropertyAddressView.swift; sourceTree = "<group>"; };
+		56D7B0EC2AFE1A9A002B65DD /* CustomStepperView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomStepperView.swift; sourceTree = "<group>"; };
+		56D7B0EF2AFE1E5F002B65DD /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		56D7B0F12AFE2C25002B65DD /* PairButtonsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PairButtonsView.swift; sourceTree = "<group>"; };
 		56E24E762AEE30CA005393C7 /* Localizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
 		56E24E7B2AF2EFE5005393C7 /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
 		89B92C97B306D5AD425B48AB /* Pods-FriendBNB.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FriendBNB.release.xcconfig"; path = "Target Support Files/Pods-FriendBNB/Pods-FriendBNB.release.xcconfig"; sourceTree = "<group>"; };
@@ -78,6 +103,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				56D7B0F52AFEF5A9002B65DD /* FloatingPromptTextField in Frameworks */,
 				1950532290672558B022FD94 /* Pods_FriendBNB.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -178,6 +204,7 @@
 				56D7B0CC2AF4BD55002B65DD /* New Group */,
 				56D7B0CA2AF358BF002B65DD /* HomeView.swift */,
 				56D7B0CD2AF4BD92002B65DD /* HomeTileView.swift */,
+				56D7B0D82AF99B83002B65DD /* HomeActionButtonView.swift */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -197,9 +224,50 @@
 			path = Settings;
 			sourceTree = "<group>";
 		};
+		56D7B0DC2AF9B012002B65DD /* New Property */ = {
+			isa = PBXGroup;
+			children = (
+				56D7B0E62AFC9DB3002B65DD /* NewPropertySearchViewModel.swift */,
+				56D7B0E42AFC9CAA002B65DD /* Views */,
+				56D7B0E32AFC9CA1002B65DD /* Models */,
+			);
+			path = "New Property";
+			sourceTree = "<group>";
+		};
+		56D7B0E32AFC9CA1002B65DD /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				56D7B0E12AFC9C9B002B65DD /* Location.swift */,
+				56D7B0E82AFC9E19002B65DD /* AddressSearchResult.swift */,
+				565A46532AFF031300D67A03 /* NewPropertyInfo.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		56D7B0E42AFC9CAA002B65DD /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				56D7B0DA2AF99F25002B65DD /* NewPropertyView.swift */,
+				56D7B0DD2AFACF44002B65DD /* NewPropertySearchView.swift */,
+				56D7B0DF2AFC9C03002B65DD /* NewPropertyInfoView.swift */,
+				56D7B0EA2AFDC7AF002B65DD /* NewPropertyAddressView.swift */,
+				56D7B0F12AFE2C25002B65DD /* PairButtonsView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		56D7B0EE2AFE1E41002B65DD /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				56D7B0EC2AFE1A9A002B65DD /* CustomStepperView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
 		56E24E722AEE2E6E005393C7 /* Features */ = {
 			isa = PBXGroup;
 			children = (
+				56D7B0DC2AF9B012002B65DD /* New Property */,
 				56D7B0D32AF8CCCD002B65DD /* Settings */,
 				56D7B0C92AF358B5002B65DD /* Home */,
 				56E24E732AEE2E77005393C7 /* Login */,
@@ -219,8 +287,9 @@
 		56E24E792AF2EF92005393C7 /* Utility */ = {
 			isa = PBXGroup;
 			children = (
+				56D7B0EE2AFE1E41002B65DD /* Views */,
 				56E24E7A2AF2EFD3005393C7 /* Extensions */,
-				56D7B0D12AF74E09002B65DD /* Colors.swift */,
+				56D7B0EF2AFE1E5F002B65DD /* Constants.swift */,
 			);
 			path = Utility;
 			sourceTree = "<group>";
@@ -228,6 +297,7 @@
 		56E24E7A2AF2EFD3005393C7 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				56D7B0D12AF74E09002B65DD /* Colors.swift */,
 				56E24E7B2AF2EFE5005393C7 /* String.swift */,
 			);
 			path = Extensions;
@@ -260,6 +330,9 @@
 			dependencies = (
 			);
 			name = FriendBNB;
+			packageProductDependencies = (
+				56D7B0F42AFEF5A9002B65DD /* FloatingPromptTextField */,
+			);
 			productName = FriendBNB;
 			productReference = 5651983C2AA7DCF200866F0B /* FriendBNB.app */;
 			productType = "com.apple.product-type.application";
@@ -332,6 +405,9 @@
 				Base,
 			);
 			mainGroup = 565198332AA7DCF200866F0B;
+			packageReferences = (
+				56D7B0F32AFEF5A9002B65DD /* XCRemoteSwiftPackageReference "FloatingPromptTextField" */,
+			);
 			productRefGroup = 5651983D2AA7DCF200866F0B /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -440,15 +516,27 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				56D7B0DB2AF99F25002B65DD /* NewPropertyView.swift in Sources */,
+				56D7B0E72AFC9DB3002B65DD /* NewPropertySearchViewModel.swift in Sources */,
 				56D7B0D02AF4BE97002B65DD /* PropertyModel.swift in Sources */,
 				56D7B0C82AF2FB95002B65DD /* RootView.swift in Sources */,
 				56E24E7C2AF2EFE5005393C7 /* String.swift in Sources */,
 				56D7B0D52AF8CCE0002B65DD /* SettingsView.swift in Sources */,
+				56D7B0F22AFE2C25002B65DD /* PairButtonsView.swift in Sources */,
+				56D7B0DE2AFACF44002B65DD /* NewPropertySearchView.swift in Sources */,
+				56D7B0E22AFC9C9B002B65DD /* Location.swift in Sources */,
+				565A46542AFF031300D67A03 /* NewPropertyInfo.swift in Sources */,
 				565198422AA7DCF200866F0B /* LoginView.swift in Sources */,
+				56D7B0ED2AFE1A9A002B65DD /* CustomStepperView.swift in Sources */,
 				56D7B0CE2AF4BD92002B65DD /* HomeTileView.swift in Sources */,
 				56D7B0D22AF74E09002B65DD /* Colors.swift in Sources */,
+				56D7B0D92AF99B83002B65DD /* HomeActionButtonView.swift in Sources */,
+				56D7B0EB2AFDC7AF002B65DD /* NewPropertyAddressView.swift in Sources */,
+				56D7B0E02AFC9C03002B65DD /* NewPropertyInfoView.swift in Sources */,
 				56D7B0CB2AF358BF002B65DD /* HomeView.swift in Sources */,
 				565198402AA7DCF200866F0B /* FriendBNBApp.swift in Sources */,
+				56D7B0F02AFE1E5F002B65DD /* Constants.swift in Sources */,
+				56D7B0E92AFC9E19002B65DD /* AddressSearchResult.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -783,6 +871,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		56D7B0F32AFEF5A9002B65DD /* XCRemoteSwiftPackageReference "FloatingPromptTextField" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/EmilioPelaez/FloatingPromptTextField";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.4.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		56D7B0F42AFEF5A9002B65DD /* FloatingPromptTextField */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 56D7B0F32AFEF5A9002B65DD /* XCRemoteSwiftPackageReference "FloatingPromptTextField" */;
+			productName = FloatingPromptTextField;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 565198342AA7DCF200866F0B /* Project object */;
 }

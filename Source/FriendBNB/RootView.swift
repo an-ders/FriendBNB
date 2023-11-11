@@ -8,7 +8,7 @@
 import SwiftUI
 import FirebaseAuth
 
-enum Tabs: String, Hashable, Equatable {
+enum RootTabs: String, Hashable, Equatable {
     case home
     case settings
 }
@@ -21,13 +21,13 @@ struct RootView: View {
             if viewModel.loggedIn {
                 TabView(selection: $viewModel.selectedTab) {
                     HomeView()
-                        .tag(Tabs.home)
+                        .tag(RootTabs.home)
                         .tabItem {
                             Label("Home", systemImage: "house")
                         }
                     
                     SettingsView()
-                        .tag(Tabs.settings)
+                        .tag(RootTabs.settings)
                         .tabItem {
                             Label("You", systemImage: "person.circle")
                         }
@@ -53,7 +53,7 @@ struct RootView: View {
 extension RootView {
     class ViewModel: ObservableObject {
         @Published var loggedIn: Bool = false
-        @Published var selectedTab: Tabs = .home
+        @Published var selectedTab: RootTabs = .home
     }
 }
 

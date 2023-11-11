@@ -21,42 +21,32 @@ struct HomeView: View {
                     }
                 }
                 .padding(.top, 2)
+                .onAppear {
+                    viewModel.fetchProperties()
+                }
             }
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
-                    Menu(content: {
-                        Button(action: {
-                            
-                        }, label: {
-                            Label("Create a property", systemImage: "plus.circle")
-                        })
-                        
-                        Button(action: {
-                            
-                        }, label: {
-                            Label("Add a property", systemImage: "house.fill")
-                        })
-                    }, label: {
-                        Image(systemName: "plus.circle.fill")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(height: 30)
-                            .padding(.trailing, 10)
-                        
-                    })
+                    HomeActionButtonView(viewModel: viewModel)
                 }
             }
-                
         }
+        .sheet(isPresented: $viewModel.newProperty) {
+            NewPropertyView(sheetToggle: $viewModel.newProperty)
+                .interactiveDismissDisabled()
+        }
+        
     }
 }
 
 extension HomeView {
     class ViewModel: ObservableObject {
-        @Published var selectedTab: Tabs = .home
+        @Published var selectedTab: RootTabs = .home
         @Published var userID: String?
         @Published var error: Error?
         @Published var properties: [Property] = []
+        
+        @Published var newProperty = false
         
         init() {
             Auth.auth().addStateDidChangeListener { auth, user in

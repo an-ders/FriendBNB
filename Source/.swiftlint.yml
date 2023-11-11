@@ -1,6 +1,9 @@
 disabled_rules:
 - trailing_whitespace
 - identifier_name
+- comment_spacing
+- return_arrow_whitespace
+- private_over_fileprivate
 
 excluded: # paths to ignore during linting. Takes precedence over `included`.
  - Pods
