@@ -9,14 +9,15 @@ import SwiftUI
 import FloatingPromptTextField
 
 struct NewPropertyAddressView: View {
+    @Binding var showSheet: Bool
     @Binding var currentTab: NewPropertyTabs
     @Binding var location: Location
-    
     var confirmAction: () -> Void
     
     @StateObject var viewModel: NewPropertyAddressView.ViewModel
     
-    init(currentTab: Binding<NewPropertyTabs>, location: Binding<Location>, confirmAction: @escaping () -> Void) {
+    init(showSheet: Binding<Bool>, currentTab: Binding<NewPropertyTabs>, location: Binding<Location>, confirmAction: @escaping () -> Void) {
+        self._showSheet = showSheet
         self._currentTab = currentTab
         self._location = location
         self._viewModel = StateObject(wrappedValue: ViewModel())
@@ -24,18 +25,18 @@ struct NewPropertyAddressView: View {
     }
     
     var body: some View {
-        VStack {
+        VStack(spacing: 0) {
             Text("Confirm the address")
                 .font(.largeTitle).fontWeight(.medium)
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(.bottom, Constants.Spacing.small)
+                .padding(.bottom, Constants.Spacing.regular)
 
-            FloatingPromptTextField(text: $viewModel.streetName, prompt: Text("Street Name"))
-            FloatingPromptTextField(text: $viewModel.streetNumber, prompt: Text("Street Number"))
-            FloatingPromptTextField(text: $viewModel.city, prompt: Text("City"))
-            FloatingPromptTextField(text: $viewModel.state, prompt: Text("State"))
-            FloatingPromptTextField(text: $viewModel.zipCode, prompt: Text("Zip Code"))
-            FloatingPromptTextField(text: $viewModel.country, prompt: Text("Country"))
+            StyledFloatingTextField(text: $viewModel.streetName, prompt: "Street Name", error: $viewModel.streetNameError)
+            StyledFloatingTextField(text: $viewModel.streetNumber, prompt: "Street Number", error: $viewModel.streetNumberError)
+            StyledFloatingTextField(text: $viewModel.city, prompt: "City", error: $viewModel.cityError)
+            StyledFloatingTextField(text: $viewModel.state, prompt: "State", error: $viewModel.stateError)
+            StyledFloatingTextField(text: $viewModel.zipCode, prompt: "Zip Code", error: $viewModel.zipCodeError)
+            StyledFloatingTextField(text: $viewModel.country, prompt: "Country", error: $viewModel.countryError)
 
             Spacer()
             
@@ -44,7 +45,10 @@ struct NewPropertyAddressView: View {
                     currentTab = .search
                 }
             }, nextText: "Confirm", nextAction: {
-                confirmAction()
+                if viewModel.validAddress() {
+                    confirmAction()
+                    showSheet = false
+                }
             })
         }
         .padding(.horizontal, Constants.Padding.regular)
@@ -76,6 +80,13 @@ extension NewPropertyAddressView {
         @Published var zipCode: String = ""
         @Published var country: String = ""
         
+        @Published var streetNameError: String = ""
+        @Published var streetNumberError: String = ""
+        @Published var cityError: String = ""
+        @Published var stateError: String = ""
+        @Published var zipCodeError: String = ""
+        @Published var countryError: String = ""
+        
         func syncLocation(_ location: Location) {
             streetName = location.streetName
             streetNumber = location.streetNumber
@@ -83,6 +94,31 @@ extension NewPropertyAddressView {
             state = location.state
             zipCode = location.zipCode
             country = location.country
+        }
+        
+        func validAddress() -> Bool {
+            let emptyError = "Field cannot be empty."
+            
+            if streetName.isEmpty {
+                streetNameError = emptyError
+            }
+            if streetNumber.isEmpty {
+                streetNumberError = emptyError
+            }
+            if city.isEmpty {
+                cityError = emptyError
+            }
+            if state.isEmpty {
+                stateError = emptyError
+            }
+            if zipCode.isEmpty {
+                zipCodeError = emptyError
+            }
+            if country.isEmpty {
+                countryError = emptyError
+            }
+            
+            return !country.isEmpty || !zipCode.isEmpty || !state.isEmpty || !city.isEmpty || !streetNumber.isEmpty || !streetName.isEmpty
         }
     }
 }

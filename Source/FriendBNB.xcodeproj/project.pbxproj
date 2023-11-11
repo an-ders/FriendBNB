@@ -19,6 +19,8 @@
 		5651986D2AA7DE8100866F0B /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5651986B2AA7DE8100866F0B /* GoogleService-Info.plist */; };
 		5651986E2AA7DE8100866F0B /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5651986B2AA7DE8100866F0B /* GoogleService-Info.plist */; };
 		565A46542AFF031300D67A03 /* NewPropertyInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 565A46532AFF031300D67A03 /* NewPropertyInfo.swift */; };
+		565A46572AFF454400D67A03 /* AddPropertyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 565A46562AFF454400D67A03 /* AddPropertyView.swift */; };
+		565A465C2AFF571800D67A03 /* StyledFloatingTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 565A465B2AFF571800D67A03 /* StyledFloatingTextField.swift */; };
 		56D7B0C42AF2F630002B65DD /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = 56D7B0C32AF2F630002B65DD /* .swiftlint.yml */; };
 		56D7B0C82AF2FB95002B65DD /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D7B0C72AF2FB95002B65DD /* RootView.swift */; };
 		56D7B0CB2AF358BF002B65DD /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D7B0CA2AF358BF002B65DD /* HomeView.swift */; };
@@ -72,6 +74,8 @@
 		5651985C2AA7DCF200866F0B /* FriendBNBUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendBNBUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		5651986B2AA7DE8100866F0B /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		565A46532AFF031300D67A03 /* NewPropertyInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPropertyInfo.swift; sourceTree = "<group>"; };
+		565A46562AFF454400D67A03 /* AddPropertyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPropertyView.swift; sourceTree = "<group>"; };
+		565A465B2AFF571800D67A03 /* StyledFloatingTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StyledFloatingTextField.swift; sourceTree = "<group>"; };
 		569A8FEB2AA82DCD003B3A44 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		56D7B0C32AF2F630002B65DD /* .swiftlint.yml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = SOURCE_ROOT; };
 		56D7B0C72AF2FB95002B65DD /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
@@ -198,6 +202,21 @@
 			path = FriendBNBUITests;
 			sourceTree = "<group>";
 		};
+		565A46552AFF453500D67A03 /* Add Property */ = {
+			isa = PBXGroup;
+			children = (
+				565A46562AFF454400D67A03 /* AddPropertyView.swift */,
+			);
+			path = "Add Property";
+			sourceTree = "<group>";
+		};
+		565A46582AFF55A300D67A03 /* Modifiers */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Modifiers;
+			sourceTree = "<group>";
+		};
 		56D7B0C92AF358B5002B65DD /* Home */ = {
 			isa = PBXGroup;
 			children = (
@@ -260,6 +279,7 @@
 			isa = PBXGroup;
 			children = (
 				56D7B0EC2AFE1A9A002B65DD /* CustomStepperView.swift */,
+				565A465B2AFF571800D67A03 /* StyledFloatingTextField.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -267,6 +287,7 @@
 		56E24E722AEE2E6E005393C7 /* Features */ = {
 			isa = PBXGroup;
 			children = (
+				565A46552AFF453500D67A03 /* Add Property */,
 				56D7B0DC2AF9B012002B65DD /* New Property */,
 				56D7B0D32AF8CCCD002B65DD /* Settings */,
 				56D7B0C92AF358B5002B65DD /* Home */,
@@ -287,6 +308,7 @@
 		56E24E792AF2EF92005393C7 /* Utility */ = {
 			isa = PBXGroup;
 			children = (
+				565A46582AFF55A300D67A03 /* Modifiers */,
 				56D7B0EE2AFE1E41002B65DD /* Views */,
 				56E24E7A2AF2EFD3005393C7 /* Extensions */,
 				56D7B0EF2AFE1E5F002B65DD /* Constants.swift */,
@@ -518,9 +540,11 @@
 			files = (
 				56D7B0DB2AF99F25002B65DD /* NewPropertyView.swift in Sources */,
 				56D7B0E72AFC9DB3002B65DD /* NewPropertySearchViewModel.swift in Sources */,
+				565A465C2AFF571800D67A03 /* StyledFloatingTextField.swift in Sources */,
 				56D7B0D02AF4BE97002B65DD /* PropertyModel.swift in Sources */,
 				56D7B0C82AF2FB95002B65DD /* RootView.swift in Sources */,
 				56E24E7C2AF2EFE5005393C7 /* String.swift in Sources */,
+				565A46572AFF454400D67A03 /* AddPropertyView.swift in Sources */,
 				56D7B0D52AF8CCE0002B65DD /* SettingsView.swift in Sources */,
 				56D7B0F22AFE2C25002B65DD /* PairButtonsView.swift in Sources */,
 				56D7B0DE2AFACF44002B65DD /* NewPropertySearchView.swift in Sources */,

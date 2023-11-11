@@ -9,6 +9,7 @@ import Foundation
 
 struct Constants {
     enum Padding {
+        static let xsmall: CGFloat = 4
         static let small: CGFloat = 10
         static let regular: CGFloat = 20
     }
