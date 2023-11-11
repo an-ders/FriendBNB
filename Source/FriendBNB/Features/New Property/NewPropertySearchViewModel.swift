@@ -9,6 +9,7 @@ import Foundation
 import MapKit
 
 extension NewPropertySearchView {
+    @MainActor
     class ViewModel: NSObject, ObservableObject {
         //@Binding var location: Location
         @Published var region = MKCoordinateRegion()

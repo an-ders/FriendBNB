@@ -17,11 +17,11 @@ enum NewPropertyTabs {
 
 struct NewPropertyView: View {
     @StateObject var viewModel: ViewModel = ViewModel()
-    @Binding var sheetToggle: Bool
+    @Binding var showSheet: Bool
     
     var body: some View {
         TabView(selection: $viewModel.currentTab) {
-            NewPropertyInfoView(sheetToggle: $sheetToggle,
+            NewPropertyInfoView(showSheet: $showSheet,
                                 currentTab: $viewModel.currentTab,
                                 info: $viewModel.info)
             
@@ -29,10 +29,10 @@ struct NewPropertyView: View {
                                   location: $viewModel.location)
                 .tag(NewPropertyTabs.search)
             
-            NewPropertyAddressView(currentTab: $viewModel.currentTab,
+            NewPropertyAddressView(showSheet: $showSheet,
+                                   currentTab: $viewModel.currentTab,
                                    location: $viewModel.location) {
                 viewModel.addDocument()
-                sheetToggle = false
             }
                 .tag(NewPropertyTabs.address)
         }

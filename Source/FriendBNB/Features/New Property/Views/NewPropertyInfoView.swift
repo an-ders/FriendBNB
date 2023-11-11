@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct NewPropertyInfoView: View {
-    @Binding var sheetToggle: Bool
+    @Binding var showSheet: Bool
     @Binding var currentTab: NewPropertyTabs
     @Binding var info: NewPropertyInfo?
     @StateObject var viewModel: ViewModel = ViewModel()
@@ -27,7 +27,7 @@ struct NewPropertyInfoView: View {
             Spacer()
             
             PairButtonsView(prevText: "Close", prevAction: {
-                sheetToggle = false
+                showSheet = false
             }, nextText: "Next", nextAction: {
                 info = viewModel.getInfo()
                 

@@ -76,6 +76,7 @@ struct NewPropertySearchView: View {
                     .frame(height: 30)
             
             }
+            
             VStack {
                 Spacer()
                 PairButtonsView(prevText: "Back", prevAction: {

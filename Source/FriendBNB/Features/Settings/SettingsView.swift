@@ -19,6 +19,10 @@ struct SettingsView: View {
                         print("Error while signing out!")
                     }
                 }
+            Text("Clear properties")
+                .onTapGesture {
+                    UserDefaults.standard.set([], forKey: "PropertyIDs")
+                }
             
         }
         

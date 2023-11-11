@@ -13,15 +13,15 @@ struct HomeActionButtonView: View {
     var body: some View {
         Menu(content: {
             Button(action: {
-                viewModel.newProperty = true
+                viewModel.showNewPropertySheet = true
             }, label: {
                 Label("Create a property", systemImage: "plus.circle")
             })
             
             Button(action: {
-                
+                viewModel.showAddPropertySheet = true
             }, label: {
-                Label("Rent a property", systemImage: "house.fill")
+                Label("Add a property", systemImage: "house.fill")
             })
         }, label: {
             Image(systemName: "plus.circle.fill")

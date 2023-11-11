@@ -14,15 +14,20 @@ struct HomeView: View {
     
     var body: some View {
         NavigationView {
-            ScrollView {
-                VStack {
-                    ForEach(viewModel.properties) { property in
-                        HomeTileView(property: property)
+            Group {
+                if viewModel.loading {
+                    
+                } else if !viewModel.properties.isEmpty {
+                    ScrollView {
+                        VStack {
+                            ForEach(viewModel.properties) { property in
+                                HomeTileView(property: property)
+                            }
+                        }
+                        .padding(.top, 2)
                     }
-                }
-                .padding(.top, 2)
-                .onAppear {
-                    viewModel.fetchProperties()
+                } else {
+                    emptyView
                 }
             }
             .toolbar {
@@ -31,22 +36,73 @@ struct HomeView: View {
                 }
             }
         }
-        .sheet(isPresented: $viewModel.newProperty) {
-            NewPropertyView(sheetToggle: $viewModel.newProperty)
+        .onAppear {
+            Task {
+                await viewModel.fetchProperties()
+            }
+        }
+        .sheet(isPresented: $viewModel.showNewPropertySheet) {
+            NewPropertyView(showSheet: $viewModel.showNewPropertySheet)
+                .interactiveDismissDisabled()
+        }
+        .sheet(isPresented: $viewModel.showAddPropertySheet) {
+            AddPropertyView(showSheet: $viewModel.showAddPropertySheet, properties: $viewModel.properties, loading: $viewModel.loading)
                 .interactiveDismissDisabled()
         }
         
     }
+    
+    var emptyView: some View {
+        VStack {
+            Image(systemName: "house")
+                .resizable()
+                .scaledToFit()
+                .frame(width: 50)
+            Text("It's empty in here.")
+                .font(.title).fontWeight(.medium)
+            Text("Add an existing or create a new property")
+                .font(.headline).fontWeight(.light)
+                .padding(.bottom, 8)
+            
+            Button(action: {
+                viewModel.showAddPropertySheet = true
+            }, label: {
+                Text("Add Existing Property")
+                    .font(.headline)
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 8)
+                    .foregroundColor(.white)
+                    .background(Color.systemGray3)
+                    .cornerRadius(10)
+            })
+            
+            Button(action: {
+                viewModel.showNewPropertySheet = true
+            }, label: {
+                Text("New Property")
+                    .font(.headline)
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 8)
+                    .foregroundColor(.white)
+                    .background(Color.systemGray3)
+                    .cornerRadius(10)
+            })
+            
+        }
+    }
 }
 
 extension HomeView {
+    @MainActor
     class ViewModel: ObservableObject {
         @Published var selectedTab: RootTabs = .home
         @Published var userID: String?
         @Published var error: Error?
         @Published var properties: [Property] = []
+        @Published var loading: Bool = true
         
-        @Published var newProperty = false
+        @Published var showNewPropertySheet = false
+        @Published var showAddPropertySheet = false
         
         init() {
             Auth.auth().addStateDidChangeListener { auth, user in
@@ -56,31 +112,35 @@ extension HomeView {
                     self.userID = nil
                 }
             }
-            
-            fetchProperties()
         }
         
-        func fetchProperties() {
+        func fetchProperties() async {
+            self.loading = true
+            
             let db = Firestore.firestore()
             let ref = db.collection("Properties")
-            ref.getDocuments { snapshot, error in
-                guard error == nil else {
-                    print(error?.localizedDescription)
+            
+            var propertyIDs = UserDefaults.standard.object(forKey: "PropertyIDs") as? [String] ?? [String]()
+            //propertyIDs = ["cPEMy165u45mDG1pO12k"]
+            
+            var newProperties: [Property] = []
+            
+            for propertyID in propertyIDs {
+                do {
+                    let snapshot = try await ref.whereField(FirebaseFirestore.FieldPath.documentID(), isEqualTo: propertyID).getDocuments()
+                    
+                    for document in snapshot.documents {
+                        let data = document.data()
+                        newProperties.append(Property(id: document.documentID, data: data))
+                    }
+                } catch {
                     self.error = error
                     return
                 }
-                var properties: [Property] = []
-                
-                if let snapshot = snapshot {
-                    for document in snapshot.documents {
-                        let data = document.data()
-                        
-                        properties.append(Property(id: document.documentID, data: data))
-                    }
-                }
-                
-                self.properties = properties
             }
+            
+            self.properties = newProperties
+            self.loading = false
         }
     }
 }
