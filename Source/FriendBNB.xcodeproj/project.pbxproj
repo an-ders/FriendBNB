@@ -21,14 +21,27 @@
 		565A46542AFF031300D67A03 /* NewPropertyInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 565A46532AFF031300D67A03 /* NewPropertyInfo.swift */; };
 		565A46572AFF454400D67A03 /* AddPropertyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 565A46562AFF454400D67A03 /* AddPropertyView.swift */; };
 		565A465C2AFF571800D67A03 /* StyledFloatingTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 565A465B2AFF571800D67A03 /* StyledFloatingTextField.swift */; };
+		565A465E2B00118600D67A03 /* HomeEmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 565A465D2B00118600D67A03 /* HomeEmptyView.swift */; };
+		565A46612B00145400D67A03 /* PropertyDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 565A46602B00145400D67A03 /* PropertyDetailView.swift */; };
+		565A46632B00A11700D67A03 /* CalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 565A46622B00A11700D67A03 /* CalendarView.swift */; };
+		565A46672B00A69E00D67A03 /* CalendarHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 565A46662B00A69E00D67A03 /* CalendarHelper.swift */; };
+		565A46692B00AB2600D67A03 /* CalendarCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 565A46682B00AB2600D67A03 /* CalendarCellView.swift */; };
+		565A466B2B00B88700D67A03 /* Booking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 565A466A2B00B88700D67A03 /* Booking.swift */; };
+		565A466D2B00C70600D67A03 /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 565A466C2B00C70600D67A03 /* Date.swift */; };
+		565A466F2B02D4D100D67A03 /* HomeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 565A466E2B02D4D100D67A03 /* HomeManager.swift */; };
+		565A46722B02DAD600D67A03 /* NewPropertyManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 565A46712B02DAD600D67A03 /* NewPropertyManager.swift */; };
+		565A46742B02E55700D67A03 /* PropertyDetailSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 565A46732B02E55700D67A03 /* PropertyDetailSettingsView.swift */; };
+		565A46762B0355C500D67A03 /* View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 565A46752B0355C500D67A03 /* View.swift */; };
+		565A46782B03583A00D67A03 /* PropertyDetailManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 565A46772B03583A00D67A03 /* PropertyDetailManager.swift */; };
+		565A467B2B0363C200D67A03 /* BookingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 565A467A2B0363C200D67A03 /* BookingView.swift */; };
 		56D7B0C42AF2F630002B65DD /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = 56D7B0C32AF2F630002B65DD /* .swiftlint.yml */; };
 		56D7B0C82AF2FB95002B65DD /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D7B0C72AF2FB95002B65DD /* RootView.swift */; };
 		56D7B0CB2AF358BF002B65DD /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D7B0CA2AF358BF002B65DD /* HomeView.swift */; };
 		56D7B0CE2AF4BD92002B65DD /* HomeTileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D7B0CD2AF4BD92002B65DD /* HomeTileView.swift */; };
-		56D7B0D02AF4BE97002B65DD /* PropertyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D7B0CF2AF4BE97002B65DD /* PropertyModel.swift */; };
+		56D7B0D02AF4BE97002B65DD /* Property.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D7B0CF2AF4BE97002B65DD /* Property.swift */; };
 		56D7B0D22AF74E09002B65DD /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D7B0D12AF74E09002B65DD /* Colors.swift */; };
 		56D7B0D52AF8CCE0002B65DD /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D7B0D42AF8CCE0002B65DD /* SettingsView.swift */; };
-		56D7B0D92AF99B83002B65DD /* HomeActionButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D7B0D82AF99B83002B65DD /* HomeActionButtonView.swift */; };
+		56D7B0D92AF99B83002B65DD /* HomeMenuButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D7B0D82AF99B83002B65DD /* HomeMenuButtonView.swift */; };
 		56D7B0DB2AF99F25002B65DD /* NewPropertyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D7B0DA2AF99F25002B65DD /* NewPropertyView.swift */; };
 		56D7B0DE2AFACF44002B65DD /* NewPropertySearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D7B0DD2AFACF44002B65DD /* NewPropertySearchView.swift */; };
 		56D7B0E02AFC9C03002B65DD /* NewPropertyInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D7B0DF2AFC9C03002B65DD /* NewPropertyInfoView.swift */; };
@@ -76,15 +89,28 @@
 		565A46532AFF031300D67A03 /* NewPropertyInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPropertyInfo.swift; sourceTree = "<group>"; };
 		565A46562AFF454400D67A03 /* AddPropertyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPropertyView.swift; sourceTree = "<group>"; };
 		565A465B2AFF571800D67A03 /* StyledFloatingTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StyledFloatingTextField.swift; sourceTree = "<group>"; };
+		565A465D2B00118600D67A03 /* HomeEmptyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeEmptyView.swift; sourceTree = "<group>"; };
+		565A46602B00145400D67A03 /* PropertyDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PropertyDetailView.swift; sourceTree = "<group>"; };
+		565A46622B00A11700D67A03 /* CalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarView.swift; sourceTree = "<group>"; };
+		565A46662B00A69E00D67A03 /* CalendarHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarHelper.swift; sourceTree = "<group>"; };
+		565A46682B00AB2600D67A03 /* CalendarCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarCellView.swift; sourceTree = "<group>"; };
+		565A466A2B00B88700D67A03 /* Booking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Booking.swift; sourceTree = "<group>"; };
+		565A466C2B00C70600D67A03 /* Date.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Date.swift; sourceTree = "<group>"; };
+		565A466E2B02D4D100D67A03 /* HomeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeManager.swift; sourceTree = "<group>"; };
+		565A46712B02DAD600D67A03 /* NewPropertyManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPropertyManager.swift; sourceTree = "<group>"; };
+		565A46732B02E55700D67A03 /* PropertyDetailSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PropertyDetailSettingsView.swift; sourceTree = "<group>"; };
+		565A46752B0355C500D67A03 /* View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = View.swift; sourceTree = "<group>"; };
+		565A46772B03583A00D67A03 /* PropertyDetailManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PropertyDetailManager.swift; sourceTree = "<group>"; };
+		565A467A2B0363C200D67A03 /* BookingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookingView.swift; sourceTree = "<group>"; };
 		569A8FEB2AA82DCD003B3A44 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		56D7B0C32AF2F630002B65DD /* .swiftlint.yml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = SOURCE_ROOT; };
 		56D7B0C72AF2FB95002B65DD /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
 		56D7B0CA2AF358BF002B65DD /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		56D7B0CD2AF4BD92002B65DD /* HomeTileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTileView.swift; sourceTree = "<group>"; };
-		56D7B0CF2AF4BE97002B65DD /* PropertyModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PropertyModel.swift; sourceTree = "<group>"; };
+		56D7B0CF2AF4BE97002B65DD /* Property.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Property.swift; sourceTree = "<group>"; };
 		56D7B0D12AF74E09002B65DD /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
 		56D7B0D42AF8CCE0002B65DD /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
-		56D7B0D82AF99B83002B65DD /* HomeActionButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeActionButtonView.swift; sourceTree = "<group>"; };
+		56D7B0D82AF99B83002B65DD /* HomeMenuButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeMenuButtonView.swift; sourceTree = "<group>"; };
 		56D7B0DA2AF99F25002B65DD /* NewPropertyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPropertyView.swift; sourceTree = "<group>"; };
 		56D7B0DD2AFACF44002B65DD /* NewPropertySearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPropertySearchView.swift; sourceTree = "<group>"; };
 		56D7B0DF2AFC9C03002B65DD /* NewPropertyInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPropertyInfoView.swift; sourceTree = "<group>"; };
@@ -217,22 +243,45 @@
 			path = Modifiers;
 			sourceTree = "<group>";
 		};
+		565A465F2B00140E00D67A03 /* Property Detail */ = {
+			isa = PBXGroup;
+			children = (
+				565A46602B00145400D67A03 /* PropertyDetailView.swift */,
+				565A46732B02E55700D67A03 /* PropertyDetailSettingsView.swift */,
+				565A46772B03583A00D67A03 /* PropertyDetailManager.swift */,
+			);
+			path = "Property Detail";
+			sourceTree = "<group>";
+		};
+		565A46702B02DA8700D67A03 /* Search */ = {
+			isa = PBXGroup;
+			children = (
+				56D7B0E62AFC9DB3002B65DD /* NewPropertySearchViewModel.swift */,
+				56D7B0DD2AFACF44002B65DD /* NewPropertySearchView.swift */,
+			);
+			path = Search;
+			sourceTree = "<group>";
+		};
+		565A46792B0363A100D67A03 /* Booking */ = {
+			isa = PBXGroup;
+			children = (
+				565A46622B00A11700D67A03 /* CalendarView.swift */,
+				565A46682B00AB2600D67A03 /* CalendarCellView.swift */,
+				565A467A2B0363C200D67A03 /* BookingView.swift */,
+			);
+			path = Booking;
+			sourceTree = "<group>";
+		};
 		56D7B0C92AF358B5002B65DD /* Home */ = {
 			isa = PBXGroup;
 			children = (
-				56D7B0CC2AF4BD55002B65DD /* New Group */,
+				565A466E2B02D4D100D67A03 /* HomeManager.swift */,
 				56D7B0CA2AF358BF002B65DD /* HomeView.swift */,
 				56D7B0CD2AF4BD92002B65DD /* HomeTileView.swift */,
-				56D7B0D82AF99B83002B65DD /* HomeActionButtonView.swift */,
+				56D7B0D82AF99B83002B65DD /* HomeMenuButtonView.swift */,
+				565A465D2B00118600D67A03 /* HomeEmptyView.swift */,
 			);
 			path = Home;
-			sourceTree = "<group>";
-		};
-		56D7B0CC2AF4BD55002B65DD /* New Group */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = "New Group";
 			sourceTree = "<group>";
 		};
 		56D7B0D32AF8CCCD002B65DD /* Settings */ = {
@@ -246,9 +295,13 @@
 		56D7B0DC2AF9B012002B65DD /* New Property */ = {
 			isa = PBXGroup;
 			children = (
-				56D7B0E62AFC9DB3002B65DD /* NewPropertySearchViewModel.swift */,
+				56D7B0DA2AF99F25002B65DD /* NewPropertyView.swift */,
+				56D7B0DF2AFC9C03002B65DD /* NewPropertyInfoView.swift */,
+				56D7B0EA2AFDC7AF002B65DD /* NewPropertyAddressView.swift */,
+				565A46702B02DA8700D67A03 /* Search */,
 				56D7B0E42AFC9CAA002B65DD /* Views */,
 				56D7B0E32AFC9CA1002B65DD /* Models */,
+				565A46712B02DAD600D67A03 /* NewPropertyManager.swift */,
 			);
 			path = "New Property";
 			sourceTree = "<group>";
@@ -266,10 +319,6 @@
 		56D7B0E42AFC9CAA002B65DD /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				56D7B0DA2AF99F25002B65DD /* NewPropertyView.swift */,
-				56D7B0DD2AFACF44002B65DD /* NewPropertySearchView.swift */,
-				56D7B0DF2AFC9C03002B65DD /* NewPropertyInfoView.swift */,
-				56D7B0EA2AFDC7AF002B65DD /* NewPropertyAddressView.swift */,
 				56D7B0F12AFE2C25002B65DD /* PairButtonsView.swift */,
 			);
 			path = Views;
@@ -287,12 +336,15 @@
 		56E24E722AEE2E6E005393C7 /* Features */ = {
 			isa = PBXGroup;
 			children = (
+				565A46792B0363A100D67A03 /* Booking */,
+				565A465F2B00140E00D67A03 /* Property Detail */,
 				565A46552AFF453500D67A03 /* Add Property */,
 				56D7B0DC2AF9B012002B65DD /* New Property */,
 				56D7B0D32AF8CCCD002B65DD /* Settings */,
 				56D7B0C92AF358B5002B65DD /* Home */,
 				56E24E732AEE2E77005393C7 /* Login */,
-				56D7B0CF2AF4BE97002B65DD /* PropertyModel.swift */,
+				56D7B0CF2AF4BE97002B65DD /* Property.swift */,
+				565A466A2B00B88700D67A03 /* Booking.swift */,
 			);
 			path = Features;
 			sourceTree = "<group>";
@@ -312,6 +364,7 @@
 				56D7B0EE2AFE1E41002B65DD /* Views */,
 				56E24E7A2AF2EFD3005393C7 /* Extensions */,
 				56D7B0EF2AFE1E5F002B65DD /* Constants.swift */,
+				565A46662B00A69E00D67A03 /* CalendarHelper.swift */,
 			);
 			path = Utility;
 			sourceTree = "<group>";
@@ -321,6 +374,8 @@
 			children = (
 				56D7B0D12AF74E09002B65DD /* Colors.swift */,
 				56E24E7B2AF2EFE5005393C7 /* String.swift */,
+				565A466C2B00C70600D67A03 /* Date.swift */,
+				565A46752B0355C500D67A03 /* View.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -538,12 +593,22 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				565A46742B02E55700D67A03 /* PropertyDetailSettingsView.swift in Sources */,
 				56D7B0DB2AF99F25002B65DD /* NewPropertyView.swift in Sources */,
+				565A466F2B02D4D100D67A03 /* HomeManager.swift in Sources */,
+				565A466D2B00C70600D67A03 /* Date.swift in Sources */,
+				565A46762B0355C500D67A03 /* View.swift in Sources */,
+				565A465E2B00118600D67A03 /* HomeEmptyView.swift in Sources */,
+				565A46782B03583A00D67A03 /* PropertyDetailManager.swift in Sources */,
 				56D7B0E72AFC9DB3002B65DD /* NewPropertySearchViewModel.swift in Sources */,
 				565A465C2AFF571800D67A03 /* StyledFloatingTextField.swift in Sources */,
-				56D7B0D02AF4BE97002B65DD /* PropertyModel.swift in Sources */,
+				56D7B0D02AF4BE97002B65DD /* Property.swift in Sources */,
 				56D7B0C82AF2FB95002B65DD /* RootView.swift in Sources */,
+				565A46632B00A11700D67A03 /* CalendarView.swift in Sources */,
+				565A467B2B0363C200D67A03 /* BookingView.swift in Sources */,
 				56E24E7C2AF2EFE5005393C7 /* String.swift in Sources */,
+				565A46612B00145400D67A03 /* PropertyDetailView.swift in Sources */,
+				565A46692B00AB2600D67A03 /* CalendarCellView.swift in Sources */,
 				565A46572AFF454400D67A03 /* AddPropertyView.swift in Sources */,
 				56D7B0D52AF8CCE0002B65DD /* SettingsView.swift in Sources */,
 				56D7B0F22AFE2C25002B65DD /* PairButtonsView.swift in Sources */,
@@ -554,13 +619,16 @@
 				56D7B0ED2AFE1A9A002B65DD /* CustomStepperView.swift in Sources */,
 				56D7B0CE2AF4BD92002B65DD /* HomeTileView.swift in Sources */,
 				56D7B0D22AF74E09002B65DD /* Colors.swift in Sources */,
-				56D7B0D92AF99B83002B65DD /* HomeActionButtonView.swift in Sources */,
+				56D7B0D92AF99B83002B65DD /* HomeMenuButtonView.swift in Sources */,
 				56D7B0EB2AFDC7AF002B65DD /* NewPropertyAddressView.swift in Sources */,
 				56D7B0E02AFC9C03002B65DD /* NewPropertyInfoView.swift in Sources */,
 				56D7B0CB2AF358BF002B65DD /* HomeView.swift in Sources */,
 				565198402AA7DCF200866F0B /* FriendBNBApp.swift in Sources */,
 				56D7B0F02AFE1E5F002B65DD /* Constants.swift in Sources */,
 				56D7B0E92AFC9E19002B65DD /* AddressSearchResult.swift in Sources */,
+				565A46722B02DAD600D67A03 /* NewPropertyManager.swift in Sources */,
+				565A46672B00A69E00D67A03 /* CalendarHelper.swift in Sources */,
+				565A466B2B00B88700D67A03 /* Booking.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -647,7 +715,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -701,7 +769,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -728,7 +796,7 @@
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -762,7 +830,7 @@
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

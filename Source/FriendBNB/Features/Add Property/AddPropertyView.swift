@@ -10,9 +10,8 @@ import FloatingPromptTextField
 import FirebaseFirestore
 
 struct AddPropertyView: View {
-    @Binding var showSheet: Bool
-    @Binding var properties: [Property]
-    @Binding var loading: Bool
+    @EnvironmentObject var homeManager: HomeManager
+    @EnvironmentObject var newPropertyManager: NewPropertyManager
     
     @StateObject var viewModel = ViewModel()
     
@@ -31,18 +30,12 @@ struct AddPropertyView: View {
             
             Spacer()
             PairButtonsView(prevText: "Close", prevAction: {
-                showSheet = false
+                homeManager.showAddPropertySheet = false
             }, nextText: "Add", nextAction: {
                 Task {
-                    loading = true
-                    if let property = await viewModel.queryID() {
-                        properties.append(property)
-                        var oldIDs = UserDefaults.standard.object(forKey: "PropertyIDs")  as? [String] ?? [String]()
-                        oldIDs.append(property.id)
-                        UserDefaults.standard.set(oldIDs, forKey: "PropertyIDs")
-                        showSheet = false
+                    if let id = await viewModel.checkValidID() {
+                        homeManager.addProperty(id)
                     }
-                    loading = false
                 }
             })
         }
@@ -57,29 +50,54 @@ extension AddPropertyView {
         @Published var propertyID: String = ""
         @Published var error: String = ""
         
-        func queryID() async -> Property? {
-            var returnProperty: Property?
-            
+//        func queryID() async -> Property? {
+//            var returnProperty: Property?
+//
+//            guard !propertyID.isEmpty else {
+//                self.error = "Please enter a property ID."
+//                return returnProperty
+//            }
+//
+//            let db = Firestore.firestore()
+//            let ref = db.collection("Properties")
+//            do {
+//                try await Task.sleep(nanoseconds: 500000000)
+//                let snapshot = try await ref.whereField(FirebaseFirestore.FieldPath.documentID(), isEqualTo: propertyID).getDocuments()
+//                for document in snapshot.documents {
+//                    let data = document.data()
+//                    returnProperty =  Property(id: document.documentID, data: data)
+//                }
+//            } catch {
+//                print(error.localizedDescription)
+//            }
+//            
+//            self.error = returnProperty != nil ? "" : "No property with that ID was found."
+//            self.propertyID = ""
+//            return returnProperty
+//        }
+        
+        func checkValidID() async -> String? {
+            var id: String?
             guard !propertyID.isEmpty else {
                 self.error = "Please enter a property ID."
-                return returnProperty
+                return id
             }
             
             let db = Firestore.firestore()
-            let ref = db.collection("Properties")
+            let ref = db.collection("Properties").document(propertyID)
             do {
-                let snapshot = try await ref.whereField(FirebaseFirestore.FieldPath.documentID(), isEqualTo: propertyID).getDocuments()
-                for document in snapshot.documents {
-                    let data = document.data()
-                    returnProperty =  Property(id: document.documentID, data: data)
+                try await Task.sleep(nanoseconds: 500000000)
+                let document = try await ref.getDocument()
+                if document.exists {
+                    id = document.documentID
                 }
             } catch {
                 print(error.localizedDescription)
             }
             
-            self.error = returnProperty != nil ? "" : "No property with that ID was found."
+            self.error = id != nil ? "" : "No property with that ID was found."
             self.propertyID = ""
-            return returnProperty
+            return id
         }
     }
 }

@@ -9,18 +9,30 @@ import Foundation
 import MapKit
 
 struct Location {
-    let streetNumber: String    // eg. 1
-    let streetName: String      // eg. Infinite Loop
-    let city: String            // eg. Cupertino
-    let state: String           // eg. CA
-    let zipCode: String         // eg. 95014
-    let country: String         // eg. United States
+    let streetNumber: String
+    let streetName: String
+    let city: String
+    let state: String
+    let zipCode: String
+    let country: String
     
     var formattedAddress: String {
         return """
         \(streetNumber) \(streetName),
         \(city), \(state) \(zipCode)
         \(country)
+        """
+    }
+    
+    var addressTitle: String {
+        return """
+        \(streetNumber) \(streetName)
+        """
+    }
+    
+    var addressDescription: String {
+        return """
+        \(city), \(state) \(zipCode) \(country)
         """
     }
     
@@ -31,17 +43,26 @@ struct Location {
             "city": city,
             "state": state,
             "zipCode": zipCode,
-            "country": country,
+            "country": country
         ]
     }
     
-    init(with placemark: MKPlacemark) {
+    init(placemark: MKPlacemark) {
         self.streetName = placemark.thoroughfare ?? ""
         self.streetNumber = placemark.subThoroughfare ?? ""
         self.city = placemark.locality ?? ""
         self.state = placemark.administrativeArea ?? ""
         self.zipCode = placemark.postalCode ?? ""
         self.country = placemark.country ?? ""
+    }
+    
+    init(data: [String: Any]) {
+        self.streetName = data["streetName"] as? String ?? ""
+        self.streetNumber = data["streetNumber"] as? String ?? ""
+        self.city = data["city"] as? String ?? ""
+        self.state = data["state"] as? String ?? ""
+        self.zipCode = data["zipCode"] as? String ?? ""
+        self.country = data["country"] as? String ?? ""
     }
     
     init() {

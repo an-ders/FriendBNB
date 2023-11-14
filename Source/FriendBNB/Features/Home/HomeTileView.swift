@@ -8,22 +8,31 @@
 import SwiftUI
 
 struct HomeTileView: View {
-    var property: Property
+    @ObservedObject var property: Property
     
     var body: some View {
         NavigationLink(destination: {
-            Text(property.owner)
-                .navigationTitle(property.title + "'s Property")
+            PropertyDetailView(property: property)
         }, label: {
-            VStack {
-                Text(property.title)
-                Text(property.owner)
+            VStack(alignment: .leading) {
+                Spacer()
+                VStack(spacing: 0) {
+                    Text(property.location.addressTitle)
+                        .font(.title).fontWeight(.medium)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    Text(property.location.addressDescription)
+                        .font(.caption).fontWeight(.light)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                }
+                .foregroundColor(.white)
+                .padding(Constants.Padding.small)
+
             }
             .frame(height: 150)
             .frame(maxWidth: .infinity)
             .background {
                 RoundedRectangle(cornerRadius: 15)
-                    .foregroundColor(.mint)
+                    .foregroundColor(.systemGray2)
             }
             .padding(.horizontal, 10)
         })

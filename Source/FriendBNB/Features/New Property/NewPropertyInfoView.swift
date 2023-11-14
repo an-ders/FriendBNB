@@ -8,10 +8,9 @@
 import SwiftUI
 
 struct NewPropertyInfoView: View {
-    @Binding var showSheet: Bool
-    @Binding var currentTab: NewPropertyTabs
-    @Binding var info: NewPropertyInfo?
     @StateObject var viewModel: ViewModel = ViewModel()
+    @EnvironmentObject var homeManager: HomeManager
+    @EnvironmentObject var newPropertyManager: NewPropertyManager
     
     var body: some View {
         VStack(spacing: Constants.Spacing.regular) {
@@ -27,12 +26,12 @@ struct NewPropertyInfoView: View {
             Spacer()
             
             PairButtonsView(prevText: "Close", prevAction: {
-                showSheet = false
+                homeManager.showNewPropertySheet = false
             }, nextText: "Next", nextAction: {
-                info = viewModel.getInfo()
+                newPropertyManager.info = viewModel.getInfo()
                 
                 withAnimation {
-                    currentTab = .search
+                    newPropertyManager.currentTab = .search
                 }
             })
             

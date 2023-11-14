@@ -9,10 +9,9 @@ import SwiftUI
 import MapKit
 
 struct NewPropertySearchView: View {
-    @Binding var currentTab: NewPropertyTabs
-    @Binding var location: Location
-    
+    @EnvironmentObject var newPropertyManager: NewPropertyManager
     @StateObject var viewModel = NewPropertySearchView.ViewModel()
+    
     @FocusState private var isFocusedTextField: Bool
     
     var body: some View {
@@ -44,10 +43,10 @@ struct NewPropertySearchView: View {
                     AddressRow(address: address) {
                         Task { @MainActor in
                             if let location = await viewModel.getPlace(from: address) {
-                                self.location = location
+                                newPropertyManager.location = location
                                 
                                 withAnimation {
-                                    currentTab = .address
+                                    newPropertyManager.currentTab = .address
                                 }
                             }
                         }
@@ -81,13 +80,13 @@ struct NewPropertySearchView: View {
                 Spacer()
                 PairButtonsView(prevText: "Back", prevAction: {
                     withAnimation {
-                        currentTab = .info
+                        newPropertyManager.currentTab = .info
                     }
                 }, nextText: "Skip", nextAction: {
-                    location = Location()
+                    newPropertyManager.location = Location()
                     
                     withAnimation {
-                        currentTab = .address
+                        newPropertyManager.currentTab = .address
                     }
                 })
             }

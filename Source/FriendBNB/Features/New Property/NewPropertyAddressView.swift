@@ -9,20 +9,10 @@ import SwiftUI
 import FloatingPromptTextField
 
 struct NewPropertyAddressView: View {
-    @Binding var showSheet: Bool
-    @Binding var currentTab: NewPropertyTabs
-    @Binding var location: Location
-    var confirmAction: () -> Void
+    @EnvironmentObject var homeManager: HomeManager
+    @EnvironmentObject var newPropertyManager: NewPropertyManager
     
-    @StateObject var viewModel: NewPropertyAddressView.ViewModel
-    
-    init(showSheet: Binding<Bool>, currentTab: Binding<NewPropertyTabs>, location: Binding<Location>, confirmAction: @escaping () -> Void) {
-        self._showSheet = showSheet
-        self._currentTab = currentTab
-        self._location = location
-        self._viewModel = StateObject(wrappedValue: ViewModel())
-        self.confirmAction = confirmAction
-    }
+    @StateObject var viewModel: ViewModel = ViewModel()
     
     var body: some View {
         VStack(spacing: 0) {
@@ -42,19 +32,22 @@ struct NewPropertyAddressView: View {
             
             PairButtonsView(prevText: "Back", prevAction: {
                 withAnimation {
-                    currentTab = .search
+                    newPropertyManager.currentTab = .search
                 }
             }, nextText: "Confirm", nextAction: {
                 if viewModel.validAddress() {
-                    confirmAction()
-                    showSheet = false
+                    Task {
+                        let newId = await newPropertyManager.addDocument()
+                        homeManager.addProperty(newId)
+                    }
+                    homeManager.showNewPropertySheet = false
                 }
             })
         }
         .padding(.horizontal, Constants.Padding.regular)
         .padding(.top, Constants.Padding.regular)
         .onAppear {
-            viewModel.syncLocation(location)
+            viewModel.syncLocation(newPropertyManager.location)
         }
     }
 }

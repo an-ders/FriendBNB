@@ -1,5 +1,5 @@
 //
-//  HomeActionButtonView.swift
+//  HomeMenuButtonView.swift
 //  FriendBNB
 //
 //  Created by Anders Tai on 2023-11-06.
@@ -7,19 +7,19 @@
 
 import SwiftUI
 
-struct HomeActionButtonView: View {
-    @ObservedObject var viewModel: HomeView.ViewModel
+struct HomeMenuButtonView: View {
+    @EnvironmentObject var homeManager: HomeManager
     
     var body: some View {
         Menu(content: {
             Button(action: {
-                viewModel.showNewPropertySheet = true
+                homeManager.showNewPropertySheet = true
             }, label: {
                 Label("Create a property", systemImage: "plus.circle")
             })
             
             Button(action: {
-                viewModel.showAddPropertySheet = true
+                homeManager.showAddPropertySheet = true
             }, label: {
                 Label("Add a property", systemImage: "house.fill")
             })
@@ -36,6 +36,6 @@ struct HomeActionButtonView: View {
 
 //struct HomeActionButtonView_Previews: PreviewProvider {
 //    static var previews: some View {
-//        HomeActionButtonView()
+//        HomeMenuButtonView()
 //    }
 //}

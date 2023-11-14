@@ -26,7 +26,9 @@ struct LoginView: View {
             Spacer()
             
             Button(action: {
-                viewModel.login()
+                Task {
+                    await viewModel.login()
+                }
             }, label: {
                 Text("Login.LoginButton.Title".localized)
                     .font(.system(size: 20, weight: .bold))
@@ -39,19 +41,18 @@ struct LoginView: View {
 }
 
 extension LoginView {
+    @MainActor
     class ViewModel: ObservableObject {
         @Published var username: String = ""
         @Published var password: String = ""
         @Published var error: String?
         
-        func login() {
-            Auth.auth().signIn(withEmail: self.username,
-                               password: self.password) { (result, error) in
-                if error != nil {
-                    print(error?.localizedDescription ?? "")
-                } else {
-                    print("success")
-                }
+        func login() async {
+            do {
+                try await Auth.auth().signIn(withEmail: self.username,
+                                             password: self.password)
+            } catch {
+                print(error.localizedDescription)
             }
         }
     }

@@ -15,12 +15,14 @@ enum RootTabs: String, Hashable, Equatable {
 
 struct RootView: View {
     @StateObject var viewModel: ViewModel = ViewModel()
+    @StateObject var homeManager: HomeManager = HomeManager()
     
     var body: some View {
         Group {
             if viewModel.loggedIn {
                 TabView(selection: $viewModel.selectedTab) {
                     HomeView()
+                        .environmentObject(homeManager)
                         .tag(RootTabs.home)
                         .tabItem {
                             Label("Home", systemImage: "house")
