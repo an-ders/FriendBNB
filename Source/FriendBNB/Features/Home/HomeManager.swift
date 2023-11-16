@@ -12,14 +12,15 @@ import FirebaseFirestore
 class HomeManager: ObservableObject {
     @Published var selectedTab: RootTabs = .home
     @Published var properties: [Property] = []
+    @Published var selectedProperty: Property?
     @Published var showNewPropertySheet = false
     @Published var showAddPropertySheet = false
-    @Published var loading: Bool = true
+    @Published var loading: Bool = false
     
     init() {
-        Task {
-            await fetchProperties()
-        }
+//        Task {
+//            await fetchProperties()
+//        }
     }
     
     func fetchProperties() async {
@@ -27,30 +28,26 @@ class HomeManager: ObservableObject {
         let db = Firestore.firestore()
         let ref = db.collection("Properties")
         
-        let propertyIDs = UserDefaults.standard.object(forKey: "PropertyIDs") as? [String] ?? [String]()
-        print("Fetching properties: \(propertyIDs)")
+        let propertyIds = UserDefaults.standard.object(forKey: "PropertyIDs") as? [String] ?? [String]()
+        print("Fetching properties: \(propertyIds)")
 
-        
         var newProperties: [Property] = []
-        var newPropertyIDs: [String] = []
-        
-        for propertyID in propertyIDs {
+        try? await Task.sleep(nanoseconds: 500000000)
+
+        for propertyId in propertyIds {
+            //let property = await Property(asyncId: propertyId)
             do {
-                try await Task.sleep(nanoseconds: 500000000)
-                let snapshot = try await ref.whereField(FirebaseFirestore.FieldPath.documentID(), isEqualTo: propertyID).getDocuments()
+                let snapshot = try await ref.whereField(FirebaseFirestore.FieldPath.documentID(), isEqualTo: propertyId).getDocuments()
                 
                 for document in snapshot.documents {
                     let data = document.data()
                     newProperties.append(Property(id: document.documentID, data: data))
-                    newPropertyIDs.append(document.documentID)
                 }
             } catch {
-                //self.error = error
                 return
             }
         }
         
-        UserDefaults.standard.set(newPropertyIDs, forKey: "PropertyIDs")
         self.properties = newProperties
         self.loading = false
     }
@@ -66,6 +63,16 @@ class HomeManager: ObservableObject {
         }
     }
     
+    func removeProperty(_ id: String) {
+        let ids = UserDefaults.standard.object(forKey: "PropertyIDs")  as? [String] ?? [String]()
+        let filteredIds = ids.filter({$0 != id})
+        UserDefaults.standard.set(filteredIds, forKey: "PropertyIDs")
+        
+        Task {
+            await fetchProperties()
+        }
+    }
+    
     func deleteProperty(id: String) async {
         let db = Firestore.firestore()
         do {
@@ -74,5 +81,6 @@ class HomeManager: ObservableObject {
         } catch {
             print("Error removing document: \(error)")
         }
+        removeProperty(id)
     }
 }

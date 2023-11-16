@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import FirebaseFirestore
 
 struct HomeEmptyView: View {
     @EnvironmentObject var homeManager: HomeManager

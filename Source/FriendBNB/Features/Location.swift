@@ -9,12 +9,12 @@ import Foundation
 import MapKit
 
 struct Location {
-    let streetNumber: String
-    let streetName: String
-    let city: String
-    let state: String
-    let zipCode: String
-    let country: String
+    var streetNumber: String
+    var streetName: String
+    var city: String
+    var state: String
+    var zipCode: String
+    var country: String
     
     var formattedAddress: String {
         return """

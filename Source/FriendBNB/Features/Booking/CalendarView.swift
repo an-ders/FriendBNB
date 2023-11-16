@@ -6,34 +6,34 @@
 //
 
 import SwiftUI
+import FirebaseFirestore
 
 struct CalendarView: View {
-    @StateObject var viewModel = ViewModel()
-    var property: Property
+    @EnvironmentObject var bookingManager: BookingManager
     
     var body: some View {
         VStack {
             HStack {
                 Spacer()
                 Button(action: {
-                    viewModel.previousMonth()
+                    bookingManager.previousMonth()
                 }, label: {
                     Image(systemName: "arrow.left")
-                        .imageScale(.large)
+                        .imageScale(.medium)
                         .font(Font.title.weight(.bold))
                 })
                 
-                Text(viewModel.date.monthYearString())
+                Text(bookingManager.date.monthYearString())
                     .font(.title)
                     .bold()
                     .animation(.none)
                     .frame(maxWidth: .infinity)
                 
                 Button(action: {
-                    viewModel.nextMonth()
+                    bookingManager.nextMonth()
                 }, label: {
                     Image(systemName: "arrow.right")
-                        .imageScale(.large)
+                        .imageScale(.medium)
                         .font(Font.title.weight(.bold))
                 })
                 Spacer()
@@ -63,50 +63,12 @@ struct CalendarView: View {
                     ForEach(1..<8) { column in
                         let count = column + (row * 7)
                         
-                        CalendarCell(count: count,
-                                     calendarViewModel: viewModel,
-                                     property: property)
+                        CalendarCell(count: count, bookingManager: bookingManager)
                     }
                 }
             }
         }
         .frame(maxHeight: .infinity)
-    }
-}
-
-extension CalendarView {
-    class ViewModel: ObservableObject {
-        @Published var date = Date()
-        @Published var startDate: Date?
-        @Published var endDate: Date?
-        
-        func previousMonth() {
-            self.date = date.minusMonth()
-        }
-        
-        func nextMonth() {
-            self.date = date.plusMonth()
-        }
-        
-        func dateClicked(_ date: Date) {
-            if startDate != nil && endDate != nil {
-                startDate = date
-                endDate = nil
-            } else if startDate == nil && endDate == nil {
-                startDate = date
-                endDate = nil
-            } else {
-                guard startDate != nil else {
-                    return
-                }
-                if date < startDate! {
-                    endDate = startDate
-                    startDate = date
-                } else {
-                    endDate = date
-                }
-            }
-        }
     }
 }
 

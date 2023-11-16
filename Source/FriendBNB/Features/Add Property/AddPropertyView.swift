@@ -30,7 +30,9 @@ struct AddPropertyView: View {
             
             Spacer()
             PairButtonsView(prevText: "Close", prevAction: {
-                homeManager.showAddPropertySheet = false
+                Task { @MainActor in
+                    homeManager.showAddPropertySheet = false
+                }
             }, nextText: "Add", nextAction: {
                 Task {
                     if let id = await viewModel.checkValidID() {

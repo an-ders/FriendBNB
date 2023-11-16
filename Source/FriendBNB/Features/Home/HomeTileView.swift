@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct HomeTileView: View {
-    @ObservedObject var property: Property
-    
+    var property: Property
+
     var body: some View {
         NavigationLink(destination: {
             PropertyDetailView(property: property)
@@ -26,7 +26,6 @@ struct HomeTileView: View {
                 }
                 .foregroundColor(.white)
                 .padding(Constants.Padding.small)
-
             }
             .frame(height: 150)
             .frame(maxWidth: .infinity)
@@ -35,18 +34,21 @@ struct HomeTileView: View {
                     .foregroundColor(.systemGray2)
             }
             .padding(.horizontal, 10)
+//            .onTapGesture {
+//                print("Tpped")
+//            }
         })
     }
 }
 
 extension HomeTileView {
     class ViewModel: ObservableObject {
-        
+
     }
 }
 
-struct HomeTileView_Previews: PreviewProvider {
-    static var previews: some View {
-        HomeTileView(property: Property(id: "test123", data: ["title": "testtitle123", "owner": "Anders"]))
-    }
-}
+//struct HomeTileView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        HomeTileView(property: Property(id: "test123", data: ["title": "testtitle123", "owner": "Anders"]))
+//    }
+//}

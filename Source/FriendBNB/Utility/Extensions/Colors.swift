@@ -64,4 +64,3 @@ extension Color {
     static let systemTeal = Color(UIColor.systemTeal)
     static let systemIndigo = Color(UIColor.systemIndigo)
 }
-

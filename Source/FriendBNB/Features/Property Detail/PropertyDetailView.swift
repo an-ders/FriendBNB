@@ -9,12 +9,14 @@ import SwiftUI
 import FirebaseFirestore
 
 struct PropertyDetailView: View {
+    @StateObject var bookingManager: BookingManager
     @StateObject var viewModel: ViewModel
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @EnvironmentObject var homeManager: HomeManager
-
+    
     init(property: Property) {
         self._viewModel = StateObject(wrappedValue: ViewModel(property))
+        self._bookingManager = StateObject(wrappedValue: BookingManager(property))
     }
     
     var body: some View {
@@ -25,6 +27,9 @@ struct PropertyDetailView: View {
                         .font(.title).fontWeight(.medium)
                         .frame(maxWidth: .infinity, alignment: .leading)
                     Text(viewModel.property.location.addressDescription)
+                        .font(.headline).fontWeight(.light)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    Text(String(viewModel.property.rooms))
                         .font(.headline).fontWeight(.light)
                         .frame(maxWidth: .infinity, alignment: .leading)
                     
@@ -47,7 +52,7 @@ struct PropertyDetailView: View {
                     .indexViewStyle(PageIndexViewStyle(backgroundDisplayMode: .always))
                     
                     Button(action: {
-                        viewModel.createBooking = true
+                        bookingManager.displayBookingSheet()
                     }, label: {
                         Text("Start Booking")
                             .font(.title3).fontWeight(.medium)
@@ -60,6 +65,7 @@ struct PropertyDetailView: View {
                 }
             }
         }
+        .environmentObject(bookingManager)
         .onChange(of: viewModel.exit) { _ in
             self.presentationMode.wrappedValue.dismiss()
             Task {
@@ -81,18 +87,24 @@ struct PropertyDetailView: View {
             },
                   secondaryButton: .default(Text("Cancel")))
         }
-        .sheet(isPresented: $viewModel.createBooking) {
-            BookingView(property: viewModel.property)
+        .sheet(isPresented: $bookingManager.showBookingSheet) {
+            BookingView()
+                .environmentObject(bookingManager)
+        }
+        .onDisappear {
+            viewModel.listener?.remove()
         }
     }
 }
 
 extension PropertyDetailView {
+    @MainActor
     class ViewModel: ObservableObject {
         @Published var property: Property
         @Published var exit: Bool = false
         @Published var confirmDelete: Bool = false
         @Published var createBooking: Bool = false
+        var listener: ListenerRegistration?
 
         init(_ property: Property) {
             self.property = property
@@ -104,16 +116,16 @@ extension PropertyDetailView {
                         print("Error fetching document: \(error!)")
                         return
                     }
-                    
+
                     if let newData = document.data() {
-                        self.property = Property(id: property.id, data: newData)
+                        print("Updating data DETAIL VIEW")
+                        self.property.updateData(newData)
+
                     } else {
                         self.exit.toggle()
                     }
                 }
         }
-        
-        
     }
 }
 

@@ -9,149 +9,125 @@ import SwiftUI
 
 struct CalendarCell: View {
     @StateObject var viewModel: CalendarCell.ViewModel
-    @ObservedObject var calendarViewModel: CalendarView.ViewModel
+    @EnvironmentObject var bookingManager: BookingManager
     
-    init(count: Int, calendarViewModel: CalendarView.ViewModel, property: Property) {
-        self._viewModel = StateObject(wrappedValue: ViewModel(count: count, calendarViewModel: calendarViewModel, property: property))
-        self.calendarViewModel = calendarViewModel
+    init(count: Int, bookingManager: BookingManager) {
+        self._viewModel = StateObject(wrappedValue: ViewModel(count: count, bookingManager: bookingManager))
     }
     
     var body: some View {
         Button(action: {
-            calendarViewModel.dateClicked(viewModel.date)
-            print(viewModel.highlighted)
+            bookingManager.dateClicked(viewModel.date)
         }, label: {
             Text(String(viewModel.day))
-                .strikethrough(viewModel.booked)
+                .strikethrough(viewModel.isBooked)
                 .padding(Constants.Padding.xsmall)
-                .foregroundColor(calendarViewModel.date.get(.month) == viewModel.month ? Color.black : Color.gray)
+                .foregroundColor(bookingManager.date.get(.month) == viewModel.month ? viewModel.isBooked ? Color.systemGray : Color.black : Color.systemGray4)
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .background {
-                    if viewModel.highlighted {
-//                        Color.blue.opacity(0.5)
-//                            .clipShape(
-//                                .rect(
-//                                    topLeadingRadius: 0,
-//                                    bottomLeadingRadius: 20,
-//                                    bottomTrailingRadius: 0,
-//                                    topTrailingRadius: 20
-//                                )
-//                        )
+                    if viewModel.isHighlighted && bookingManager.startDate != nil && bookingManager.endDate != nil {
+                        Color.blue.opacity(0.5)
+                            .clipShape(
+                                .rect(
+                                    topLeadingRadius: viewModel.isStartDate ? 20 : 0,
+                                    bottomLeadingRadius: viewModel.isStartDate ? 20 : 0,
+                                    bottomTrailingRadius: viewModel.isEndDate ? 20 : 0,
+                                    topTrailingRadius: viewModel.isEndDate ? 20 : 0
+                                )
+                        )
+                    } else if viewModel.isHighlighted && bookingManager.endDate == nil {
+                        Color.blue.opacity(0.5)
+                            .clipShape(
+                                .rect(
+                                    topLeadingRadius: 20,
+                                    bottomLeadingRadius: 20,
+                                    bottomTrailingRadius: 20,
+                                    topTrailingRadius: 20
+                                )
+                        )
+                    } else if viewModel.isHighlighted {
                         Color.blue.opacity(0.5)
                     }
                 }
-                .onChange(of: calendarViewModel.startDate) { _ in
-                    viewModel.updateHighlighted()
+                .onChange(of: bookingManager.startDate) { _ in
+                    viewModel.update(bookingManager)
                 }
-                .onChange(of: calendarViewModel.endDate) { _ in
-                    viewModel.updateHighlighted()
+                .onChange(of: bookingManager.endDate) { _ in
+                    viewModel.update(bookingManager)
                 }
-                .onChange(of: calendarViewModel.date) { _ in
-                    viewModel.update()
+                .onChange(of: bookingManager.date) { _ in
+                    viewModel.update(bookingManager)
+                }
+                .onChange(of: bookingManager.property.bookings) { _ in
+                    viewModel.update(bookingManager)
                 }
         })
     }
 }
 
 extension CalendarCell {
+    @MainActor
     class ViewModel: ObservableObject {
-        @ObservedObject var calendarViewModel: CalendarView.ViewModel
-        @Published var highlighted: Bool
-        @Published var isStart: Bool
-        @Published var isEnd: Bool
-        @Published var booked: Bool
-        
         let count: Int
-        let property: Property
         @Published var year: Int
         @Published var month: Int
         @Published var day: Int
         @Published var date: Date
+        @Published var isHighlighted: Bool
+        @Published var isBooked: Bool
+        @Published var isStartDate: Bool
+        @Published var isEndDate: Bool
         
-        init(count: Int, calendarViewModel: CalendarView.ViewModel, property: Property) {
+        init(count: Int, bookingManager: BookingManager) {
             self.count = count
-            self.calendarViewModel = calendarViewModel
-            self.property = property
-            self.booked = false
-            self.year = calendarViewModel.date.get(.year)
-            self.month = calendarViewModel.date.get(.month)
-            self.day = calendarViewModel.date.get(.day)
+            self.year = bookingManager.date.get(.year)
+            self.month = bookingManager.date.get(.month)
+            self.day = bookingManager.date.get(.day)
             self.date = Date()
-            self.highlighted = false
-            self.isEnd = false
-            self.isStart = false
-            setDate()
-            updateBooked()
-            updateHighlighted()
+            self.isHighlighted = false
+            self.isBooked = false
+            self.isStartDate = false
+            self.isEndDate = false
+            
+            update(bookingManager)
         }
         
-        func updateHighlighted() {
-            if let start = calendarViewModel.startDate {
-                self.isStart = start == self.date
-            }
-            if let end = calendarViewModel.endDate {
-                self.isEnd = end == self.date
-            }
-            
-            self.highlighted = false
-            
-            if let start = calendarViewModel.startDate {
-                self.highlighted = start == self.date
-            } else if let end = calendarViewModel.endDate {
-                self.highlighted = end == self.date
-            }
-            
-            if let start = calendarViewModel.startDate, let end = calendarViewModel.endDate {
-                self.highlighted = (start...end).contains(self.date)
-            }
-        }
-        
-        func update() {
-            self.booked = false
-            self.year = calendarViewModel.date.get(.year)
-            self.month = calendarViewModel.date.get(.month)
-            self.day = calendarViewModel.date.get(.day)
+        func update(_ bookingManager: BookingManager) {
+            self.year = bookingManager.date.get(.year)
+            self.month = bookingManager.date.get(.month)
+            self.day = bookingManager.date.get(.day)
             self.date = Date()
-            self.highlighted = false
-            self.isEnd = false
-            self.isStart = false
-            setDate()
-            updateBooked()
-            updateHighlighted()
+            setDate(bookingManager.date)
+            
+            isHighlighted = bookingManager.isHightlighted(date)
+            isBooked = bookingManager.isBooked(date)
+            
+            self.isStartDate = false
+            self.isEndDate = false
+            if let startDate = bookingManager.startDate, let endDate = bookingManager.endDate {
+                self.isStartDate = self.date == startDate
+                self.isEndDate = self.date == endDate
+            }
         }
         
-        func setDate() {
-            let daysInMonth = calendarViewModel.date.daysInMonth()
-            let startingSpaces = calendarViewModel.date.firstOfMonth().weekDay()
-            let daysInPrevMonth = calendarViewModel.date.minusMonth().daysInMonth()
+        func setDate(_ date: Date) {
+            let daysInMonth = date.daysInMonth()
+            let startingSpaces = date.firstOfMonth().weekDay()
+            let daysInPrevMonth = date.minusMonth().daysInMonth()
             
             let start = startingSpaces == 0 ? startingSpaces + 7 : startingSpaces
             if count <= start {
                 self.day = daysInPrevMonth + count - start
-                self.month = calendarViewModel.date.minusMonth().get(.month)
+                self.month = date.minusMonth().get(.month)
             } else if count - start > daysInMonth {
                 self.day = count - start - daysInMonth
-                self.month = calendarViewModel.date.plusMonth().get(.month)
+                self.month = date.plusMonth().get(.month)
             } else {
                 self.day = count - start
             }
             
             let calendar = Calendar(identifier: .gregorian)
             self.date = calendar.date(from: DateComponents(year: self.year, month: self.month, day: self.day))!.stripTime()
-        }
-        
-        func updateBooked() {
-            let monthYear = self.date.monthYearString()
-            guard property.bookings.keys.contains(monthYear) else {
-                return
-            }
-
-            for booking in property.bookings[monthYear]! {
-                if booking.overlaps(date: self.date) {
-                    self.booked = true
-                    break
-                }
-            }
         }
     }
 }

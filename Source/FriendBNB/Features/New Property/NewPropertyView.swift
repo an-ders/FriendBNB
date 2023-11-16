@@ -37,7 +37,6 @@ struct NewPropertyView: View {
     var backgroundColor: Color = Color.init(uiColor: .systemGray6)
 }
 
-
 //struct NewPropertyView_Previews: PreviewProvider {
 //    static var previews: some View {
 //        NewPropertyView()

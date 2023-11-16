@@ -21,7 +21,7 @@ struct SettingsView: View {
                 }
             Text("Clear properties")
                 .onTapGesture {
-                    UserDefaults.standard.set([], forKey: "PropertyIDs")
+                    UserDefaults.standard.set([String](), forKey: "PropertyIDs")
                 }
             
         }

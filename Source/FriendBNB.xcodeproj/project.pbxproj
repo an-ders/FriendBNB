@@ -15,9 +15,6 @@
 		565198512AA7DCF200866F0B /* FriendBNBTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 565198502AA7DCF200866F0B /* FriendBNBTests.swift */; };
 		5651985B2AA7DCF200866F0B /* FriendBNBUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5651985A2AA7DCF200866F0B /* FriendBNBUITests.swift */; };
 		5651985D2AA7DCF200866F0B /* FriendBNBUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5651985C2AA7DCF200866F0B /* FriendBNBUITestsLaunchTests.swift */; };
-		5651986C2AA7DE8100866F0B /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5651986B2AA7DE8100866F0B /* GoogleService-Info.plist */; };
-		5651986D2AA7DE8100866F0B /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5651986B2AA7DE8100866F0B /* GoogleService-Info.plist */; };
-		5651986E2AA7DE8100866F0B /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5651986B2AA7DE8100866F0B /* GoogleService-Info.plist */; };
 		565A46542AFF031300D67A03 /* NewPropertyInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 565A46532AFF031300D67A03 /* NewPropertyInfo.swift */; };
 		565A46572AFF454400D67A03 /* AddPropertyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 565A46562AFF454400D67A03 /* AddPropertyView.swift */; };
 		565A465C2AFF571800D67A03 /* StyledFloatingTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 565A465B2AFF571800D67A03 /* StyledFloatingTextField.swift */; };
@@ -34,6 +31,7 @@
 		565A46762B0355C500D67A03 /* View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 565A46752B0355C500D67A03 /* View.swift */; };
 		565A46782B03583A00D67A03 /* PropertyDetailManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 565A46772B03583A00D67A03 /* PropertyDetailManager.swift */; };
 		565A467B2B0363C200D67A03 /* BookingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 565A467A2B0363C200D67A03 /* BookingView.swift */; };
+		567B74FE2B0607DB00639540 /* BookingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 567B74FD2B0607DB00639540 /* BookingManager.swift */; };
 		56D7B0C42AF2F630002B65DD /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = 56D7B0C32AF2F630002B65DD /* .swiftlint.yml */; };
 		56D7B0C82AF2FB95002B65DD /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D7B0C72AF2FB95002B65DD /* RootView.swift */; };
 		56D7B0CB2AF358BF002B65DD /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D7B0CA2AF358BF002B65DD /* HomeView.swift */; };
@@ -53,6 +51,9 @@
 		56D7B0F02AFE1E5F002B65DD /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D7B0EF2AFE1E5F002B65DD /* Constants.swift */; };
 		56D7B0F22AFE2C25002B65DD /* PairButtonsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D7B0F12AFE2C25002B65DD /* PairButtonsView.swift */; };
 		56D7B0F52AFEF5A9002B65DD /* FloatingPromptTextField in Frameworks */ = {isa = PBXBuildFile; productRef = 56D7B0F42AFEF5A9002B65DD /* FloatingPromptTextField */; };
+		56DA6A092B059E0B0007BC40 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 56DA6A082B059E0B0007BC40 /* GoogleService-Info.plist */; };
+		56DA6A0A2B059E0B0007BC40 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 56DA6A082B059E0B0007BC40 /* GoogleService-Info.plist */; };
+		56DA6A0B2B059E0B0007BC40 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 56DA6A082B059E0B0007BC40 /* GoogleService-Info.plist */; };
 		56E24E772AEE30CA005393C7 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 56E24E762AEE30CA005393C7 /* Localizable.strings */; };
 		56E24E7C2AF2EFE5005393C7 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56E24E7B2AF2EFE5005393C7 /* String.swift */; };
 /* End PBXBuildFile section */
@@ -85,7 +86,6 @@
 		565198562AA7DCF200866F0B /* FriendBNBUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FriendBNBUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		5651985A2AA7DCF200866F0B /* FriendBNBUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendBNBUITests.swift; sourceTree = "<group>"; };
 		5651985C2AA7DCF200866F0B /* FriendBNBUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendBNBUITestsLaunchTests.swift; sourceTree = "<group>"; };
-		5651986B2AA7DE8100866F0B /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		565A46532AFF031300D67A03 /* NewPropertyInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPropertyInfo.swift; sourceTree = "<group>"; };
 		565A46562AFF454400D67A03 /* AddPropertyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPropertyView.swift; sourceTree = "<group>"; };
 		565A465B2AFF571800D67A03 /* StyledFloatingTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StyledFloatingTextField.swift; sourceTree = "<group>"; };
@@ -102,6 +102,7 @@
 		565A46752B0355C500D67A03 /* View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = View.swift; sourceTree = "<group>"; };
 		565A46772B03583A00D67A03 /* PropertyDetailManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PropertyDetailManager.swift; sourceTree = "<group>"; };
 		565A467A2B0363C200D67A03 /* BookingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookingView.swift; sourceTree = "<group>"; };
+		567B74FD2B0607DB00639540 /* BookingManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookingManager.swift; sourceTree = "<group>"; };
 		569A8FEB2AA82DCD003B3A44 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		56D7B0C32AF2F630002B65DD /* .swiftlint.yml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = SOURCE_ROOT; };
 		56D7B0C72AF2FB95002B65DD /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
@@ -121,6 +122,7 @@
 		56D7B0EC2AFE1A9A002B65DD /* CustomStepperView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomStepperView.swift; sourceTree = "<group>"; };
 		56D7B0EF2AFE1E5F002B65DD /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		56D7B0F12AFE2C25002B65DD /* PairButtonsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PairButtonsView.swift; sourceTree = "<group>"; };
+		56DA6A082B059E0B0007BC40 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		56E24E762AEE30CA005393C7 /* Localizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
 		56E24E7B2AF2EFE5005393C7 /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
 		89B92C97B306D5AD425B48AB /* Pods-FriendBNB.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FriendBNB.release.xcconfig"; path = "Target Support Files/Pods-FriendBNB/Pods-FriendBNB.release.xcconfig"; sourceTree = "<group>"; };
@@ -189,11 +191,11 @@
 		5651983E2AA7DCF200866F0B /* FriendBNB */ = {
 			isa = PBXGroup;
 			children = (
+				56DA6A082B059E0B0007BC40 /* GoogleService-Info.plist */,
 				56D7B0C32AF2F630002B65DD /* .swiftlint.yml */,
 				56E24E792AF2EF92005393C7 /* Utility */,
 				56E24E722AEE2E6E005393C7 /* Features */,
 				569A8FEB2AA82DCD003B3A44 /* Info.plist */,
-				5651986B2AA7DE8100866F0B /* GoogleService-Info.plist */,
 				5651983F2AA7DCF200866F0B /* FriendBNBApp.swift */,
 				565198432AA7DCF200866F0B /* Colors.xcassets */,
 				565198452AA7DCF200866F0B /* Preview Content */,
@@ -268,6 +270,7 @@
 				565A46622B00A11700D67A03 /* CalendarView.swift */,
 				565A46682B00AB2600D67A03 /* CalendarCellView.swift */,
 				565A467A2B0363C200D67A03 /* BookingView.swift */,
+				567B74FD2B0607DB00639540 /* BookingManager.swift */,
 			);
 			path = Booking;
 			sourceTree = "<group>";
@@ -309,7 +312,6 @@
 		56D7B0E32AFC9CA1002B65DD /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				56D7B0E12AFC9C9B002B65DD /* Location.swift */,
 				56D7B0E82AFC9E19002B65DD /* AddressSearchResult.swift */,
 				565A46532AFF031300D67A03 /* NewPropertyInfo.swift */,
 			);
@@ -345,6 +347,7 @@
 				56E24E732AEE2E77005393C7 /* Login */,
 				56D7B0CF2AF4BE97002B65DD /* Property.swift */,
 				565A466A2B00B88700D67A03 /* Booking.swift */,
+				56D7B0E12AFC9C9B002B65DD /* Location.swift */,
 			);
 			path = Features;
 			sourceTree = "<group>";
@@ -504,8 +507,8 @@
 				56D7B0C42AF2F630002B65DD /* .swiftlint.yml in Resources */,
 				565198472AA7DCF200866F0B /* Preview Assets.xcassets in Resources */,
 				56E24E772AEE30CA005393C7 /* Localizable.strings in Resources */,
+				56DA6A092B059E0B0007BC40 /* GoogleService-Info.plist in Resources */,
 				565198442AA7DCF200866F0B /* Colors.xcassets in Resources */,
-				5651986C2AA7DE8100866F0B /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -513,7 +516,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5651986D2AA7DE8100866F0B /* GoogleService-Info.plist in Resources */,
+				56DA6A0A2B059E0B0007BC40 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -521,7 +524,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5651986E2AA7DE8100866F0B /* GoogleService-Info.plist in Resources */,
+				56DA6A0B2B059E0B0007BC40 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -621,6 +624,7 @@
 				56D7B0D22AF74E09002B65DD /* Colors.swift in Sources */,
 				56D7B0D92AF99B83002B65DD /* HomeMenuButtonView.swift in Sources */,
 				56D7B0EB2AFDC7AF002B65DD /* NewPropertyAddressView.swift in Sources */,
+				567B74FE2B0607DB00639540 /* BookingManager.swift in Sources */,
 				56D7B0E02AFC9C03002B65DD /* NewPropertyInfoView.swift in Sources */,
 				56D7B0CB2AF358BF002B65DD /* HomeView.swift in Sources */,
 				565198402AA7DCF200866F0B /* FriendBNBApp.swift in Sources */,

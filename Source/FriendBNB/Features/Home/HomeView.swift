@@ -16,10 +16,10 @@ struct HomeView: View {
     var body: some View {
         NavigationView {
             Group {
-                if !homeManager.properties.isEmpty || homeManager.loading {
+                if !viewModel.properties.isEmpty || homeManager.loading {
                     ScrollView {
                         VStack {
-                            ForEach(homeManager.properties) { property in
+                            ForEach(viewModel.properties) { property in
                                 HomeTileView(property: property)
                             }
                         }
@@ -27,7 +27,7 @@ struct HomeView: View {
                     }
                     .refreshable {
                         Task {
-                            await homeManager.fetchProperties()
+                            await viewModel.fetchProperties()
                         }
                     }
                     .if(homeManager.loading) { view in
@@ -63,11 +63,42 @@ struct HomeView: View {
 extension HomeView {
     @MainActor
     class ViewModel: ObservableObject {
-        
         @Published var userID: String?
         @Published var error: Error?
         @Published var properties: [Property] = []
+        init() {
+            Task {
+                await fetchProperties()
+            }
+        }
         
+        func fetchProperties() async {
+            let db = Firestore.firestore()
+            let ref = db.collection("Properties")
+            
+            let propertyIds = UserDefaults.standard.object(forKey: "PropertyIDs") as? [String] ?? [String]()
+            print("Fetching properties: \(propertyIds)")
+            
+            self.properties = []
+            try? await Task.sleep(nanoseconds: 500000000)
+            
+            for propertyId in propertyIds {
+                //let property = await Property(asyncId: propertyId)
+                do {
+                    let snapshot = try await ref.whereField(FirebaseFirestore.FieldPath.documentID(), isEqualTo: propertyId).getDocuments()
+                    
+                    for document in snapshot.documents {
+                        let data = document.data()
+                        print(data)
+                        self.properties.append(Property(id: document.documentID, data: data))
+                    }
+                } catch {
+                    return
+                }
+            }
+            
+            //self.properties = newProperties
+        }
     }
 }
 

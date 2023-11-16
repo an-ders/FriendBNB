@@ -15,7 +15,7 @@ enum RootTabs: String, Hashable, Equatable {
 
 struct RootView: View {
     @StateObject var viewModel: ViewModel = ViewModel()
-    @StateObject var homeManager: HomeManager = HomeManager()
+    @ObservedObject var homeManager: HomeManager = HomeManager()
     
     var body: some View {
         Group {
@@ -47,6 +47,9 @@ struct RootView: View {
         .onAppear {
             Auth.auth().addStateDidChangeListener { auth, user in
                 viewModel.loggedIn = user != nil
+//                Task { @MainActor in
+//                    await homeManager.fetchProperties()
+//                }
             }
         }
     }
