@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import FirebaseAuth
 import FirebaseFirestore
 
 @MainActor
@@ -26,18 +27,32 @@ class HomeManager: ObservableObject {
     func fetchProperties() async {
         self.loading = true
         let db = Firestore.firestore()
-        let ref = db.collection("Properties")
         
-        let propertyIds = UserDefaults.standard.object(forKey: "PropertyIDs") as? [String] ?? [String]()
+        guard Auth.auth().currentUser != nil else {
+            print("User not found")
+            return
+        }
+        
+        //let propertyIds = UserDefaults.standard.object(forKey: "PropertyIDs") as? [String] ?? [String]()
+        var propertyIds = [String]()
+        print("Attempting to fetch property Ids")
+        do {
+            let document = try await db.collection("Accounts").document(Auth.auth().currentUser!.uid).getDocument()
+            let data = document.data() ?? [:]
+            propertyIds = data["properties"] as? [String] ?? [String]()
+            
+            print("Successfully fetched Ids")
+        } catch {
+            print("Error getting Ids \(error.localizedDescription)")
+        }
+        
         print("Fetching properties: \(propertyIds)")
-
         var newProperties: [Property] = []
-        try? await Task.sleep(nanoseconds: 500000000)
+        //try? await Task.sleep(nanoseconds: 500000000)
 
         for propertyId in propertyIds {
-            //let property = await Property(asyncId: propertyId)
             do {
-                let snapshot = try await ref.whereField(FirebaseFirestore.FieldPath.documentID(), isEqualTo: propertyId).getDocuments()
+                let snapshot = try await db.collection("Properties").whereField(FirebaseFirestore.FieldPath.documentID(), isEqualTo: propertyId).getDocuments()
                 
                 for document in snapshot.documents {
                     let data = document.data()
@@ -52,21 +67,52 @@ class HomeManager: ObservableObject {
         self.loading = false
     }
     
-    func addProperty(_ id: String) {
-        var oldIDs = UserDefaults.standard.object(forKey: "PropertyIDs")  as? [String] ?? [String]()
-        oldIDs.append(id)
-        UserDefaults.standard.set(oldIDs, forKey: "PropertyIDs")
+    func addProperty(_ id: String) async {
+//        var oldIDs = UserDefaults.standard.object(forKey: "PropertyIDs")  as? [String] ?? [String]()
+//        oldIDs.append(id)
+//        UserDefaults.standard.set(oldIDs, forKey: "PropertyIDs")
+//        
+        let db = Firestore.firestore()
+        let ref = db.collection("Accounts")
         
-        showAddPropertySheet = false
+        guard Auth.auth().currentUser != nil else {
+            print("User not found")
+            return
+        }
+        
+        print("Attempting to add Id: \(id) to user \(Auth.auth().currentUser!.uid)")
+        do {
+            try await ref.document(Auth.auth().currentUser!.uid).updateData([
+                "properties": FieldValue.arrayUnion([id])
+            ])
+            print("Successfully added Id")
+        } catch {
+            print("Error adding Id: \(error.localizedDescription)")
+        }
+        
         Task {
             await fetchProperties()
         }
     }
     
-    func removeProperty(_ id: String) {
-        let ids = UserDefaults.standard.object(forKey: "PropertyIDs")  as? [String] ?? [String]()
-        let filteredIds = ids.filter({$0 != id})
-        UserDefaults.standard.set(filteredIds, forKey: "PropertyIDs")
+    func removeProperty(_ id: String) async {
+        let db = Firestore.firestore()
+        let ref = db.collection("Accounts")
+        
+        guard Auth.auth().currentUser != nil else {
+            print("User not found")
+            return
+        }
+        
+        print("Attempting to remove Id \(id) from user \(Auth.auth().currentUser!.uid)")
+        do {
+            try await ref.document(Auth.auth().currentUser!.uid).updateData([
+                "properties": FieldValue.arrayRemove([id])
+            ])
+            print("Successfully removed Id")
+        } catch {
+            print("Error removing Id: \(error.localizedDescription)")
+        }
         
         Task {
             await fetchProperties()
@@ -81,6 +127,26 @@ class HomeManager: ObservableObject {
         } catch {
             print("Error removing document: \(error)")
         }
-        removeProperty(id)
+        await removeProperty(id)
+    }
+    
+    func resetProperty() async {
+        let db = Firestore.firestore()
+        let ref = db.collection("Accounts")
+        
+        guard Auth.auth().currentUser != nil else {
+            print("User not found")
+            return
+        }
+        
+        print("Attempting to reset \(Auth.auth().currentUser!) properties")
+        do {
+            try await ref.document(Auth.auth().currentUser!.uid).setData([
+                "properties": []
+            ])
+            print("Successfully reset Ids")
+        } catch {
+            print("Error resetting Ids: \(error.localizedDescription)")
+        }
     }
 }

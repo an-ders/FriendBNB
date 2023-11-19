@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import FloatingPromptTextField
 import FirebaseFirestore
 
 struct AddPropertyView: View {
@@ -36,7 +35,8 @@ struct AddPropertyView: View {
             }, nextText: "Add", nextAction: {
                 Task {
                     if let id = await viewModel.checkValidID() {
-                        homeManager.addProperty(id)
+                        await homeManager.addProperty(id)
+                        homeManager.showAddPropertySheet = false
                     }
                 }
             })

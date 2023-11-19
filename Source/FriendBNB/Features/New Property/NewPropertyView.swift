@@ -22,6 +22,7 @@ struct NewPropertyView: View {
     var body: some View {
         TabView(selection: $newPropertyManager.currentTab) {
             NewPropertyInfoView()
+                .tag(NewPropertyTabs.info)
             
             NewPropertySearchView()
                 .tag(NewPropertyTabs.search)

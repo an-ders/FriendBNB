@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import FloatingPromptTextField
 
 struct NewPropertyAddressView: View {
     @EnvironmentObject var homeManager: HomeManager
@@ -38,9 +37,9 @@ struct NewPropertyAddressView: View {
                 if viewModel.validAddress() {
                     Task {
                         let newId = await newPropertyManager.addDocument()
-                        homeManager.addProperty(newId)
+                        await homeManager.addProperty(newId)
+                        homeManager.showNewPropertySheet = false
                     }
-                    homeManager.showNewPropertySheet = false
                 }
             })
         }

@@ -45,12 +45,20 @@ struct BookingView: View {
                 })
             }
         }
+        .padding(.horizontal, Constants.Padding.regular)
+        .padding(.top, Constants.Padding.small)
+        
         .onTapGesture {
             bookingManager.startDate = nil
             bookingManager.endDate = nil
         }
-        .padding(.horizontal, Constants.Padding.regular)
-        .padding(.top, Constants.Padding.small)
+        
+        .onAppear {
+            bookingManager.subscribe()
+        }
+        .onDisappear {
+            bookingManager.unsubscribe()
+        }
     }
 }
 

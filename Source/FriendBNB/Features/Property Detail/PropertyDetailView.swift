@@ -14,6 +14,8 @@ struct PropertyDetailView: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @EnvironmentObject var homeManager: HomeManager
     
+    @State var showBookingSheet: Bool = false
+    
     init(property: Property) {
         self._viewModel = StateObject(wrappedValue: ViewModel(property))
         self._bookingManager = StateObject(wrappedValue: BookingManager(property))
@@ -65,19 +67,16 @@ struct PropertyDetailView: View {
                 }
             }
         }
-        .environmentObject(bookingManager)
-        .onChange(of: viewModel.exit) { _ in
-            self.presentationMode.wrappedValue.dismiss()
-            Task {
-                await homeManager.fetchProperties()
-            }
-        }
         .padding(.horizontal, Constants.Padding.regular)
+        
+        // Property settings button (...)
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
                 PropertyDetailSettingsView(confirmDelete: $viewModel.confirmDelete)
             }
         }
+        
+        // Auxiliary Views
         .alert(isPresented: $viewModel.confirmDelete) {
             Alert(title: Text("Are you sure you want to delete this property?"),
                   primaryButton: .destructive(Text("Delete")) {
@@ -87,12 +86,23 @@ struct PropertyDetailView: View {
             },
                   secondaryButton: .default(Text("Cancel")))
         }
-        .sheet(isPresented: $bookingManager.showBookingSheet) {
+        .sheet(isPresented: $showBookingSheet) {
             BookingView()
                 .environmentObject(bookingManager)
         }
+        .sync($bookingManager.showBookingSheet, with: $showBookingSheet)
+        
+        .environmentObject(bookingManager)
+        // When the property gets deleted in Firestore "exit" gets toggled
+        .onChange(of: viewModel.exit) { _ in
+            self.presentationMode.wrappedValue.dismiss()
+            Task {
+                await homeManager.fetchProperties()
+            }
+        }
+        // Unsubscribe
         .onDisappear {
-            viewModel.listener?.remove()
+            viewModel.unsubscribe()
         }
     }
 }
@@ -109,8 +119,13 @@ extension PropertyDetailView {
         init(_ property: Property) {
             self.property = property
             
+            subscribe()
+        }
+        
+        func subscribe() {
+            print("Adding listener in DETAIL VIEW")
             let db = Firestore.firestore()
-            db.collection("Properties").document(property.id)
+            self.listener = db.collection("Properties").document(property.id)
                 .addSnapshotListener { documentSnapshot, error in
                     guard let document = documentSnapshot else {
                         print("Error fetching document: \(error!)")
@@ -125,6 +140,11 @@ extension PropertyDetailView {
                         self.exit.toggle()
                     }
                 }
+        }
+        
+        func unsubscribe() {
+            print("Removing listener from DETAIL VIEW")
+            self.listener?.remove()
         }
     }
 }

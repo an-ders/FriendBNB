@@ -9,7 +9,6 @@ import Foundation
 
 @MainActor
 class PropertyDetailManager: ObservableObject {
-    @Published var selectedTab: RootTabs = .home
     @Published var properties: [Property] = []
     @Published var showNewPropertySheet = false
     @Published var showAddPropertySheet = false

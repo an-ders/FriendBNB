@@ -21,6 +21,10 @@ class BookingManager: ObservableObject {
     
     init(_ property: Property) {
         self.property = property
+    }
+    
+    func subscribe() {
+        print("Adding listener in BOOKING MANAGER")
         
         let db = Firestore.firestore()
         self.listener = db.collection("Properties").document(property.id)
@@ -29,14 +33,19 @@ class BookingManager: ObservableObject {
                     print("Error fetching document: \(error!)")
                     return
                 }
-
+                
                 if let newData = document.data() {
-                    print("Updating data CALENDAR VIEW")
+                    print("Updating data BOOKING MANAGER")
                     self.property.updateData(newData)
-
+                    
                 } else {
                 }
             }
+    }
+    
+    func unsubscribe() {
+        print("Removing listener from BOOKING MANAGER")
+        self.listener?.remove()
     }
     
     func hideBookingSheet() {
@@ -69,7 +78,7 @@ class BookingManager: ObservableObject {
             try await db.collection("Properties").document(property.id).updateData([
                 "bookings": FieldValue.arrayUnion([["start": startDate, "end": endDate]])
               ])
-            print("Booking from \(startDate) to \(endDate)")
+            print("Booking from \(String(describing: startDate)) to \(String(describing: endDate))")
         } catch {
             print("Error writing document: \(error)")
         }

@@ -14,15 +14,15 @@ enum RootTabs: String, Hashable, Equatable {
 }
 
 struct RootView: View {
-    @StateObject var viewModel: ViewModel = ViewModel()
     @ObservedObject var homeManager: HomeManager = HomeManager()
+    @ObservedObject var loginManager: LoginManager = LoginManager()
+    @State var loggedIn = false
     
     var body: some View {
         Group {
-            if viewModel.loggedIn {
-                TabView(selection: $viewModel.selectedTab) {
+            if loggedIn {
+                TabView(selection: $homeManager.selectedTab) {
                     HomeView()
-                        .environmentObject(homeManager)
                         .tag(RootTabs.home)
                         .tabItem {
                             Label("Home", systemImage: "house")
@@ -35,30 +35,22 @@ struct RootView: View {
                         }
 
                 }
+                .environmentObject(homeManager)
                 .background {
                     Color.Home.grey
                         .ignoresSafeArea()
-
                 }
             } else {
                 LoginView()
+                    .environmentObject(loginManager)
             }
         }
-        .onAppear {
-            Auth.auth().addStateDidChangeListener { auth, user in
-                viewModel.loggedIn = user != nil
-//                Task { @MainActor in
-//                    await homeManager.fetchProperties()
-//                }
-            }
-        }
+        .sync($loginManager.loggedIn, with: $loggedIn)
     }
 }
 
 extension RootView {
     class ViewModel: ObservableObject {
-        @Published var loggedIn: Bool = false
-        @Published var selectedTab: RootTabs = .home
     }
 }
 
