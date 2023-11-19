@@ -9,50 +9,66 @@ import SwiftUI
 import FirebaseAuth
 
 struct LoginView: View {
-    @StateObject var viewModel: ViewModel = ViewModel()
-    
+    @EnvironmentObject var loginManager: LoginManager
+    @State var showResetPassword = false
     var body: some View {
         VStack {
             Spacer()
-            Text("FriendBNB")
+            Text("Login.Title".localized)
                 .font(.system(size: 36, weight: .bold))
             Spacer()
-            TextField("Login.UsernameField.Title".localized, text: $viewModel.username)
-                .autocapitalization(.none)
-                .disableAutocorrection(true)
-            Divider()
-            SecureField("Login.PasswordField.Title".localized, text: $viewModel.password)
-            Divider()
+
+            StyledFloatingTextField(text: $loginManager.username, prompt: "Login.UsernameField.Title".localized, error: $loginManager.usernameError)
+            
+            SecureStyledFloatingTextField(text: $loginManager.password, prompt: "Login.PasswordField.Title".localized, error: $loginManager.passwordError)
+                
+            if !loginManager.newUser {
+                Button(action: {
+                    loginManager.showResetPassword = true
+                }, label: {
+                    Text("Forgot password?")
+                        .font(.caption).fontWeight(.light)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                })
+                .padding(.top, Constants.Spacing.xsmall)
+            }
+            
+            if loginManager.newUser {
+                    SecureStyledFloatingTextField(text: $loginManager.confirmPassword, prompt: "Login.PasswordConfirmField.Title".localized, error: $loginManager.confirmPasswordError)
+            }
+            
             Spacer()
             
             Button(action: {
-                viewModel.login()
+                Task {
+                    if loginManager.newUser {
+                        await loginManager.register()
+                    } else {
+                        await loginManager.login()
+                    }
+                }
             }, label: {
-                Text("Login.LoginButton.Title".localized)
-                    .font(.system(size: 20, weight: .bold))
+                Text(loginManager.newUser ? "Login.SignupButton.Title".localized : "Login.LoginButton.Title".localized)
+                    .font(.title3).fontWeight(.bold)
             })
+            
+            Button(action: {
+                withAnimation {
+                    loginManager.newUser.toggle()
+                }
+            }, label: {
+                Text(loginManager.newUser ? "Login.SignupButton.Description".localized : "Login.LoginButton.Description".localized)
+                    .font(.headline).fontWeight(.light)
+            })
+            .padding(.top, Constants.Spacing.large)
             Spacer()
         }
         .padding(25)
+        
+        .sheet(isPresented: $showResetPassword) {
+            ResetPasswordView()
+        }
+        .sync($loginManager.showResetPassword, with: $showResetPassword)
     }
     
-}
-
-extension LoginView {
-    class ViewModel: ObservableObject {
-        @Published var username: String = ""
-        @Published var password: String = ""
-        @Published var error: String?
-        
-        func login() {
-            Auth.auth().signIn(withEmail: self.username,
-                               password: self.password) { (result, error) in
-                if error != nil {
-                    print(error?.localizedDescription ?? "")
-                } else {
-                    print("success")
-                }
-            }
-        }
-    }
 }

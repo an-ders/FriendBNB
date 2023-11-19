@@ -11,14 +11,9 @@ import MapKit
 extension NewPropertySearchView {
     @MainActor
     class ViewModel: NSObject, ObservableObject {
-        //@Binding var location: Location
         @Published var region = MKCoordinateRegion()
         @Published var results: [AddressSearchResult] = []
         @Published var searchableText = ""
-        
-//        init(location: Binding<Location>) {
-//            self._location = location
-//        }
         
         private lazy var localSearchCompleter: MKLocalSearchCompleter = {
             let completer = MKLocalSearchCompleter()
@@ -42,7 +37,7 @@ extension NewPropertySearchView {
             do {
                 let response = try await MKLocalSearch(request: request).start()
                 if let placemark = response.mapItems.first?.placemark {
-                    return Location(with: placemark)
+                    return Location(placemark: placemark)
                 }
             } catch {
                 print("ERROR WITH MKLOCALSEARCH")
