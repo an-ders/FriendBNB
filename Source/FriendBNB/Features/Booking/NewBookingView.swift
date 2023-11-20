@@ -1,5 +1,5 @@
 //
-//  BookingView.swift
+//  NewBookingView.swift
 //  FriendBNB
 //
 //  Created by Anders Tai on 2023-11-14.
@@ -7,14 +7,14 @@
 
 import SwiftUI
 
-struct BookingView: View {
+struct NewBookingView: View {
     @EnvironmentObject var bookingManager: BookingManager
     
     var body: some View {
         ZStack {
             ScrollView {
                 VStack {
-                    Text("Your Boooking")
+                    Text("New Boooking")
                         .font(.largeTitle).fontWeight(.medium)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.bottom, Constants.Spacing.small)
@@ -22,13 +22,14 @@ struct BookingView: View {
                         .font(.title3).fontWeight(.light)
                         .frame(maxWidth: .infinity, alignment: .leading)
                     
-                    Text(bookingManager.error ?? "")
-                        .font(.title3).fontWeight(.light)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                    
                     CalendarView()
                         .padding(.horizontal, Constants.Padding.regular)
                         .frame(maxHeight: 300)
+                    
+                    Text(bookingManager.error ?? "")
+                        .font(.headline).fontWeight(.light)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .foregroundColor(Color.systemRed)
                     Spacer()
                 }
                 
@@ -37,7 +38,7 @@ struct BookingView: View {
             VStack {
                 Spacer()
                 PairButtonsView(prevText: "Back", prevAction: {
-                    bookingManager.hideBookingSheet()
+                    bookingManager.showNewBookingSheet = false
                 }, nextText: "Confirm", nextAction: {
                     Task {
                         await bookingManager.createBooking()

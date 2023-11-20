@@ -17,7 +17,7 @@ enum NewPropertyTabs {
 
 struct NewPropertyView: View {
     @StateObject var newPropertyManager: NewPropertyManager = NewPropertyManager()
-    @EnvironmentObject var homeManager: HomeManager
+    @EnvironmentObject var yourPropertyManager: YourPropertyManager
     
     var body: some View {
         TabView(selection: $newPropertyManager.currentTab) {

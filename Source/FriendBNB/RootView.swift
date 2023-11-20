@@ -9,33 +9,35 @@ import SwiftUI
 import FirebaseAuth
 
 enum RootTabs: String, Hashable, Equatable {
-    case home
+    case your
+    case friend
     case settings
 }
 
 struct RootView: View {
-    @ObservedObject var homeManager: HomeManager = HomeManager()
+    @ObservedObject var yourPropertyManager: YourPropertyManager = YourPropertyManager()
     @ObservedObject var loginManager: LoginManager = LoginManager()
     @State var loggedIn = false
     
     var body: some View {
         Group {
             if loggedIn {
-                TabView(selection: $homeManager.selectedTab) {
-                    HomeView()
-                        .tag(RootTabs.home)
+                TabView(selection: $yourPropertyManager.selectedTab) {
+                    YourPropertiesView()
+                        .tag(RootTabs.your)
                         .tabItem {
                             Label("Home", systemImage: "house")
                         }
+                    
+                    
                     
                     SettingsView()
                         .tag(RootTabs.settings)
                         .tabItem {
                             Label("You", systemImage: "person.circle")
                         }
-
                 }
-                .environmentObject(homeManager)
+                .environmentObject(yourPropertyManager)
                 .background {
                     Color.Home.grey
                         .ignoresSafeArea()
@@ -43,9 +45,17 @@ struct RootView: View {
             } else {
                 LoginView()
                     .environmentObject(loginManager)
+                    .onAppear {
+                        yourPropertyManager.selectedTab = .your
+                    }
             }
         }
         .sync($loginManager.loggedIn, with: $loggedIn)
+        .onChange(of: loginManager.loggedIn) { _ in
+            Task {
+                await yourPropertyManager.fetchProperties()
+            }
+        }
     }
 }
 

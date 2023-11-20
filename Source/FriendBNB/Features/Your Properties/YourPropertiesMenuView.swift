@@ -7,19 +7,19 @@
 
 import SwiftUI
 
-struct HomeMenuButtonView: View {
-    @EnvironmentObject var homeManager: HomeManager
+struct YourPropertiesMenuView: View {
+    @EnvironmentObject var yourPropertiesManager: YourPropertiesManager
     
     var body: some View {
         Menu(content: {
             Button(action: {
-                homeManager.showNewPropertySheet = true
+                yourPropertiesManager.showNewPropertySheet = true
             }, label: {
                 Label("Create a property", systemImage: "plus.circle")
             })
             
             Button(action: {
-                homeManager.showAddPropertySheet = true
+                yourPropertiesManager.showAddPropertySheet = true
             }, label: {
                 Label("Add a property", systemImage: "house.fill")
             })

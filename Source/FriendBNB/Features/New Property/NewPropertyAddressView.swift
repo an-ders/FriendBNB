@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct NewPropertyAddressView: View {
-    @EnvironmentObject var homeManager: HomeManager
+    @EnvironmentObject var yourPropertyManager: YourPropertyManager
     @EnvironmentObject var newPropertyManager: NewPropertyManager
     
     @StateObject var viewModel: ViewModel = ViewModel()
@@ -37,8 +37,8 @@ struct NewPropertyAddressView: View {
                 if viewModel.validAddress() {
                     Task {
                         let newId = await newPropertyManager.addDocument()
-                        await homeManager.addProperty(newId)
-                        homeManager.showNewPropertySheet = false
+                        await yourPropertyManager.addProperty(newId)
+                        yourPropertyManager.showNewPropertySheet = false
                     }
                 }
             })

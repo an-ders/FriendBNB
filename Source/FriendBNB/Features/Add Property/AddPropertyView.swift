@@ -9,7 +9,7 @@ import SwiftUI
 import FirebaseFirestore
 
 struct AddPropertyView: View {
-    @EnvironmentObject var homeManager: HomeManager
+    @EnvironmentObject var yourPropertyManager: YourPropertyManager
     @EnvironmentObject var newPropertyManager: NewPropertyManager
     
     @StateObject var viewModel = ViewModel()
@@ -30,13 +30,13 @@ struct AddPropertyView: View {
             Spacer()
             PairButtonsView(prevText: "Close", prevAction: {
                 Task { @MainActor in
-                    homeManager.showAddPropertySheet = false
+                    yourPropertyManager.showAddPropertySheet = false
                 }
             }, nextText: "Add", nextAction: {
                 Task {
                     if let id = await viewModel.checkValidID() {
-                        await homeManager.addProperty(id)
-                        homeManager.showAddPropertySheet = false
+                        await yourPropertyManager.addProperty(id)
+                        yourPropertyManager.showAddPropertySheet = false
                     }
                 }
             })

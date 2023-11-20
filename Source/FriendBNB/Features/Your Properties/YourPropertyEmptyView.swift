@@ -1,5 +1,5 @@
 //
-//  HomeEmptyView.swift
+//  YourPropertiesEmptyView.swift
 //  FriendBNB
 //
 //  Created by Anders Tai on 2023-11-11.
@@ -8,8 +8,8 @@
 import SwiftUI
 import FirebaseFirestore
 
-struct HomeEmptyView: View {
-    @EnvironmentObject var homeManager: HomeManager
+struct YourPropertiesEmptyView: View {
+    @EnvironmentObject var yourPropertiesManager: YourPropertiesManager
     
     var body: some View {
         VStack {
@@ -24,7 +24,7 @@ struct HomeEmptyView: View {
                 .padding(.bottom, 8)
             
             Button(action: {
-                homeManager.showAddPropertySheet = true
+                yourPropertiesManager.showAddPropertySheet = true
             }, label: {
                 Text("Add Existing Property")
                     .font(.headline)
@@ -36,7 +36,7 @@ struct HomeEmptyView: View {
             })
             
             Button(action: {
-                homeManager.showNewPropertySheet = true
+                yourPropertiesManager.showNewPropertySheet = true
             }, label: {
                 Text("New Property")
                     .font(.headline)
@@ -53,6 +53,6 @@ struct HomeEmptyView: View {
 
 //struct HomeEmptyView_Previews: PreviewProvider {
 //    static var previews: some View {
-//        HomeEmptyView()
+//        YourPropertiesEmptyView()
 //    }
 //}

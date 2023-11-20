@@ -7,11 +7,12 @@ target 'FriendBNB' do
   inhibit_all_warnings!
 
   # Pods for FriendBNB
-  pod 'FirebaseAuth', :inhibit_warnings => true
-  pod 'FirebaseCore', :inhibit_warnings => true
-  pod 'FirebaseFirestore', :inhibit_warnings => true
+  pod 'FirebaseAuth'
+  pod 'FirebaseCore'
+  pod 'FirebaseFirestore'
   
-  pod 'SwiftLint', :inhibit_warnings => true
+  pod 'SwiftLint'
+  pod 'SwiftUIIntrospect', '~> 1.0'
 
 #  target 'FriendBNBTests' do
 #    inherit! :search_paths

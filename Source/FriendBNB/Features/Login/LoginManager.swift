@@ -33,7 +33,7 @@ class LoginManager: ObservableObject {
     }
     
     init() {
-        Auth.auth().addStateDidChangeListener { auth, user in
+        Auth.auth().addStateDidChangeListener { _, user in
             self.loggedIn = user != nil
         }
     }
@@ -56,6 +56,13 @@ class LoginManager: ObservableObject {
         self.resetPasswordEmailError = ""
     }
     
+    func resetErrors() {
+        self.usernameError = ""
+        self.passwordError = ""
+        self.confirmPasswordError = ""
+        self.resetPasswordEmailError = ""
+    }
+    
     func login() async {
         print("Attempting a login")
         do {
@@ -71,6 +78,8 @@ class LoginManager: ObservableObject {
     
     func register() async {
         print("Attempting a register")
+        
+        self.resetErrors()
         guard !username.isEmpty else {
             usernameError = "Please enter a valid email"
             return
@@ -89,6 +98,8 @@ class LoginManager: ObservableObject {
         do {
             try await Auth.auth().createUser(withEmail: self.username,
                                              password: self.password)
+            self.resetAll()
+            print("Successfully registered")
         } catch {
             print(error.localizedDescription)
         }

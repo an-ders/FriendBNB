@@ -8,26 +8,27 @@
 import Foundation
 import FirebaseFirestore
 
-struct Booking: Equatable {
-    var start: Date
-    //var startTimeStamp: Timestamp
-    var end: Date
-    //var endTimeStamp: Timestamp
+struct Booking: Equatable, Identifiable {
+    var id = UUID()
+    var start: Date = Date()
+    var end: Date = Date()
+    var userId: String = ""
     
     init(data: [String: Any]) {
-        self.start = Date()
         if let newStart = data["start"] as? Timestamp {
             self.start = newStart.dateValue().stripTime()
         }
-        self.end = Date()
         if let newEnd = data["end"] as? Timestamp {
             self.end = newEnd.dateValue().stripTime()
         }
+        
+        self.userId = data["userId"] as? String ?? ""
     }
     
-    init(start: Date, end: Date) {
+    init(start: Date, end: Date, userId: String) {
         self.start = start
         self.end = end
+        self.userId = userId
     }
     
     func overlaps(date: Date) -> Bool {

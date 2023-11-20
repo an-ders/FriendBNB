@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct HomeTileView: View {
+struct PropertyTileView: View {
     var property: Property
 
     var body: some View {
@@ -41,7 +41,7 @@ struct HomeTileView: View {
     }
 }
 
-extension HomeTileView {
+extension PropertyTileView {
     class ViewModel: ObservableObject {
 
     }

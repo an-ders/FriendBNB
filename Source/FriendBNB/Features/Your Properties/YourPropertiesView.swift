@@ -9,60 +9,56 @@ import SwiftUI
 import FirebaseAuth
 import FirebaseFirestore
 
-struct HomeView: View {
-    @EnvironmentObject var homeManager: HomeManager
+struct YourPropertiesView: View {
+    @EnvironmentObject var yourPropertiesManager: YourPropertiesManager
     @State var showNewPropertySheet = false
     @State var showAddPropertySheet = false
     
     var body: some View {
         NavigationView {
             Group {
-                if !homeManager.properties.isEmpty || homeManager.loading {
+                if !yourPropertiesManager.properties.isEmpty || yourPropertiesManager.loading {
                     ScrollView {
                         VStack {
-                            ForEach(homeManager.properties) { property in
-                                HomeTileView(property: property)
+                            ForEach(yourPropertiesManager.properties) { property in
+                                PropertyTileView(property: property)
                             }
                         }
                         .padding(.top, 2)
                     }
                     .refreshable {
                         Task {
-                            await homeManager.fetchProperties()
+                            await yourPropertiesManager.fetchProperties()
                         }
                     }
-                    .if(homeManager.loading) { view in
+                    .if(yourPropertiesManager.loading) { view in
                         view.blur(radius: 20)
                     }
                     .overlay {
-                        if homeManager.loading {
+                        if yourPropertiesManager.loading {
                             Text("LOADING...")
                                 .fontWeight(.bold)
                         }
                     }
                 } else {
-                    HomeEmptyView()
-                        .onAppear {
-                            Task {
-                                await homeManager.fetchProperties()
-                            }
-                        }
+                    YourPropertiesEmptyView()
+                        
                 }
             }
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
-                    HomeMenuButtonView()
+                    YourPropertiesMenuView()
                 }
             }
         }
         
-        .sync($homeManager.showNewPropertySheet, with: $showNewPropertySheet)
+        .sync($yourPropertiesManager.showNewPropertySheet, with: $showNewPropertySheet)
         .sheet(isPresented: $showNewPropertySheet) {
             NewPropertyView()
                 .interactiveDismissDisabled()
         }
         
-        .sync($homeManager.showAddPropertySheet, with: $showAddPropertySheet)
+        .sync($yourPropertiesManager.showAddPropertySheet, with: $showAddPropertySheet)
         .sheet(isPresented: $showAddPropertySheet) {
             AddPropertyView()
                 .interactiveDismissDisabled()
@@ -70,7 +66,7 @@ struct HomeView: View {
     }
 }
 
-extension HomeView {
+extension YourPropertiesView {
     @MainActor
     class ViewModel: ObservableObject {
         
@@ -79,6 +75,6 @@ extension HomeView {
 
 struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
-        HomeView()
+        YourPropertiesView()
     }
 }

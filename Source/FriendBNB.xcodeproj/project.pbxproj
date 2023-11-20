@@ -18,28 +18,28 @@
 		565A46542AFF031300D67A03 /* NewPropertyInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 565A46532AFF031300D67A03 /* NewPropertyInfo.swift */; };
 		565A46572AFF454400D67A03 /* AddPropertyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 565A46562AFF454400D67A03 /* AddPropertyView.swift */; };
 		565A465C2AFF571800D67A03 /* StyledFloatingTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 565A465B2AFF571800D67A03 /* StyledFloatingTextField.swift */; };
-		565A465E2B00118600D67A03 /* HomeEmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 565A465D2B00118600D67A03 /* HomeEmptyView.swift */; };
+		565A465E2B00118600D67A03 /* YourPropertyEmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 565A465D2B00118600D67A03 /* YourPropertyEmptyView.swift */; };
 		565A46612B00145400D67A03 /* PropertyDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 565A46602B00145400D67A03 /* PropertyDetailView.swift */; };
 		565A46632B00A11700D67A03 /* CalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 565A46622B00A11700D67A03 /* CalendarView.swift */; };
 		565A46672B00A69E00D67A03 /* CalendarHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 565A46662B00A69E00D67A03 /* CalendarHelper.swift */; };
 		565A46692B00AB2600D67A03 /* CalendarCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 565A46682B00AB2600D67A03 /* CalendarCellView.swift */; };
 		565A466B2B00B88700D67A03 /* Booking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 565A466A2B00B88700D67A03 /* Booking.swift */; };
 		565A466D2B00C70600D67A03 /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 565A466C2B00C70600D67A03 /* Date.swift */; };
-		565A466F2B02D4D100D67A03 /* HomeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 565A466E2B02D4D100D67A03 /* HomeManager.swift */; };
+		565A466F2B02D4D100D67A03 /* YourPropertiesManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 565A466E2B02D4D100D67A03 /* YourPropertiesManager.swift */; };
 		565A46722B02DAD600D67A03 /* NewPropertyManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 565A46712B02DAD600D67A03 /* NewPropertyManager.swift */; };
 		565A46742B02E55700D67A03 /* PropertyDetailSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 565A46732B02E55700D67A03 /* PropertyDetailSettingsView.swift */; };
 		565A46762B0355C500D67A03 /* View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 565A46752B0355C500D67A03 /* View.swift */; };
 		565A46782B03583A00D67A03 /* PropertyDetailManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 565A46772B03583A00D67A03 /* PropertyDetailManager.swift */; };
-		565A467B2B0363C200D67A03 /* BookingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 565A467A2B0363C200D67A03 /* BookingView.swift */; };
+		565A467B2B0363C200D67A03 /* NewBookingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 565A467A2B0363C200D67A03 /* NewBookingView.swift */; };
 		567B74FE2B0607DB00639540 /* BookingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 567B74FD2B0607DB00639540 /* BookingManager.swift */; };
 		56D7B0C42AF2F630002B65DD /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = 56D7B0C32AF2F630002B65DD /* .swiftlint.yml */; };
 		56D7B0C82AF2FB95002B65DD /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D7B0C72AF2FB95002B65DD /* RootView.swift */; };
-		56D7B0CB2AF358BF002B65DD /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D7B0CA2AF358BF002B65DD /* HomeView.swift */; };
-		56D7B0CE2AF4BD92002B65DD /* HomeTileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D7B0CD2AF4BD92002B65DD /* HomeTileView.swift */; };
+		56D7B0CB2AF358BF002B65DD /* YourPropertiesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D7B0CA2AF358BF002B65DD /* YourPropertiesView.swift */; };
+		56D7B0CE2AF4BD92002B65DD /* PropertyTileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D7B0CD2AF4BD92002B65DD /* PropertyTileView.swift */; };
 		56D7B0D02AF4BE97002B65DD /* Property.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D7B0CF2AF4BE97002B65DD /* Property.swift */; };
 		56D7B0D22AF74E09002B65DD /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D7B0D12AF74E09002B65DD /* Colors.swift */; };
 		56D7B0D52AF8CCE0002B65DD /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D7B0D42AF8CCE0002B65DD /* SettingsView.swift */; };
-		56D7B0D92AF99B83002B65DD /* HomeMenuButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D7B0D82AF99B83002B65DD /* HomeMenuButtonView.swift */; };
+		56D7B0D92AF99B83002B65DD /* YourPropertiesMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D7B0D82AF99B83002B65DD /* YourPropertiesMenuView.swift */; };
 		56D7B0DB2AF99F25002B65DD /* NewPropertyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D7B0DA2AF99F25002B65DD /* NewPropertyView.swift */; };
 		56D7B0DE2AFACF44002B65DD /* NewPropertySearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D7B0DD2AFACF44002B65DD /* NewPropertySearchView.swift */; };
 		56D7B0E02AFC9C03002B65DD /* NewPropertyInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D7B0DF2AFC9C03002B65DD /* NewPropertyInfoView.swift */; };
@@ -62,6 +62,8 @@
 		56EC54392B09F08200AE12DC /* LoginManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56EC54382B09F08200AE12DC /* LoginManager.swift */; };
 		56EC543B2B09F74900AE12DC /* ResetPasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56EC543A2B09F74900AE12DC /* ResetPasswordView.swift */; };
 		56EC543D2B09FFC300AE12DC /* SecureStyledFloatingTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56EC543C2B09FFC300AE12DC /* SecureStyledFloatingTextField.swift */; };
+		56EC543F2B0B2CCA00AE12DC /* ExistingBookingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56EC543E2B0B2CCA00AE12DC /* ExistingBookingView.swift */; };
+		56EC54412B0B378D00AE12DC /* BookingTileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56EC54402B0B378D00AE12DC /* BookingTileView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -95,29 +97,29 @@
 		565A46532AFF031300D67A03 /* NewPropertyInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPropertyInfo.swift; sourceTree = "<group>"; };
 		565A46562AFF454400D67A03 /* AddPropertyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPropertyView.swift; sourceTree = "<group>"; };
 		565A465B2AFF571800D67A03 /* StyledFloatingTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StyledFloatingTextField.swift; sourceTree = "<group>"; };
-		565A465D2B00118600D67A03 /* HomeEmptyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeEmptyView.swift; sourceTree = "<group>"; };
+		565A465D2B00118600D67A03 /* YourPropertyEmptyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YourPropertyEmptyView.swift; sourceTree = "<group>"; };
 		565A46602B00145400D67A03 /* PropertyDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PropertyDetailView.swift; sourceTree = "<group>"; };
 		565A46622B00A11700D67A03 /* CalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarView.swift; sourceTree = "<group>"; };
 		565A46662B00A69E00D67A03 /* CalendarHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarHelper.swift; sourceTree = "<group>"; };
 		565A46682B00AB2600D67A03 /* CalendarCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarCellView.swift; sourceTree = "<group>"; };
 		565A466A2B00B88700D67A03 /* Booking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Booking.swift; sourceTree = "<group>"; };
 		565A466C2B00C70600D67A03 /* Date.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Date.swift; sourceTree = "<group>"; };
-		565A466E2B02D4D100D67A03 /* HomeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeManager.swift; sourceTree = "<group>"; };
+		565A466E2B02D4D100D67A03 /* YourPropertiesManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YourPropertiesManager.swift; sourceTree = "<group>"; };
 		565A46712B02DAD600D67A03 /* NewPropertyManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPropertyManager.swift; sourceTree = "<group>"; };
 		565A46732B02E55700D67A03 /* PropertyDetailSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PropertyDetailSettingsView.swift; sourceTree = "<group>"; };
 		565A46752B0355C500D67A03 /* View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = View.swift; sourceTree = "<group>"; };
 		565A46772B03583A00D67A03 /* PropertyDetailManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PropertyDetailManager.swift; sourceTree = "<group>"; };
-		565A467A2B0363C200D67A03 /* BookingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookingView.swift; sourceTree = "<group>"; };
+		565A467A2B0363C200D67A03 /* NewBookingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewBookingView.swift; sourceTree = "<group>"; };
 		567B74FD2B0607DB00639540 /* BookingManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookingManager.swift; sourceTree = "<group>"; };
 		569A8FEB2AA82DCD003B3A44 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		56D7B0C32AF2F630002B65DD /* .swiftlint.yml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = SOURCE_ROOT; };
 		56D7B0C72AF2FB95002B65DD /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
-		56D7B0CA2AF358BF002B65DD /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
-		56D7B0CD2AF4BD92002B65DD /* HomeTileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTileView.swift; sourceTree = "<group>"; };
+		56D7B0CA2AF358BF002B65DD /* YourPropertiesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YourPropertiesView.swift; sourceTree = "<group>"; };
+		56D7B0CD2AF4BD92002B65DD /* PropertyTileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PropertyTileView.swift; sourceTree = "<group>"; };
 		56D7B0CF2AF4BE97002B65DD /* Property.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Property.swift; sourceTree = "<group>"; };
 		56D7B0D12AF74E09002B65DD /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
 		56D7B0D42AF8CCE0002B65DD /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
-		56D7B0D82AF99B83002B65DD /* HomeMenuButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeMenuButtonView.swift; sourceTree = "<group>"; };
+		56D7B0D82AF99B83002B65DD /* YourPropertiesMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YourPropertiesMenuView.swift; sourceTree = "<group>"; };
 		56D7B0DA2AF99F25002B65DD /* NewPropertyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPropertyView.swift; sourceTree = "<group>"; };
 		56D7B0DD2AFACF44002B65DD /* NewPropertySearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPropertySearchView.swift; sourceTree = "<group>"; };
 		56D7B0DF2AFC9C03002B65DD /* NewPropertyInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPropertyInfoView.swift; sourceTree = "<group>"; };
@@ -138,6 +140,8 @@
 		56EC54382B09F08200AE12DC /* LoginManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginManager.swift; sourceTree = "<group>"; };
 		56EC543A2B09F74900AE12DC /* ResetPasswordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetPasswordView.swift; sourceTree = "<group>"; };
 		56EC543C2B09FFC300AE12DC /* SecureStyledFloatingTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecureStyledFloatingTextField.swift; sourceTree = "<group>"; };
+		56EC543E2B0B2CCA00AE12DC /* ExistingBookingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExistingBookingView.swift; sourceTree = "<group>"; };
+		56EC54402B0B378D00AE12DC /* BookingTileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookingTileView.swift; sourceTree = "<group>"; };
 		89B92C97B306D5AD425B48AB /* Pods-FriendBNB.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FriendBNB.release.xcconfig"; path = "Target Support Files/Pods-FriendBNB/Pods-FriendBNB.release.xcconfig"; sourceTree = "<group>"; };
 		A88517334A19E262D7241542 /* Pods-FriendBNB.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FriendBNB.debug.xcconfig"; path = "Target Support Files/Pods-FriendBNB/Pods-FriendBNB.debug.xcconfig"; sourceTree = "<group>"; };
 		E19B548CCA72EEB2AD42091C /* Pods_FriendBNB.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FriendBNB.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -281,24 +285,27 @@
 		565A46792B0363A100D67A03 /* Booking */ = {
 			isa = PBXGroup;
 			children = (
+				565A466A2B00B88700D67A03 /* Booking.swift */,
 				565A46622B00A11700D67A03 /* CalendarView.swift */,
 				565A46682B00AB2600D67A03 /* CalendarCellView.swift */,
-				565A467A2B0363C200D67A03 /* BookingView.swift */,
+				565A467A2B0363C200D67A03 /* NewBookingView.swift */,
 				567B74FD2B0607DB00639540 /* BookingManager.swift */,
+				56EC543E2B0B2CCA00AE12DC /* ExistingBookingView.swift */,
+				56EC54402B0B378D00AE12DC /* BookingTileView.swift */,
 			);
 			path = Booking;
 			sourceTree = "<group>";
 		};
-		56D7B0C92AF358B5002B65DD /* Home */ = {
+		56D7B0C92AF358B5002B65DD /* Your Properties */ = {
 			isa = PBXGroup;
 			children = (
-				565A466E2B02D4D100D67A03 /* HomeManager.swift */,
-				56D7B0CA2AF358BF002B65DD /* HomeView.swift */,
-				56D7B0CD2AF4BD92002B65DD /* HomeTileView.swift */,
-				56D7B0D82AF99B83002B65DD /* HomeMenuButtonView.swift */,
-				565A465D2B00118600D67A03 /* HomeEmptyView.swift */,
+				565A466E2B02D4D100D67A03 /* YourPropertiesManager.swift */,
+				56D7B0CA2AF358BF002B65DD /* YourPropertiesView.swift */,
+				56D7B0CD2AF4BD92002B65DD /* PropertyTileView.swift */,
+				56D7B0D82AF99B83002B65DD /* YourPropertiesMenuView.swift */,
+				565A465D2B00118600D67A03 /* YourPropertyEmptyView.swift */,
 			);
-			path = Home;
+			path = "Your Properties";
 			sourceTree = "<group>";
 		};
 		56D7B0D32AF8CCCD002B65DD /* Settings */ = {
@@ -358,10 +365,9 @@
 				565A46552AFF453500D67A03 /* Add Property */,
 				56D7B0DC2AF9B012002B65DD /* New Property */,
 				56D7B0D32AF8CCCD002B65DD /* Settings */,
-				56D7B0C92AF358B5002B65DD /* Home */,
+				56D7B0C92AF358B5002B65DD /* Your Properties */,
 				56E24E732AEE2E77005393C7 /* Login */,
 				56D7B0CF2AF4BE97002B65DD /* Property.swift */,
-				565A466A2B00B88700D67A03 /* Booking.swift */,
 				56D7B0E12AFC9C9B002B65DD /* Location.swift */,
 			);
 			path = Features;
@@ -631,10 +637,10 @@
 			files = (
 				565A46742B02E55700D67A03 /* PropertyDetailSettingsView.swift in Sources */,
 				56D7B0DB2AF99F25002B65DD /* NewPropertyView.swift in Sources */,
-				565A466F2B02D4D100D67A03 /* HomeManager.swift in Sources */,
+				565A466F2B02D4D100D67A03 /* YourPropertiesManager.swift in Sources */,
 				565A466D2B00C70600D67A03 /* Date.swift in Sources */,
 				565A46762B0355C500D67A03 /* View.swift in Sources */,
-				565A465E2B00118600D67A03 /* HomeEmptyView.swift in Sources */,
+				565A465E2B00118600D67A03 /* YourPropertyEmptyView.swift in Sources */,
 				565A46782B03583A00D67A03 /* PropertyDetailManager.swift in Sources */,
 				56D7B0E72AFC9DB3002B65DD /* NewPropertySearchViewModel.swift in Sources */,
 				565A465C2AFF571800D67A03 /* StyledFloatingTextField.swift in Sources */,
@@ -642,10 +648,11 @@
 				56D7B0C82AF2FB95002B65DD /* RootView.swift in Sources */,
 				56EC54362B09DDB400AE12DC /* SecureFloatingPromptTextField.swift in Sources */,
 				565A46632B00A11700D67A03 /* CalendarView.swift in Sources */,
-				565A467B2B0363C200D67A03 /* BookingView.swift in Sources */,
+				565A467B2B0363C200D67A03 /* NewBookingView.swift in Sources */,
 				56EC54302B09D88200AE12DC /* FloatingPromptTextField.swift in Sources */,
 				56E24E7C2AF2EFE5005393C7 /* String.swift in Sources */,
 				565A46612B00145400D67A03 /* PropertyDetailView.swift in Sources */,
+				56EC543F2B0B2CCA00AE12DC /* ExistingBookingView.swift in Sources */,
 				565A46692B00AB2600D67A03 /* CalendarCellView.swift in Sources */,
 				565A46572AFF454400D67A03 /* AddPropertyView.swift in Sources */,
 				56D7B0D52AF8CCE0002B65DD /* SettingsView.swift in Sources */,
@@ -656,15 +663,15 @@
 				565A46542AFF031300D67A03 /* NewPropertyInfo.swift in Sources */,
 				565198422AA7DCF200866F0B /* LoginView.swift in Sources */,
 				56D7B0ED2AFE1A9A002B65DD /* CustomStepperView.swift in Sources */,
-				56D7B0CE2AF4BD92002B65DD /* HomeTileView.swift in Sources */,
+				56D7B0CE2AF4BD92002B65DD /* PropertyTileView.swift in Sources */,
 				56D7B0D22AF74E09002B65DD /* Colors.swift in Sources */,
-				56D7B0D92AF99B83002B65DD /* HomeMenuButtonView.swift in Sources */,
+				56D7B0D92AF99B83002B65DD /* YourPropertiesMenuView.swift in Sources */,
 				56EC54322B09D8AE00AE12DC /* FloatingPrompyEnvironmentValues.swift in Sources */,
 				56EC543D2B09FFC300AE12DC /* SecureStyledFloatingTextField.swift in Sources */,
 				56D7B0EB2AFDC7AF002B65DD /* NewPropertyAddressView.swift in Sources */,
 				567B74FE2B0607DB00639540 /* BookingManager.swift in Sources */,
 				56D7B0E02AFC9C03002B65DD /* NewPropertyInfoView.swift in Sources */,
-				56D7B0CB2AF358BF002B65DD /* HomeView.swift in Sources */,
+				56D7B0CB2AF358BF002B65DD /* YourPropertiesView.swift in Sources */,
 				565198402AA7DCF200866F0B /* FriendBNBApp.swift in Sources */,
 				56D7B0F02AFE1E5F002B65DD /* Constants.swift in Sources */,
 				56D7B0E92AFC9E19002B65DD /* AddressSearchResult.swift in Sources */,
@@ -672,6 +679,7 @@
 				565A46672B00A69E00D67A03 /* CalendarHelper.swift in Sources */,
 				56EC54342B09D8E400AE12DC /* FloatingPromptViewExtensions.swift in Sources */,
 				565A466B2B00B88700D67A03 /* Booking.swift in Sources */,
+				56EC54412B0B378D00AE12DC /* BookingTileView.swift in Sources */,
 				56EC543B2B09F74900AE12DC /* ResetPasswordView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

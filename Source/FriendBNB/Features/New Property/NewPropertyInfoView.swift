@@ -9,7 +9,7 @@ import SwiftUI
 
 struct NewPropertyInfoView: View {
     @StateObject var viewModel: ViewModel = ViewModel()
-    @EnvironmentObject var homeManager: HomeManager
+    @EnvironmentObject var yourPropertyManager: YourPropertyManager
     @EnvironmentObject var newPropertyManager: NewPropertyManager
     
     var body: some View {
@@ -26,7 +26,7 @@ struct NewPropertyInfoView: View {
             Spacer()
             
             PairButtonsView(prevText: "Close", prevAction: {
-                homeManager.showNewPropertySheet = false
+                yourPropertyManager.showNewPropertySheet = false
             }, nextText: "Next", nextAction: {
                 newPropertyManager.info = viewModel.getInfo()
                 

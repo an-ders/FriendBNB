@@ -9,7 +9,8 @@ import SwiftUI
 import FirebaseAuth
 
 struct SettingsView: View {
-    @EnvironmentObject var homeManager: HomeManager
+    @EnvironmentObject var yourPropertyManager: YourPropertyManager
+    
     var body: some View {
         VStack {
             Text("Sign Out")
@@ -23,12 +24,10 @@ struct SettingsView: View {
             Text("Clear properties")
                 .onTapGesture {
                     Task {
-                        await homeManager.resetProperty()
+                        await yourPropertyManager.resetProperty()
                     }
                 }
-            
         }
-        
     }
 }
 

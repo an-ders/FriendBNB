@@ -10,8 +10,8 @@ import FirebaseAuth
 import FirebaseFirestore
 
 @MainActor
-class HomeManager: ObservableObject {
-    @Published var selectedTab: RootTabs = .home
+class YourPropertiesManager: ObservableObject {
+    @Published var selectedTab: RootTabs = .your
     @Published var properties: [Property] = []
     @Published var selectedProperty: Property?
     @Published var showNewPropertySheet = false
@@ -19,9 +19,7 @@ class HomeManager: ObservableObject {
     @Published var loading: Bool = false
     
     init() {
-//        Task {
-//            await fetchProperties()
-//        }
+
     }
     
     func fetchProperties() async {
@@ -61,6 +59,17 @@ class HomeManager: ObservableObject {
             } catch {
                 return
             }
+        }
+        let newPropertiesIds = newProperties.map { $0.id }
+        
+        print("Attempting to write new property Ids")
+        do {
+            try await db.collection("Accounts").document(Auth.auth().currentUser!.uid).setData([
+                "properties": newPropertiesIds
+            ])
+            print("Successfully set Ids")
+        } catch {
+            print("Error setting Ids \(error.localizedDescription)")
         }
         
         self.properties = newProperties

@@ -7,14 +7,16 @@
 
 import SwiftUI
 import FirebaseFirestore
+import SwiftUIIntrospect
 
 struct PropertyDetailView: View {
     @StateObject var bookingManager: BookingManager
     @StateObject var viewModel: ViewModel
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
-    @EnvironmentObject var homeManager: HomeManager
+    @EnvironmentObject var yourPropertyManager: YourPropertyManager
     
-    @State var showBookingSheet: Bool = false
+    @State var showNewBookingSheet = false
+    @State var showExistingBookingSheet = false
     
     init(property: Property) {
         self._viewModel = StateObject(wrappedValue: ViewModel(property))
@@ -22,7 +24,7 @@ struct PropertyDetailView: View {
     }
     
     var body: some View {
-        VStack {
+        ZStack {
             ScrollView {
                 VStack {
                     Text(viewModel.property.location.addressTitle)
@@ -53,20 +55,21 @@ struct PropertyDetailView: View {
                     .tabViewStyle(.page(indexDisplayMode: .always))
                     .indexViewStyle(PageIndexViewStyle(backgroundDisplayMode: .always))
                     
-                    Button(action: {
-                        bookingManager.displayBookingSheet()
-                    }, label: {
-                        Text("Start Booking")
-                            .font(.title3).fontWeight(.medium)
-                            .padding(.horizontal, 20)
-                            .padding(.vertical, 8)
-                            .foregroundColor(.white)
-                            .background(Color.label)
-                            .cornerRadius(20)
-                    })
                 }
             }
+            
+            VStack {
+                Spacer()
+                PairButtonsView(prevText: "Your Bookings", prevAction: {
+                    bookingManager.showExistingBookingSheet = true
+                }, nextText: "New Booking", nextAction: {
+                    bookingManager.showNewBookingSheet = true
+                })
+            }
         }
+//        .introspectTabBarController { (UITabBarController) in
+//            UITabBarController.tabBar.isHidden = true
+//        }
         .padding(.horizontal, Constants.Padding.regular)
         
         // Property settings button (...)
@@ -81,28 +84,41 @@ struct PropertyDetailView: View {
             Alert(title: Text("Are you sure you want to delete this property?"),
                   primaryButton: .destructive(Text("Delete")) {
                 Task {
-                    await homeManager.deleteProperty(id: viewModel.property.id)
+                    await yourPropertyManager.deleteProperty(id: viewModel.property.id)
                 }
             },
                   secondaryButton: .default(Text("Cancel")))
         }
-        .sheet(isPresented: $showBookingSheet) {
-            BookingView()
+        
+        .sync($bookingManager.showNewBookingSheet, with: $showNewBookingSheet)
+        .sheet(isPresented: $showNewBookingSheet) {
+            NewBookingView()
                 .environmentObject(bookingManager)
         }
-        .sync($bookingManager.showBookingSheet, with: $showBookingSheet)
+        
+        .sync($bookingManager.showExistingBookingSheet, with: $showExistingBookingSheet)
+        .sheet(isPresented: $showExistingBookingSheet) {
+            ExistingBookingView()
+                .environmentObject(bookingManager)
+        }
         
         .environmentObject(bookingManager)
         // When the property gets deleted in Firestore "exit" gets toggled
         .onChange(of: viewModel.exit) { _ in
             self.presentationMode.wrappedValue.dismiss()
             Task {
-                await homeManager.fetchProperties()
+                await yourPropertyManager.fetchProperties()
             }
+        }
+        
+        .onAppear {
+            viewModel.subscribe()
+            bookingManager.subscribe()
         }
         // Unsubscribe
         .onDisappear {
             viewModel.unsubscribe()
+            bookingManager.unsubscribe()
         }
     }
 }
@@ -118,8 +134,6 @@ extension PropertyDetailView {
 
         init(_ property: Property) {
             self.property = property
-            
-            subscribe()
         }
         
         func subscribe() {
