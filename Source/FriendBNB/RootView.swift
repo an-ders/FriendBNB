@@ -8,43 +8,69 @@
 import SwiftUI
 import FirebaseAuth
 
-enum Tabs: String, Hashable, Equatable {
-    case home
+enum RootTabs: String, Hashable, Equatable {
+    case owned
+    case friends
     case settings
 }
 
 struct RootView: View {
-    @StateObject var viewModel: ViewModel = ViewModel()
+	@EnvironmentObject var propertyStore: PropertyStore
+	@EnvironmentObject var authStore: AuthenticationStore
+	
+    @State var loggedIn = false
+    @State var showNewPropertySheet = false
+    @State var showAddPropertySheet = false
+	@State var selectedTab: RootTabs = .owned
     
     var body: some View {
-        Group {
-            if viewModel.loggedIn {
-                TabView(selection: $viewModel.selectedTab) {
-                    HomeView()
-                        .tag(Tabs.home)
+        NotificationView {
+            if loggedIn {
+                TabView(selection: $selectedTab) {
+                    OwnedPropertiesView()
+                        .tag(RootTabs.owned)
                         .tabItem {
-                            Label("Home", systemImage: "house")
+                            Label("Owned", systemImage: "house")
+                        }
+                    
+                    FriendsHomeView()
+                        .tag(RootTabs.friends)
+                        .tabItem {
+                            Label("Friends", systemImage: "person.fill")
                         }
                     
                     SettingsView()
-                        .tag(Tabs.settings)
+                        .tag(RootTabs.settings)
                         .tabItem {
                             Label("You", systemImage: "person.circle")
                         }
-
                 }
+                
                 .background {
                     Color.Home.grey
                         .ignoresSafeArea()
-
                 }
             } else {
                 LoginView()
             }
         }
-        .onAppear {
-            Auth.auth().addStateDidChangeListener { auth, user in
-                viewModel.loggedIn = user != nil
+        .sync($propertyStore.showNewPropertySheet, with: $showNewPropertySheet)
+        .sheet(isPresented: $showNewPropertySheet) {
+            NewPropertyView()
+                .interactiveDismissDisabled()
+        }
+        
+        .sync($propertyStore.showAddPropertySheet, with: $showAddPropertySheet)
+        .sheet(isPresented: $showAddPropertySheet) {
+            AddPropertyView()
+                .interactiveDismissDisabled()
+        }
+        
+        .sync($authStore.loggedIn, with: $loggedIn)
+        .onChange(of: authStore.loggedIn) { _ in
+            Task {
+                await propertyStore.fetchProperties(.owned)
+                await propertyStore.fetchProperties(.friend)
             }
         }
     }
@@ -52,8 +78,6 @@ struct RootView: View {
 
 extension RootView {
     class ViewModel: ObservableObject {
-        @Published var loggedIn: Bool = false
-        @Published var selectedTab: Tabs = .home
     }
 }
 

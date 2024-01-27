@@ -6,7 +6,12 @@
   
 */
 
-
-"Login.UsernameField.Title" = "Username";
+"Login.Title" = "FriendBNB";
+"Login.UsernameField.Title" = "Email";
 "Login.PasswordField.Title" = "Password";
+"Login.PasswordConfirmField.Title" = "Confirm Password";
 "Login.LoginButton.Title" = "Login";
+"Login.SignupButton.Title" = "Sign Up";
+"Login.LoginButton.Description" = "Already have an account? Login";
+"Login.SignupButton.Description" = "Dont have an account? Signup";
+
