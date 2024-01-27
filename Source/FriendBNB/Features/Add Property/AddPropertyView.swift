@@ -9,99 +9,49 @@ import SwiftUI
 import FirebaseFirestore
 
 struct AddPropertyView: View {
-    @EnvironmentObject var yourPropertyManager: YourPropertyManager
-    @EnvironmentObject var newPropertyManager: NewPropertyManager
-    
-    @StateObject var viewModel = ViewModel()
-    
-    var body: some View {
-        VStack {
-            Text("Add an existing property")
-                .font(.largeTitle).fontWeight(.medium)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(.bottom, Constants.Spacing.small)
-            Text("Enter the property ID below:")
-                .font(.title3).fontWeight(.light)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                //.padding(.bottom, Constants.Spacing.small)
-            
-            StyledFloatingTextField(text: $viewModel.propertyID, prompt: "Property ID", error: $viewModel.error)
-            
-            Spacer()
-            PairButtonsView(prevText: "Close", prevAction: {
-                Task { @MainActor in
-                    yourPropertyManager.showAddPropertySheet = false
-                }
-            }, nextText: "Add", nextAction: {
-                Task {
-                    if let id = await viewModel.checkValidID() {
-                        await yourPropertyManager.addProperty(id)
-                        yourPropertyManager.showAddPropertySheet = false
-                    }
-                }
-            })
-        }
-        .padding(.top, Constants.Padding.regular)
-        .padding(.horizontal, Constants.Padding.regular)
-    }
-}
-
-extension AddPropertyView {
-    @MainActor
-    class ViewModel: ObservableObject {
-        @Published var propertyID: String = ""
-        @Published var error: String = ""
-        
-//        func queryID() async -> Property? {
-//            var returnProperty: Property?
-//
-//            guard !propertyID.isEmpty else {
-//                self.error = "Please enter a property ID."
-//                return returnProperty
-//            }
-//
-//            let db = Firestore.firestore()
-//            let ref = db.collection("Properties")
-//            do {
-//                try await Task.sleep(nanoseconds: 500000000)
-//                let snapshot = try await ref.whereField(FirebaseFirestore.FieldPath.documentID(), isEqualTo: propertyID).getDocuments()
-//                for document in snapshot.documents {
-//                    let data = document.data()
-//                    returnProperty =  Property(id: document.documentID, data: data)
-//                }
-//            } catch {
-//                print(error.localizedDescription)
-//            }
-//            
-//            self.error = returnProperty != nil ? "" : "No property with that ID was found."
-//            self.propertyID = ""
-//            return returnProperty
-//        }
-        
-        func checkValidID() async -> String? {
-            var id: String?
-            guard !propertyID.isEmpty else {
-                self.error = "Please enter a property ID."
-                return id
-            }
-            
-            let db = Firestore.firestore()
-            let ref = db.collection("Properties").document(propertyID)
-            do {
-                try await Task.sleep(nanoseconds: 500000000)
-                let document = try await ref.getDocument()
-                if document.exists {
-                    id = document.documentID
-                }
-            } catch {
-                print(error.localizedDescription)
-            }
-            
-            self.error = id != nil ? "" : "No property with that ID was found."
-            self.propertyID = ""
-            return id
-        }
-    }
+	@EnvironmentObject var rootManager: PropertyStore
+	
+	@State var propertyId: String = ""
+	@State var error: String = ""
+	var body: some View {
+		PairButtonWrapper(prevText: "Close", prevAction: {
+			Task { @MainActor in
+				rootManager.showAddPropertySheet = false
+			}
+		}, nextText: "Add", nextAction: {
+			guard !propertyId.isEmpty else {
+				self.error = "Please enter a property ID."
+				return
+			}
+			
+			Task {
+				if let id = await rootManager.checkValidId(propertyId) {
+					await rootManager.addProperty(id, type: .friend)
+					rootManager.showAddPropertySheet = false
+					self.propertyId = ""
+				} else {
+					self.error = "No property with that ID was found."
+				}
+			}
+		}, content: {
+			VStack {
+				Text("Add an existing property")
+					.font(.largeTitle).fontWeight(.medium)
+					.frame(maxWidth: .infinity, alignment: .leading)
+					.padding(.bottom, Constants.Spacing.small)
+				Text("Enter the property ID below:")
+					.font(.title3).fontWeight(.light)
+					.frame(maxWidth: .infinity, alignment: .leading)
+				
+				StyledFloatingTextField(text: $propertyId, prompt: "Property ID")
+				
+				Spacer()
+				
+			}
+		})
+		.padding(.top, Constants.Padding.regular)
+		.padding(.horizontal, Constants.Padding.regular)
+	}
 }
 
 //struct AddPropertyView_Previews: PreviewProvider {

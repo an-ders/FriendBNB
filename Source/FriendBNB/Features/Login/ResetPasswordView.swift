@@ -8,37 +8,49 @@
 import SwiftUI
 
 struct ResetPasswordView: View {
-    @EnvironmentObject var loginManager: LoginManager
-    
+    @EnvironmentObject var authStore: AuthenticationStore
+	@Binding var showSheet: Bool
+	@State var resetEmail = ""
+	@State var error = ""
+	
     var body: some View {
-        VStack {
-            Text("Reset your password")
-                .font(.largeTitle).fontWeight(.medium)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(.bottom, Constants.Spacing.small)
-            Text("Enter email below:")
-                .font(.title3).fontWeight(.light)
-                .frame(maxWidth: .infinity, alignment: .leading)
-            //.padding(.bottom, Constants.Spacing.small)
-            
-            StyledFloatingTextField(text: $loginManager.resetPasswordEmail, prompt: "Email", error: $loginManager.resetPasswordEmailError)
-            
-            Spacer()
-            
-            PairButtonsView(prevText: "Close", prevAction: {
-                loginManager.showResetPassword = false
-                loginManager.resetPasswordEmail = ""
-            }, nextText: "Send Email", nextAction: {
-                Task {
-                    await loginManager.resetPassword()
-                }
-            })
-        }
+		PairButtonWrapper(prevText: "Close", prevAction: {
+			showSheet.toggle()
+		}, nextText: "Send Email", nextAction: {
+			resetPassword(resetEmail)
+		}, content: {
+			VStack {
+				Text("Reset your password")
+					.font(.largeTitle).fontWeight(.medium)
+					.frame(maxWidth: .infinity, alignment: .leading)
+					.padding(.bottom, Constants.Spacing.small)
+				Text("Enter email below:")
+					.font(.title3).fontWeight(.light)
+					.frame(maxWidth: .infinity, alignment: .leading)
+				//.padding(.bottom, Constants.Spacing.small)
+				
+				StyledFloatingTextField(text: $resetEmail, prompt: "Email")
+				
+				ErrorView(error: $error)
+				
+				Spacer()
+			}
+		})
         .padding(.top, Constants.Padding.regular)
         .padding(.horizontal, Constants.Padding.regular)
     }
+	
+	func resetPassword(_ email: String) {
+		Task {
+			if let error = await authStore.resetPassword(email: email) {
+				self.error = error
+			} else {
+				showSheet.toggle()
+			}
+		}
+	}
 }
 
 #Preview {
-    ResetPasswordView()
+	ResetPasswordView(showSheet: .constant(false))
 }

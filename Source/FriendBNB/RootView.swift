@@ -9,27 +9,35 @@ import SwiftUI
 import FirebaseAuth
 
 enum RootTabs: String, Hashable, Equatable {
-    case your
-    case friend
+    case owned
+    case friends
     case settings
 }
 
 struct RootView: View {
-    @ObservedObject var yourPropertyManager: YourPropertyManager = YourPropertyManager()
-    @ObservedObject var loginManager: LoginManager = LoginManager()
+	@EnvironmentObject var propertyStore: PropertyStore
+	@EnvironmentObject var authStore: AuthenticationStore
+	
     @State var loggedIn = false
+    @State var showNewPropertySheet = false
+    @State var showAddPropertySheet = false
+	@State var selectedTab: RootTabs = .owned
     
     var body: some View {
-        Group {
+        NotificationView {
             if loggedIn {
-                TabView(selection: $yourPropertyManager.selectedTab) {
-                    YourPropertiesView()
-                        .tag(RootTabs.your)
+                TabView(selection: $selectedTab) {
+                    OwnedPropertiesView()
+                        .tag(RootTabs.owned)
                         .tabItem {
-                            Label("Home", systemImage: "house")
+                            Label("Owned", systemImage: "house")
                         }
                     
-                    
+                    FriendsHomeView()
+                        .tag(RootTabs.friends)
+                        .tabItem {
+                            Label("Friends", systemImage: "person.fill")
+                        }
                     
                     SettingsView()
                         .tag(RootTabs.settings)
@@ -37,23 +45,32 @@ struct RootView: View {
                             Label("You", systemImage: "person.circle")
                         }
                 }
-                .environmentObject(yourPropertyManager)
+                
                 .background {
                     Color.Home.grey
                         .ignoresSafeArea()
                 }
             } else {
                 LoginView()
-                    .environmentObject(loginManager)
-                    .onAppear {
-                        yourPropertyManager.selectedTab = .your
-                    }
             }
         }
-        .sync($loginManager.loggedIn, with: $loggedIn)
-        .onChange(of: loginManager.loggedIn) { _ in
+        .sync($propertyStore.showNewPropertySheet, with: $showNewPropertySheet)
+        .sheet(isPresented: $showNewPropertySheet) {
+            NewPropertyView()
+                .interactiveDismissDisabled()
+        }
+        
+        .sync($propertyStore.showAddPropertySheet, with: $showAddPropertySheet)
+        .sheet(isPresented: $showAddPropertySheet) {
+            AddPropertyView()
+                .interactiveDismissDisabled()
+        }
+        
+        .sync($authStore.loggedIn, with: $loggedIn)
+        .onChange(of: authStore.loggedIn) { _ in
             Task {
-                await yourPropertyManager.fetchProperties()
+                await propertyStore.fetchProperties(.owned)
+                await propertyStore.fetchProperties(.friend)
             }
         }
     }

@@ -9,10 +9,18 @@ import SwiftUI
 import FirebaseAuth
 
 struct SettingsView: View {
-    @EnvironmentObject var yourPropertyManager: YourPropertyManager
+    @EnvironmentObject var propertyStore: PropertyStore
+	@EnvironmentObject var authStore: AuthenticationStore
+	@EnvironmentObject var notificationStore: NotificationStore
     
     var body: some View {
         VStack {
+			Spacer()
+			if let user = authStore.user {
+				Text(user.email ?? "")
+			}
+			Spacer()
+			
             Text("Sign Out")
                 .onTapGesture {
                     do {
@@ -24,9 +32,16 @@ struct SettingsView: View {
             Text("Clear properties")
                 .onTapGesture {
                     Task {
-                        await yourPropertyManager.resetProperty()
+                        await propertyStore.resetProperty(.friend)
+                        await propertyStore.resetProperty(.owned)
                     }
                 }
+			
+			Text("notif")
+				.onTapGesture {
+					notificationStore.pushNotification(message: "test123")
+				}
+			Spacer()
         }
     }
 }

@@ -9,66 +9,89 @@ import SwiftUI
 import FirebaseAuth
 
 struct LoginView: View {
-    @EnvironmentObject var loginManager: LoginManager
-    @State var showResetPassword = false
-    var body: some View {
-        VStack {
-            Spacer()
-            Text("Login.Title".localized)
-                .font(.system(size: 36, weight: .bold))
-            Spacer()
-
-            StyledFloatingTextField(text: $loginManager.username, prompt: "Login.UsernameField.Title".localized, error: $loginManager.usernameError)
-            
-            SecureStyledFloatingTextField(text: $loginManager.password, prompt: "Login.PasswordField.Title".localized, error: $loginManager.passwordError)
-                
-            if !loginManager.newUser {
-                Button(action: {
-                    loginManager.showResetPassword = true
-                }, label: {
-                    Text("Forgot password?")
-                        .font(.caption).fontWeight(.light)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                })
-                .padding(.top, Constants.Spacing.xsmall)
-            }
-            
-            if loginManager.newUser {
-                    SecureStyledFloatingTextField(text: $loginManager.confirmPassword, prompt: "Login.PasswordConfirmField.Title".localized, error: $loginManager.confirmPasswordError)
-            }
-            
-            Spacer()
-            
-            Button(action: {
-                Task {
-                    if loginManager.newUser {
-                        await loginManager.register()
-                    } else {
-                        await loginManager.login()
-                    }
-                }
-            }, label: {
-                Text(loginManager.newUser ? "Login.SignupButton.Title".localized : "Login.LoginButton.Title".localized)
-                    .font(.title3).fontWeight(.bold)
-            })
-            
-            Button(action: {
-                withAnimation {
-                    loginManager.newUser.toggle()
-                }
-            }, label: {
-                Text(loginManager.newUser ? "Login.SignupButton.Description".localized : "Login.LoginButton.Description".localized)
-                    .font(.headline).fontWeight(.light)
-            })
-            .padding(.top, Constants.Spacing.large)
-            Spacer()
-        }
-        .padding(25)
-        
-        .sheet(isPresented: $showResetPassword) {
-            ResetPasswordView()
-        }
-        .sync($loginManager.showResetPassword, with: $showResetPassword)
-    }
-    
+	@EnvironmentObject var authStore: AuthenticationStore
+	@State var email = ""
+	@State var password = ""
+	
+	@State var isSignup = false
+	@State var passwordConfirm = ""
+	
+	@State var showPasswordResetSheet = false
+	
+	@State var error: String = ""
+	
+	var body: some View {
+		VStack {
+			Spacer()
+			Text("FriendBNB")
+				.font(.system(size: 36, weight: .bold))
+			Spacer()
+			
+			StyledFloatingTextField(text: $email, prompt: "Email")
+			
+			SecureStyledFloatingTextField(text: $password, prompt: "Password")
+			
+			if !isSignup {
+				Button(action: {
+					showPasswordResetSheet = true
+				}, label: {
+					Text("Forgot password?")
+						.font(.caption).fontWeight(.light)
+						.frame(maxWidth: .infinity, alignment: .leading)
+				})
+				.padding(.top, Constants.Spacing.xsmall)
+			}
+			
+			if isSignup {
+				SecureStyledFloatingTextField(text: $passwordConfirm, prompt: "Confirm Password")
+			}
+			
+			ErrorView(error: $error)
+			
+			Spacer()
+			
+			Button(action: {
+				cta(email: email, password: password, passwordConfirm: passwordConfirm)
+			}, label: {
+				Text(isSignup ? "Sign Up" : "Log In")
+					.font(.title3).fontWeight(.bold)
+			})
+			
+			Button(action: {
+				withAnimation {
+					isSignup.toggle()
+					error = ""
+				}
+			}, label: {
+				Text(isSignup ? "Already have an account? Log In" : "Dont have an account? Sign Up")
+					.font(.headline).fontWeight(.light)
+			})
+			.padding(.top, Constants.Spacing.large)
+			Spacer()
+		}
+		.padding(25)
+		
+		.sheet(isPresented: $showPasswordResetSheet) {
+			ResetPasswordView(showSheet: $showPasswordResetSheet)
+		}
+	}
+	
+	func cta(email: String, password: String, passwordConfirm: String) {
+		Task {
+			if isSignup {
+				guard let error = await authStore.register(username: email, password: password, passwordConfirm: passwordConfirm) else {
+					self.error = ""
+					return
+				}
+				self.error = error
+			} else {
+				guard let error = await authStore.login(username: email, password: password) else {
+					self.error = ""
+					return
+				}
+				self.error = error
+			}
+		}
+	}
+	
 }

@@ -8,22 +8,28 @@
 import SwiftUI
 import FirebaseCore
 
-class AppDelegate: NSObject, UIApplicationDelegate {
-  func application(_ application: UIApplication,
-                   didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
-    FirebaseApp.configure()
-
-    return true
-  }
-}
-
 @main
 struct FriendBNBApp: App {
-    @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
-    
-    var body: some Scene {
-        WindowGroup {
-            RootView()
-        }
-    }
+	@ObservedObject var propertyStore: PropertyStore
+	@ObservedObject var authStore: AuthenticationStore
+	@ObservedObject var notificationStore: NotificationStore
+	@ObservedObject var bookingStore: BookingStore
+	
+	init() {
+		FirebaseApp.configure()
+		self.propertyStore = PropertyStore()
+		self.authStore = AuthenticationStore()
+		self.notificationStore = NotificationStore()
+		self.bookingStore = BookingStore()
+	}
+	
+	var body: some Scene {
+		WindowGroup {
+			RootView()
+				.environmentObject(propertyStore)
+				.environmentObject(authStore)
+				.environmentObject(notificationStore)
+				.environmentObject(bookingStore)
+		}
+	}
 }

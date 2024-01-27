@@ -16,7 +16,8 @@ extension Date {
     }
     
     func stripTime() -> Date {
-        let components = Calendar.current.dateComponents([.year, .month, .day], from: self)
+        var components = Calendar.current.dateComponents([.year, .month, .day], from: self)
+		components.hour = 0
         let date = Calendar.current.date(from: components)
         return date!
     }
