@@ -98,12 +98,6 @@ struct PropertyTileView: View {
     }
 }
 
-extension PropertyTileView {
-    class ViewModel: ObservableObject {
-
-    }
-}
-
 //struct HomeTileView_Previews: PreviewProvider {
 //    static var previews: some View {
 //        HomeTileView(property: Property(id: "test123", data: ["title": "testtitle123", "owner": "Anders"]))
