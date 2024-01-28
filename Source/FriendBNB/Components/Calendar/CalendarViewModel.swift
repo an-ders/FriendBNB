@@ -15,8 +15,9 @@ class CalendarViewModel: ObservableObject {
 	@Published var endDate: Date?
 	@Published var isAvailableMode = true
 	@Published var manualUpdate = true
-	@Published var property: Property
 	@Published var error = ""
+	
+	@Published var property: Property
 	
 	var listener: ListenerRegistration?
 	
@@ -55,13 +56,11 @@ class CalendarViewModel: ObservableObject {
 	
 	func previousMonth() {
 		self.date = date.minusMonth()
-		resetDates()
 		self.manualUpdate.toggle()
 	}
 	
 	func nextMonth() {
 		self.date = date.plusMonth()
-		resetDates()
 		self.manualUpdate.toggle()
 	}
 	

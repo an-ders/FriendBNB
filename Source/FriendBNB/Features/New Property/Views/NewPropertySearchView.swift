@@ -18,33 +18,37 @@ struct NewPropertySearchView: View {
     @FocusState private var isFocusedTextField: Bool
     
     var body: some View {
-		PairButtonWrapper(prevText: "Back", prevAction: {
+		PairButtonWrapper(buttonPadding: Constants.Padding.regular, prevText: "Cancel", prevAction: {
 			back()
 		}, nextText: "Skip", nextAction: {
 			next()
 		}, content: {
 			VStack(alignment: .leading, spacing: 0) {
-				TextField("Type address", text: $viewModel.searchableText)
-					.padding(.vertical)
-					.autocorrectionDisabled()
-					.focused($isFocusedTextField)
-					.font(.title)
-					.onReceive(
-						viewModel.$searchableText.debounce(
-							for: .seconds(1),
-							scheduler: DispatchQueue.main
-						)
-					) {
-						viewModel.searchAddress($0)
-					}
-					.background(Color.init(uiColor: .systemBackground))
-					.overlay {
-						ClearButton(text: $viewModel.searchableText)
-							.padding(.top, 8)
-					}
-					.onAppear {
-						isFocusedTextField = true
-					}
+				HStack(alignment: .center) {
+					TextField("Type address", text: $viewModel.searchableText)
+						.padding(.vertical)
+						.autocorrectionDisabled()
+						.focused($isFocusedTextField)
+						.font(.title)
+						.onReceive(
+							viewModel.$searchableText.debounce(
+								for: .seconds(1),
+								scheduler: DispatchQueue.main
+							)
+						) {
+							viewModel.searchAddress($0)
+						}
+						.frame(maxWidth: .infinity, alignment: .leading)
+						.onAppear {
+							isFocusedTextField = true
+						}
+						.padding(.leading, Constants.Padding.regular)
+						.padding(.trailing, Constants.Padding.small)
+					
+					ClearButton(text: $viewModel.searchableText)
+						.padding(.trailing, Constants.Padding.regular)
+				}
+				.background(Color.init(uiColor: .systemGray6))
 
 				List(viewModel.results) { address in
 					AddressRow(address: address) {
@@ -58,11 +62,12 @@ struct NewPropertySearchView: View {
 					}
 					.listRowInsets(EdgeInsets(top: 10, leading: 0, bottom: 10, trailing: 0))
 				}
+				
 				.frame(maxWidth: .infinity)
 				.listStyle(.inset)
 			}
 		})
-        .padding(.horizontal, Constants.Padding.regular)
+        
     }
 	
 	func next() {
@@ -89,6 +94,7 @@ struct AddressRow: View {
                 Text(address.subtitle)
                     .font(.caption)
             }
+			.padding(.horizontal, Constants.Padding.regular)
         }
         .padding(.bottom, 2)
     }
@@ -99,16 +105,13 @@ struct ClearButton: View {
     
     var body: some View {
         if text.isEmpty == false {
-            HStack {
-                Spacer()
-                Button {
-                    text = ""
-                } label: {
-                    Image(systemName: "multiply.circle.fill")
-                        .foregroundColor(Color(red: 0.7, green: 0.7, blue: 0.7))
-                }
-                .foregroundColor(.secondary)
-            }
+			Button {
+				text = ""
+			} label: {
+				Image(systemName: "multiply.circle.fill")
+					.foregroundColor(.black.opacity(0.7))
+			}
+			.foregroundColor(.secondary)
         } else {
             EmptyView()
         }

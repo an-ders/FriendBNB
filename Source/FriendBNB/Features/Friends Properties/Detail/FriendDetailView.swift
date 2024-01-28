@@ -36,9 +36,6 @@ struct FriendDetailView: View {
 					Text(viewModel.property.location.addressDescription)
 						.font(.headline).fontWeight(.light)
 						.frame(maxWidth: .infinity, alignment: .leading)
-					Text(String(viewModel.property.rooms))
-						.font(.headline).fontWeight(.light)
-						.frame(maxWidth: .infinity, alignment: .leading)
 					
 					TabView {
 						Image(systemName: "house")

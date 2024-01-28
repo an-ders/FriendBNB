@@ -10,9 +10,10 @@ import FirebaseFirestore
 import FirebaseAuth
 
 enum NewPropertyTabs {
-	case info
 	case search
 	case address
+	case info
+	case confirm
 }
 
 struct NewPropertyView: View {
@@ -30,10 +31,13 @@ struct NewPropertyView: View {
 			NewPropertyAddressView(currentTab: $currentTab, location: location)
 				.tag(NewPropertyTabs.address)
 			
-			NewPropertyInfoView(currentTab: $currentTab, info: info) {
+			NewPropertyInfoView(currentTab: $currentTab, info: info)
+				.tag(NewPropertyTabs.info)
+			
+			NewPropertyConfirmView(currentTab: $currentTab, location: location, info: info) {
 				createProperty()
 			}
-			.tag(NewPropertyTabs.info)
+			.tag(NewPropertyTabs.confirm)
 		}
 		.tabViewStyle(.page(indexDisplayMode: .never))
 		.indexViewStyle(PageIndexViewStyle(backgroundDisplayMode: .always))
@@ -44,6 +48,9 @@ struct NewPropertyView: View {
 			let newId = await propertyStore.createProperty(location: location, info: info)
 			await propertyStore.addProperty(newId, type: .owned)
 			propertyStore.showNewPropertySheet = false
+			if let property = await propertyStore.getProperty(id: newId) {
+				propertyStore.showProperty(property, showAvailability: true)
+			}
 		}
 	}
 }

@@ -16,7 +16,7 @@ struct CustomStepperView: View {
     var body: some View {
         HStack {
             Text(text)
-                .font(.title2).fontWeight(.thin)
+                .body()
             Spacer()
             HStack {
                 Button(action: {
@@ -30,7 +30,7 @@ struct CustomStepperView: View {
                 })
                 
                 Text(String(value))
-                    .font(.title2).fontWeight(.thin)
+                    .body()
                     .frame(width: 45, alignment: .center)
                 
                 Button(action: {
@@ -56,14 +56,14 @@ struct CustomStepperIconView: View {
             Circle()
                 .strokeBorder(limit ?? value + 1 == value ? Color.systemGray5 : Color.systemGray2, lineWidth: 1)
                 .background(Circle().foregroundColor(.white))
-                .frame(width: 30)
+                .scaledToFit()
             
             Text(text)
                 .font(.system(size: 25)).fontWeight(.light)
                 .offset(x: 0, y: -1)
                 .foregroundColor(limit ?? value + 1 == value ? .systemGray5 : .systemGray2)
         }
-        .frame(height: 30)
+        .frame(height: 20)
     }
 }
 

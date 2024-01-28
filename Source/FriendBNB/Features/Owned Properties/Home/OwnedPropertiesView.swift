@@ -11,25 +11,34 @@ import FirebaseFirestore
 
 struct OwnedPropertiesView: View {
 	@EnvironmentObject var propertyStore: PropertyStore
+	@State private var navPath = NavigationPath()
+	@State var test = false
 	
 	var body: some View {
-		NavigationView {
+		NavigationStack {
 			Group {
 				if propertyStore.loading {
 					
 				} else if !propertyStore.ownedProperties.isEmpty {
-					ScrollView {
-						VStack {
-							ForEach(propertyStore.ownedProperties) { property in
-								PropertyTileView(property: property) {
-									OwnedDetailView(property: property)
+					VStack {
+						ScrollView {
+							VStack {
+								ForEach(propertyStore.ownedProperties) { property in
+									PropertyTileView(property: property) {
+										propertyStore.showProperty(property)
+									}
 								}
 							}
+							.padding(.top, 2)
 						}
-						.padding(.top, 2)
+						.refreshable {
+							await propertyStore.fetchProperties(.owned)
+						}
 					}
-					.refreshable {
-						await propertyStore.fetchProperties(.owned)
+					.onChange(of: propertyStore.showOwnedProperty) { _ in
+						Task {
+							await propertyStore.fetchProperties(.owned)
+						}
 					}
 				} else {
 					OwnedPropertiesEmptyView()
@@ -37,8 +46,19 @@ struct OwnedPropertiesView: View {
 			}
 			.toolbar {
 				ToolbarItem(placement: .primaryAction) {
-					HomeMenu()
+					Button(action: {
+						propertyStore.showNewPropertySheet = true
+					}, label: {
+						Image(systemName: "plus.circle.fill")
+							.resizable()
+							.scaledToFit()
+							.frame(height: 30)
+							.padding(.trailing, 10)
+					})
 				}
+			}
+			.navigationDestination(isPresented: $propertyStore.showOwnedProperty) {
+				OwnedDetailView()
 			}
 		}
 	}

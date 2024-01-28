@@ -17,28 +17,23 @@ struct OwnedAvailabilityView: View {
 	}
 	
     var body: some View {
-		PairButtonWrapper(prevText: "Done", prevAction: {
-			dismiss()
-		}, nextText: "Confirm", nextAction: {
-			Task {
-				if let error = await bookingStore.addSchedule(
-					startDate: calendarViewModel.startDate,
-					endDate: calendarViewModel.endDate,
-					property: calendarViewModel.property,
-					type: calendarViewModel.isAvailableMode ? .available : .unavailable) {
-					calendarViewModel.error = error
-				} else {
-					
-				}
-				calendarViewModel.resetDates()
-			}
-		}, content: {
+		VStack {
 			ScrollView {
 				VStack {
-					Text("Set Availability")
-						.font(.largeTitle).fontWeight(.medium)
-						.frame(maxWidth: .infinity, alignment: .leading)
-						.padding(.bottom, Constants.Spacing.small)
+					HStack(alignment: .center) {
+						Text("Set Availability")
+							.title()
+							.fillLeading()
+							.padding(.bottom, Constants.Spacing.small)
+						
+						Button(action: {
+							dismiss()
+						}, label: {
+							Text("Done")
+								.font(.headline).fontWeight(.semibold)
+								.underline()
+						})
+					}
 					
 					CalendarView(type: .owned)
 						.environmentObject(calendarViewModel)
@@ -80,7 +75,7 @@ struct OwnedAvailabilityView: View {
 					
 					VStack {
 						if calendarViewModel.isAvailableMode {
-							ForEach(calendarViewModel.property.available.dict()[calendarViewModel.date.monthYearString()]?.sorted { $0.start < $1.end } ?? []) { availability in
+							ForEach(calendarViewModel.property.available.current().dateSorted()) { availability in
 								AvailabilityTileView(availibility: availability, type: .available) {
 									Task {
 										await bookingStore.deleteBooking(availability, type: .available, property: calendarViewModel.property)
@@ -88,7 +83,7 @@ struct OwnedAvailabilityView: View {
 								}
 							}
 						} else {
-							ForEach(calendarViewModel.property.unavailable.dict()[calendarViewModel.date.monthYearString()]?.sorted { $0.start < $1.end } ?? []) { availability in
+							ForEach(calendarViewModel.property.unavailable.current().dateSorted()) { availability in
 								AvailabilityTileView(availibility: availability, type: .unavailable) {
 									Task {
 										await bookingStore.deleteBooking(availability, type: .unavailable, property: calendarViewModel.property)
@@ -106,14 +101,27 @@ struct OwnedAvailabilityView: View {
 					}
 				}
 			}
-		})
+			
+			HStack {}
+			
+//			Task {
+//				if let error = await bookingStore.addSchedule(
+//					startDate: calendarViewModel.startDate,
+//					endDate: calendarViewModel.endDate,
+//					property: calendarViewModel.property,
+//					type: calendarViewModel.isAvailableMode ? .available : .unavailable) {
+//					calendarViewModel.error = error
+//				} else {
+//					
+//				}
+//				calendarViewModel.resetDates()
+//			}
+		}
         .padding(.horizontal, Constants.Padding.regular)
         .padding(.top, Constants.Padding.small)
-        
         .onTapGesture {
 			calendarViewModel.resetDates()
         }
-        
         .onAppear {
             calendarViewModel.subscribe()
         }

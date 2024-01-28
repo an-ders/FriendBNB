@@ -1,5 +1,5 @@
 //
-//  RootManager.swift
+//  PropertyStore.swift
 //  FriendBNB
 //
 //  Created by Anders Tai on 2023-11-13.
@@ -29,14 +29,87 @@ class PropertyStore: ObservableObject {
 	
 	@Published var ownedProperties: [Property] = []
 	@Published var friendsProperties: [Property] = []
-	@Published var selectedProperty: Property?
+	
+	@Published var showOwnedProperty = false
+	@Published var showOwnedAvailability = false
+	@Published var showOwnedBooking = false
+	@Published var selectedOwnedProperty: Property?
 	
 	@Published var showNewPropertySheet = false
 	@Published var showAddPropertySheet = false
-	@Published var loading: Bool = false
+	
+	@Published var loading = false
+	
+	var listener: ListenerRegistration?
+	
+	func showProperty(_ property: Property, showAvailability: Bool = false) {
+		selectedOwnedProperty = property
+		showOwnedProperty = true
+		
+		DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+			self.showOwnedAvailability = showAvailability
+		}
+	}
+	
+	func subscribe() {
+		print("Adding listener in DETAIL VIEW")
+		guard let property = selectedOwnedProperty else {
+			return
+		}
+		let db = Firestore.firestore()
+		self.listener = db.collection("Properties").document(property.id)
+			.addSnapshotListener { documentSnapshot, error in
+				guard let document = documentSnapshot else {
+					print("Error fetching document: \(error!)")
+					return
+				}
+
+				if let newData = document.data() {
+					print("Updating data DETAIL VIEW")
+					self.selectedOwnedProperty = Property(id: property.id, data: newData)
+				} else {
+					self.selectedOwnedProperty = nil
+					self.showOwnedProperty = false
+					Task {
+						await self.fetchProperties(.owned)
+					}
+				}
+			}
+	}
+	
+	func unsubscribe() {
+		print("Removing listener from DETAIL VIEW")
+		self.listener?.remove()
+	}
+	
+	// MARK: SERVICE FUNCTIONS
+	
+	func getProperty(id: String) async -> Property? {
+		let db = Firestore.firestore()
+		
+		guard Auth.auth().currentUser != nil else {
+			print("User not found")
+			return nil
+		}
+		
+		print("Fetching properties: \(id)")
+
+		do {
+			let snapshot = try await db.collection("Properties").whereField(FirebaseFirestore.FieldPath.documentID(), isEqualTo: id).getDocuments()
+			
+			for document in snapshot.documents {
+				let data = document.data()
+				return Property(id: document.documentID, data: data)
+			}
+		} catch {
+			return nil
+		}
+		
+		return nil
+	}
 	
 	func fetchProperties(_ type: PropertyType) async {
-		self.loading = true
+		//self.loading = true
 		let db = Firestore.firestore()
 		
 		guard Auth.auth().currentUser != nil else {
@@ -89,7 +162,7 @@ class PropertyStore: ObservableObject {
 		} else {
 			self.friendsProperties = newProperties
 		}
-		self.loading = false
+		//self.loading = false
 	}
 	
 	func addProperty(_ id: String, type: PropertyType) async {
@@ -107,6 +180,8 @@ class PropertyStore: ObservableObject {
 				type.firestoreKey: FieldValue.arrayUnion([id])
 			])
 			print("Successfully added Id to \(type.firestoreKey)")
+			
+			
 		} catch {
 			print("Error adding Id: \(error.localizedDescription)")
 		}

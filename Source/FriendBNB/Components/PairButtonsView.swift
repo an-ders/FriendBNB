@@ -22,7 +22,7 @@ struct PairButtonsView: View {
                                    startPoint: .bottom, endPoint: .top)
                 )
                 .frame(maxWidth: .infinity)
-                .frame(height: 25)
+                .frame(height: 35)
             HStack {
                 Button(action: {
                     prevAction()

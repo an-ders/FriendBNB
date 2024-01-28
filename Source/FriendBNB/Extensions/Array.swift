@@ -36,10 +36,14 @@ extension Array where Element == Booking {
 	}
 	
 	func current() -> [Booking] {
-		self.filter({ $0.end > Date() })
+		self.filter{ $0.end > Date() }
+	}
+	
+	func dateSorted() -> [Booking] {
+		self.sorted{ $0.start < $1.end }
 	}
 	
 	func withId(id: String) -> [Booking] {
-		self.filter({ $0.userId == id})
+		self.filter{ $0.userId == id}
 	}
 }

@@ -7,13 +7,13 @@
 
 import SwiftUI
 
-struct PropertyTileView<Content: View>: View {
+struct PropertyTileView: View {
     var property: Property
-    @ViewBuilder var content: Content
+    var action: () -> Void
     
     var body: some View {
-        NavigationLink(destination: {
-            content
+        Button(action: {
+            action()
         }, label: {
             VStack(alignment: .leading) {
                 Spacer()

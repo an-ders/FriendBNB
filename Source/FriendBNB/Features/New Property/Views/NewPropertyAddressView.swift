@@ -47,7 +47,9 @@ struct NewPropertyAddressView: View {
 	
 	func next() {
 		if location.checkAddress() {
-			currentTab = .info
+			withAnimation {
+				currentTab = .info
+			}
 		}
 	}
 }

@@ -30,19 +30,19 @@ struct RootView: View {
                     OwnedPropertiesView()
                         .tag(RootTabs.owned)
                         .tabItem {
-                            Label("Owned", systemImage: "house")
+                            Label("My Homes", systemImage: "house")
                         }
                     
                     FriendsHomeView()
                         .tag(RootTabs.friends)
                         .tabItem {
-                            Label("Friends", systemImage: "person.fill")
+                            Label("Friends Homes", systemImage: "person.2.fill")
                         }
                     
                     SettingsView()
                         .tag(RootTabs.settings)
                         .tabItem {
-                            Label("You", systemImage: "person.circle")
+                            Label("Settings", systemImage: "gear")
                         }
                 }
                 

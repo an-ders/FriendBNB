@@ -9,7 +9,7 @@ import SwiftUI
 import FirebaseFirestore
 
 struct FriendHomeEmptyView: View {
-    @EnvironmentObject var rootManager: PropertyStore
+    @EnvironmentObject var propertyStore: PropertyStore
     
     var body: some View {
         VStack {
@@ -24,9 +24,9 @@ struct FriendHomeEmptyView: View {
                 .padding(.bottom, 8)
             
             Button(action: {
-                rootManager.showAddPropertySheet = true
+				propertyStore.showAddPropertySheet = true
             }, label: {
-                Text("Search Friends Properties")
+                Text("Find friends property")
                     .font(.headline)
                     .padding(.horizontal, 16)
                     .padding(.vertical, 8)

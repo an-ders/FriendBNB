@@ -13,13 +13,21 @@ struct PropertyTest {
 	var owner: String
 }
 
-struct Property: Identifiable {
+struct Property: Identifiable, Hashable {
 	let id: String
 	var title: String
 	var owner: String
 	var people: Int
-	var rooms: Int
+	
 	var notes: String
+	var cleaningNotes: String
+	var wifi: String
+	var securityCode: String
+	var contactInfo: String
+	
+	var payment: PaymentFee
+	var cost: Int
+	var paymentNotes: String
 	
 	var location: Location
 	var bookings: [Booking]
@@ -31,7 +39,13 @@ struct Property: Identifiable {
 		title: String = "",
 		owner: String = "",
 		people: Int = 0,
-		rooms: Int = 0,
+		cleaningNotes: String = "",
+		wifi: String = "",
+		securityCode: String = "",
+		payment: PaymentFee = .free,
+		cost: Int = 0,
+		paymentNotes: String = "",
+		contactInfo: String = "",
 		location: Location = Location(),
 		notes: String = "",
 		bookings: [Booking] = [],
@@ -42,8 +56,17 @@ struct Property: Identifiable {
 		self.title = title
 		self.owner = owner
 		self.people = people
-		self.rooms = rooms
+		
 		self.notes = notes
+		self.cleaningNotes = cleaningNotes
+		self.wifi = wifi
+		self.securityCode = securityCode
+		self.contactInfo = contactInfo
+		
+		self.payment = payment
+		self.cost = cost
+		self.paymentNotes = paymentNotes
+		
 		self.location = location
 		self.bookings = bookings
 		self.available = available
@@ -55,8 +78,16 @@ struct Property: Identifiable {
 		self.title = data["title"] as? String ?? ""
 		self.owner = data["owner"] as? String ?? ""
 		self.people = data["people"] as? Int ?? 0
-		self.rooms = data["rooms"] as? Int ?? 0
+		
 		self.notes = data["notes"] as? String ?? ""
+		self.cleaningNotes = data["cleaningNotes"] as? String ?? ""
+		self.wifi = data["wifi"] as? String ?? ""
+		self.securityCode = data["securityCode"] as? String ?? ""
+		self.contactInfo = data["contactInfo"] as? String ?? ""
+		
+		self.payment = PaymentFee(rawValue: data["payment"] as? String ?? "") ?? .free
+		self.cost = data["cost"] as? Int ?? 0
+		self.paymentNotes = data["paymentNotes"] as? String ?? ""
 		
 		self.location = Location(data: data)
 		
@@ -78,5 +109,13 @@ struct Property: Identifiable {
 		for busyData in busyDataArray {
 			unavailable.append(Booking(data: busyData))
 		}
+	}
+	
+	func hash(into hasher: inout Hasher) {
+		hasher.combine(id)
+	}
+	
+	static func == (lhs: Property, rhs: Property) -> Bool {
+		lhs.id == rhs.id
 	}
 }

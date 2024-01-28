@@ -61,6 +61,9 @@ extension CalendarCellView {
 			} else if count - start > daysInMonth {
 				self.day = count - start - daysInMonth
 				self.month = date.plusMonth().get(.month)
+				if self.month == 1 {
+					self.year += 1
+				}
 				isCurrentMonth = false
 			} else {
 				self.day = count - start
