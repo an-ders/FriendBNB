@@ -64,7 +64,6 @@ struct NewPropertySearchView: View {
 					}
 					.listRowInsets(EdgeInsets(top: 10, leading: 0, bottom: 10, trailing: 0))
 				}
-				
 				.frame(maxWidth: .infinity)
 				.listStyle(.inset)
 				.zIndex(5)

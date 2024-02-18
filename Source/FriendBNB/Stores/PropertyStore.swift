@@ -197,7 +197,7 @@ class PropertyStore: ObservableObject {
 		} else {
 			self.friendsProperties = newProperties
 		}
-		//self.loading = false
+		self.loading = false
 	}
 	
 	func addProperty(_ id: String, type: PropertyType) async {

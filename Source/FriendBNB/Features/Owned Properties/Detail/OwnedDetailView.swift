@@ -134,6 +134,7 @@ struct OwnedDetailView: View {
 					})
 				}
 			}
+			//.navigationTitle(property.nickname)
 			.padding(.horizontal, Constants.Padding.regular)
 			.toolbar {
 				ToolbarItem(placement: .primaryAction) {

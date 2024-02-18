@@ -85,11 +85,7 @@ struct OwnedAvailabilityView: View {
 							}
 						} else {
 							ForEach(calendarViewModel.property.unavailable.current().dateSorted()) { availability in
-<<<<<<< HEAD
-								AvailabilityTileView(availibility: availability, type: .unavailable, bgColor: Color.systemGray3) {
-=======
-								AvailabilityTileView(availibility: availability, type: .unavailable) {
->>>>>>> 28f3ab4 (Update bunch of UI and polish fixes)
+								AvailabilityTileView(availibility: availability, type: .unavailable, bgColor: .systemGray) {
 									Task {
 										await bookingStore.deleteBooking(availability, type: .unavailable, property: calendarViewModel.property)
 									}
