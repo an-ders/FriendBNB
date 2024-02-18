@@ -9,9 +9,9 @@ import SwiftUI
 import FirebaseAuth
 
 enum RootTabs: String, Hashable, Equatable, CaseIterable {
-	case owned
-	case friends
-	case settings
+    case owned
+    case friends
+    case settings
 	
 	var image: String {
 		switch self {
@@ -41,36 +41,23 @@ struct RootView: View {
 	@EnvironmentObject var authStore: AuthenticationStore
 	@Environment(\.dismiss) private var dismiss
 	
-	@State var loggedIn = false
-	@State var showNewPropertySheet = false
-	@State var showAddPropertySheet = false
+    @State var loggedIn = false
+    @State var showNewPropertySheet = false
+    @State var showAddPropertySheet = false
 	@State var selectedTab: RootTabs = .owned
-	
-	var body: some View {
-		NotificationView {
+    
+    var body: some View {
+        NotificationView {
 			if authStore.loggedIn {
 				VStack(spacing: 0) {
-					TabView(selection: $propertyStore.selectedTab) {
+					switch propertyStore.selectedTab {
+					case .owned:
 						OwnedPropertiesView()
-							.tag(RootTabs.owned)
-							.tabItem {
-								Label("Owned", systemImage: "house")
-							}
-						
+					case .friends:
 						FriendsHomeView()
-							.tag(RootTabs.friends)
-							.tabItem {
-								Label("Friends", systemImage: "person.fill")
-							}
-						
+					case .settings:
 						SettingsView()
-							.tag(RootTabs.settings)
-							.tabItem {
-								Label("You", systemImage: "person.circle")
-							}
 					}
-					.tabViewStyle(.page)
-					.toolbar(.hidden, for: .tabBar)
 					
 					if propertyStore.showTabBar {
 						HStack {
@@ -95,24 +82,24 @@ struct RootView: View {
 						.padding(.top, Constants.Padding.small)
 					}
 				}
-			} else {
-				LoginView()
-			}
-		}
+            } else {
+                LoginView()
+            }
+        }
 		.sheet(isPresented: $propertyStore.showNewPropertySheet) {
-			NewPropertyView()
-				.interactiveDismissDisabled()
-		}
+            NewPropertyView()
+                .interactiveDismissDisabled()
+        }
 		.sheet(isPresented: $propertyStore.showAddPropertySheet) {
-			AddPropertyView()
-				.interactiveDismissDisabled()
-		}
-		.onChange(of: authStore.loggedIn) { _ in
-			Task {
-				await propertyStore.fetchProperties(.owned)
-				await propertyStore.fetchProperties(.friend)
-			}
-		}
+            AddPropertyView()
+                .interactiveDismissDisabled()
+        }
+        .onChange(of: authStore.loggedIn) { _ in
+            Task {
+                await propertyStore.fetchProperties(.owned)
+                await propertyStore.fetchProperties(.friend)
+            }
+        }
 		.onOpenURL { url in
 			let string = url.absoluteString.replacingOccurrences(of: "friendbnb://", with: "")
 			print(string)
@@ -138,11 +125,16 @@ struct RootView: View {
 				}
 			}
 		}
-	}
+    }
+}
+
+extension RootView {
+    class ViewModel: ObservableObject {
+    }
 }
 
 struct RootView_Previews: PreviewProvider {
-	static var previews: some View {
-		RootView()
-	}
+    static var previews: some View {
+        RootView()
+    }
 }
