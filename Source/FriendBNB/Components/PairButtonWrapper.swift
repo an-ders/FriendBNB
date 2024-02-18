@@ -12,6 +12,7 @@ struct PairButtonWrapper<Content: View>: View {
 	var prevText: String
 	var prevAction: () -> Void
 	var nextText: String
+	var nextCaption: String = ""
 	var nextAction: () -> Void
 	@ViewBuilder var content: Content
 	
@@ -23,7 +24,7 @@ struct PairButtonWrapper<Content: View>: View {
 				Spacer()
 				PairButtonsView(prevText: prevText, prevAction: {
 					prevAction()
-				}, nextText: nextText, nextAction: {
+				}, nextText: nextText, nextCaption: nextCaption, nextAction: {
 					nextAction()
 				})
 			}

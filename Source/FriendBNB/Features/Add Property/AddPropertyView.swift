@@ -10,14 +10,13 @@ import FirebaseFirestore
 
 struct AddPropertyView: View {
 	@EnvironmentObject var propertyStore: PropertyStore
-	
+	@Environment(\.dismiss) private var dismiss
+
 	@State var propertyId: String = ""
 	@State var error: String = ""
 	var body: some View {
 		PairButtonWrapper(prevText: "Close", prevAction: {
-			Task { @MainActor in
-				propertyStore.showAddPropertySheet = false
-			}
+			dismiss()
 		}, nextText: "Add", nextAction: {
 			guard !propertyId.isEmpty else {
 				self.error = "Please enter a property ID."
@@ -35,15 +34,15 @@ struct AddPropertyView: View {
 			}
 		}, content: {
 			VStack {
-				Text("Add an existing property")
+				Text("Add a property")
 					.title()
 					.frame(maxWidth: .infinity, alignment: .leading)
 					.padding(.bottom, Constants.Spacing.small)
-				Text("Enter the property ID below:")
+				Text("Enter the property code below:")
 					.body()
 					.frame(maxWidth: .infinity, alignment: .leading)
 				
-				StyledFloatingTextField(text: $propertyId, prompt: "Property ID")
+				StyledFloatingTextField(text: $propertyId, prompt: "Property Code")
 				
 				Spacer()
 				

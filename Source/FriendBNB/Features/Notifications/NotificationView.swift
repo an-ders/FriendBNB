@@ -16,10 +16,11 @@ struct NotificationView<Content: View>: View {
 			content
 			
 			if let notification = notificationStore.notification {
-				HStack(alignment: .center) {
+				HStack(alignment: .top) {
 					Text(notification.message)
+						.caption()
 						.frame(maxWidth: .infinity, alignment: .leading)
-						.foregroundStyle(Color.white)
+						.foregroundStyle(Color.black)
 						.padding(.leading, Constants.Padding.regular)
 						.padding(.vertical, Constants.Padding.regular)
 					
@@ -30,23 +31,20 @@ struct NotificationView<Content: View>: View {
 							Image(systemName: "x.circle")
 								.resizable()
 								.scaledToFit()
-								.frame(width: 20)
-								.foregroundStyle(Color.systemRed)
+								.frame(width: 16)
+								.foregroundStyle(Color.black)
 						})
-						.padding(.trailing, Constants.Padding.regular)
+						.padding(.horizontal, Constants.Padding.regular)
+						.padding(.vertical, Constants.Padding.regular)
+						.contentShape(Rectangle())
 					}
 				}
+				.background(Rectangle().fill(Color(red: 1, green: 0.8, blue: 0)))
 				.zIndex(5)
-				.background {
-					RoundedRectangle(cornerRadius: 5)
-						.fill(notification.backgroundColor)
-						
-				}
 				.transition(.asymmetric(
 					insertion: .move(edge: .leading),
 					removal: .move(edge: .trailing)
 				))
-				.padding(.horizontal, Constants.Padding.regular)
 			}
 		}
 	}

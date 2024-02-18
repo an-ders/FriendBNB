@@ -9,31 +9,35 @@ import Foundation
 import FirebaseAuth
 import FirebaseFirestore
 
-enum PropertyType {
-	case owned
-	case friend
-	
-	var firestoreKey: String {
-		switch self {
-		case .owned:
-			return "ownedProperties"
-		case .friend:
-			return "friendsProperties"
-		}
-	}
+@MainActor
+enum PropertyType: String {
+	case owned = "ownedProperties"
+	case friend = "friendsProperties"
 }
 
 @MainActor
 class PropertyStore: ObservableObject {
+	@Published var showTabBar = true
 	@Published var selectedTab: RootTabs = .owned
 	
 	@Published var ownedProperties: [Property] = []
 	@Published var friendsProperties: [Property] = []
 	
-	@Published var showOwnedProperty = false
 	@Published var showOwnedAvailability = false
 	@Published var showOwnedBooking = false
-	@Published var selectedOwnedProperty: Property?
+	@Published var selectedOwnedProperty: Property? {
+		didSet {
+			showTabBar = selectedOwnedProperty == nil
+		}
+	}
+	
+	@Published var showFriendExistingBooking: Booking? 
+	@Published var showFriendNewBooking = false
+	@Published var selectedFriendProperty: Property? {
+		didSet {
+			showTabBar = selectedFriendProperty == nil
+		}
+	}
 	
 	@Published var showNewPropertySheet = false
 	@Published var showAddPropertySheet = false
@@ -42,18 +46,36 @@ class PropertyStore: ObservableObject {
 	
 	var listener: ListenerRegistration?
 	
-	func showProperty(_ property: Property, showAvailability: Bool = false) {
-		selectedOwnedProperty = property
-		showOwnedProperty = true
+	func showOwnedProperty(_ property: Property, showAvailability: Bool = false) {
+		self.selectedTab = .owned
+		self.selectedOwnedProperty = property
+		//subscribe(type: .owned)
+		//showTabBar = false
 		
-		DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-			self.showOwnedAvailability = showAvailability
+		if showAvailability {
+			DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+				self.showOwnedAvailability = showAvailability
+			}
 		}
 	}
 	
-	func subscribe() {
-		print("Adding listener in DETAIL VIEW")
-		guard let property = selectedOwnedProperty else {
+	func showFriendProperty(_ property: Property, delay: Bool = false) {
+		self.selectedTab = .friends
+		//subscribe(type: .friend)
+		//showTabBar = false
+		
+		if delay {
+			DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+				self.selectedFriendProperty = property
+			}
+		} else {
+			self.selectedFriendProperty = property
+		}
+	}
+	
+	func subscribe(type: PropertyType) {
+		print("SUBSCRIBING: \(type.rawValue)")
+		guard let property = type == .owned ? selectedOwnedProperty : selectedFriendProperty else {
 			return
 		}
 		let db = Firestore.firestore()
@@ -65,13 +87,24 @@ class PropertyStore: ObservableObject {
 				}
 
 				if let newData = document.data() {
-					print("Updating data DETAIL VIEW")
-					self.selectedOwnedProperty = Property(id: property.id, data: newData)
+					switch type {
+					case .friend:
+						self.selectedFriendProperty = Property(id: property.id, data: newData)
+					case .owned:
+						self.selectedOwnedProperty = Property(id: property.id, data: newData)
+					}
 				} else {
-					self.selectedOwnedProperty = nil
-					self.showOwnedProperty = false
-					Task {
-						await self.fetchProperties(.owned)
+					switch type {
+					case .friend:
+						self.selectedFriendProperty = nil
+						Task {
+							await self.fetchProperties(.friend)
+						}
+					case .owned:
+						self.selectedOwnedProperty = nil
+						Task {
+							await self.fetchProperties(.owned)
+						}
 					}
 				}
 			}
@@ -109,11 +142,12 @@ class PropertyStore: ObservableObject {
 	}
 	
 	func fetchProperties(_ type: PropertyType) async {
-		//self.loading = true
+		self.loading = true
 		let db = Firestore.firestore()
 		
 		guard Auth.auth().currentUser != nil else {
 			print("User not found")
+			self.loading = false
 			return
 		}
 		
@@ -122,9 +156,9 @@ class PropertyStore: ObservableObject {
 		do {
 			let document = try await db.collection("Accounts").document(Auth.auth().currentUser!.uid).getDocument()
 			let data = document.data() ?? [:]
-			propertyIds = data[type.firestoreKey] as? [String] ?? [String]()
+			propertyIds = data[type.rawValue] as? [String] ?? [String]()
 			
-			print("Successfully fetched \(type.firestoreKey) Ids")
+			print("Successfully fetched \(type.rawValue) Ids")
 		} catch {
 			print("Error getting Ids \(error.localizedDescription)")
 		}
@@ -142,6 +176,7 @@ class PropertyStore: ObservableObject {
 					newProperties.append(Property(id: document.documentID, data: data))
 				}
 			} catch {
+				self.loading = false
 				return
 			}
 		}
@@ -150,9 +185,9 @@ class PropertyStore: ObservableObject {
 		print("Attempting to write new property Ids")
 		do {
 			try await db.collection("Accounts").document(Auth.auth().currentUser!.uid).setData([
-				type.firestoreKey: newPropertiesIds
+				type.rawValue: newPropertiesIds
 			], merge: true)
-			print("Successfully set \(type.firestoreKey) Ids")
+			print("Successfully set \(type.rawValue) Ids")
 		} catch {
 			print("Error setting Ids \(error.localizedDescription)")
 		}
@@ -162,7 +197,7 @@ class PropertyStore: ObservableObject {
 		} else {
 			self.friendsProperties = newProperties
 		}
-		//self.loading = false
+		self.loading = false
 	}
 	
 	func addProperty(_ id: String, type: PropertyType) async {
@@ -177,10 +212,9 @@ class PropertyStore: ObservableObject {
 		print("Attempting to add Id: \(id) to user \(Auth.auth().currentUser!.uid)")
 		do {
 			try await ref.document(Auth.auth().currentUser!.uid).updateData([
-				type.firestoreKey: FieldValue.arrayUnion([id])
+				type.rawValue: FieldValue.arrayUnion([id])
 			])
-			print("Successfully added Id to \(type.firestoreKey)")
-			
+			print("Successfully added Id to \(type.rawValue)")
 			
 		} catch {
 			print("Error adding Id: \(error.localizedDescription)")
@@ -203,9 +237,9 @@ class PropertyStore: ObservableObject {
 		print("Attempting to remove Id \(id) from user \(Auth.auth().currentUser!.uid)")
 		do {
 			try await ref.document(Auth.auth().currentUser!.uid).updateData([
-				type.firestoreKey: FieldValue.arrayRemove([id])
+				type.rawValue: FieldValue.arrayRemove([id])
 			])
-			print("Successfully removed Id from \(type.firestoreKey)")
+			print("Successfully removed Id from \(type.rawValue)")
 		} catch {
 			print("Error removing Id: \(error.localizedDescription)")
 		}
@@ -219,8 +253,9 @@ class PropertyStore: ObservableObject {
 		var newDict = location.dictonary.merging(info.dictonary) { (_, new) in new }
 		if let user = Auth.auth().currentUser {
 			newDict = newDict.merging([
-				"owner": user.uid
-			]) { (_, new) in new }
+				"ownerId": user.uid,
+				"ownerName": user.displayName ?? ""
+ 			]) { (_, new) in new }
 		}
 		
 		let db = Firestore.firestore()
@@ -239,7 +274,7 @@ class PropertyStore: ObservableObject {
 		let db = Firestore.firestore()
 		do {
 			try await db.collection("Properties").document(id).delete()
-			print("Document successfully removed \(id) from \(type.firestoreKey)!")
+			print("Document successfully removed \(id) from \(type.rawValue)!")
 		} catch {
 			print("Error removing document: \(error)")
 		}
@@ -257,9 +292,9 @@ class PropertyStore: ObservableObject {
 		print("Attempting to reset \(Auth.auth().currentUser!) properties")
 		do {
 			try await ref.document(Auth.auth().currentUser!.uid).setData([
-				type.firestoreKey: []
+				type.rawValue: []
 			])
-			print("Successfully reset \(type.firestoreKey) Ids")
+			print("Successfully reset \(type.rawValue) Ids")
 		} catch {
 			print("Error resetting Ids: \(error.localizedDescription)")
 		}

@@ -10,7 +10,8 @@ import MapKit
 
 struct NewPropertySearchView: View {
     @EnvironmentObject var propertyStore: PropertyStore
-	
+	@Environment(\.dismiss) private var dismiss
+
 	@Binding var currentTab: NewPropertyTabs
 	@ObservedObject var location: Location
 	
@@ -20,8 +21,8 @@ struct NewPropertySearchView: View {
     var body: some View {
 		PairButtonWrapper(buttonPadding: Constants.Padding.regular, prevText: "Cancel", prevAction: {
 			back()
-		}, nextText: "Skip", nextAction: {
-			next()
+		}, nextText: "", nextAction: {
+			
 		}, content: {
 			VStack(alignment: .leading, spacing: 0) {
 				HStack(alignment: .center) {
@@ -57,14 +58,15 @@ struct NewPropertySearchView: View {
 								self.location.update(placemark: placemark)
 								
 								next()
+								hideKeyboard()
 							}
 						}
 					}
 					.listRowInsets(EdgeInsets(top: 10, leading: 0, bottom: 10, trailing: 0))
 				}
-				
 				.frame(maxWidth: .infinity)
 				.listStyle(.inset)
+				.zIndex(5)
 			}
 		})
         
@@ -77,7 +79,7 @@ struct NewPropertySearchView: View {
 	}
 	
 	func back() {
-		propertyStore.showNewPropertySheet = false
+		dismiss()
 	}
 }
 

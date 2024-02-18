@@ -13,7 +13,7 @@ class AuthenticationStore: ObservableObject {
     @Published var loggedIn = false
 	
 	var user: User? {
-        return Auth.auth().currentUser
+		return Auth.auth().currentUser
     }
     
     init() {
@@ -34,8 +34,18 @@ class AuthenticationStore: ObservableObject {
 			return error.localizedDescription
         }
 	}
+	
+	func signOut() async -> String? {
+		do {
+			try Auth.auth().signOut()
+		} catch {
+			print("Error while signing out!")
+			return "Error while signing out!"
+		}
+		return nil
+	}
     
-	func register(username: String, password: String, passwordConfirm: String) async -> String? {
+	func register(name: String, username: String, password: String, passwordConfirm: String) async -> String? {
         print("Attempting a register")
         
         guard !username.isEmpty else {
@@ -54,11 +64,31 @@ class AuthenticationStore: ObservableObject {
             try await Auth.auth().createUser(withEmail: username,
                                              password: password)
             print("Successfully registered")
-			return nil
+			
+			guard let error = await updateUser(displayName: name) else {
+				return nil
+			}
+			return error
         } catch {
             print(error.localizedDescription)
 			return error.localizedDescription
         }
+	}
+	
+	func updateUser(displayName: String = "") async -> String? {
+		guard let user = Auth.auth().currentUser else {
+			return "Not currently logged in"
+		}
+		
+		let changeRequest = user.createProfileChangeRequest()
+		changeRequest.displayName = displayName
+		
+		do {
+			try await changeRequest.commitChanges()
+		} catch {
+			return error.localizedDescription
+		}
+		return nil
 	}
     
     func sendVerificationEmail() async {

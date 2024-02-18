@@ -8,15 +8,38 @@
 import SwiftUI
 import FirebaseAuth
 
-enum RootTabs: String, Hashable, Equatable {
+enum RootTabs: String, Hashable, Equatable, CaseIterable {
     case owned
     case friends
     case settings
+	
+	var image: String {
+		switch self {
+		case .owned:
+			return "house"
+		case .friends:
+			return "person.2.fill"
+		case .settings:
+			return "gear"
+		}
+	}
+	
+	var name: String {
+		switch self {
+		case .owned:
+			return "My Homes"
+		case .friends:
+			return "Friends Homes"
+		case .settings:
+			return "Settings"
+		}
+	}
 }
 
 struct RootView: View {
 	@EnvironmentObject var propertyStore: PropertyStore
 	@EnvironmentObject var authStore: AuthenticationStore
+	@Environment(\.dismiss) private var dismiss
 	
     @State var loggedIn = false
     @State var showNewPropertySheet = false
@@ -25,54 +48,83 @@ struct RootView: View {
     
     var body: some View {
         NotificationView {
-            if loggedIn {
-                TabView(selection: $selectedTab) {
-                    OwnedPropertiesView()
-                        .tag(RootTabs.owned)
-                        .tabItem {
-                            Label("My Homes", systemImage: "house")
-                        }
-                    
-                    FriendsHomeView()
-                        .tag(RootTabs.friends)
-                        .tabItem {
-                            Label("Friends Homes", systemImage: "person.2.fill")
-                        }
-                    
-                    SettingsView()
-                        .tag(RootTabs.settings)
-                        .tabItem {
-                            Label("Settings", systemImage: "gear")
-                        }
-                }
-                
-                .background {
-                    Color.Home.grey
-                        .ignoresSafeArea()
-                }
+			if authStore.loggedIn {
+				VStack(spacing: 0) {
+					switch propertyStore.selectedTab {
+					case .owned:
+						OwnedPropertiesView()
+					case .friends:
+						FriendsHomeView()
+					case .settings:
+						SettingsView()
+					}
+					
+					if propertyStore.showTabBar {
+						HStack {
+							ForEach(RootTabs.allCases, id: \.self) { tab in
+								Button(action: {
+									propertyStore.selectedTab = tab
+								}, label: {
+									VStack {
+										Image(systemName: tab.image)
+											.resizable()
+											.scaledToFit()
+											.frame(height: 20)
+										Text(tab.name)
+											.caption()
+									}
+									.frame(maxWidth: .infinity)
+									.contentShape(Rectangle())
+									.foregroundStyle(propertyStore.selectedTab == tab ? Color.systemBlue : Color.systemGray2)
+								})
+							}
+						}
+						.padding(.top, Constants.Padding.small)
+					}
+				}
             } else {
                 LoginView()
             }
         }
-        .sync($propertyStore.showNewPropertySheet, with: $showNewPropertySheet)
-        .sheet(isPresented: $showNewPropertySheet) {
+		.sheet(isPresented: $propertyStore.showNewPropertySheet) {
             NewPropertyView()
                 .interactiveDismissDisabled()
         }
-        
-        .sync($propertyStore.showAddPropertySheet, with: $showAddPropertySheet)
-        .sheet(isPresented: $showAddPropertySheet) {
+		.sheet(isPresented: $propertyStore.showAddPropertySheet) {
             AddPropertyView()
                 .interactiveDismissDisabled()
         }
-        
-        .sync($authStore.loggedIn, with: $loggedIn)
         .onChange(of: authStore.loggedIn) { _ in
             Task {
                 await propertyStore.fetchProperties(.owned)
                 await propertyStore.fetchProperties(.friend)
             }
         }
+		.onOpenURL { url in
+			let string = url.absoluteString.replacingOccurrences(of: "friendbnb://", with: "")
+			print(string)
+			let components = string.components(separatedBy: "?")
+			
+			for component in components {
+				if component.contains("id=") {
+					let idRequest = component.replacingOccurrences(of: "id=", with: "")
+					Task { @MainActor in
+						if let id = await propertyStore.checkValidId(idRequest) {
+							await propertyStore.addProperty(id, type: .friend)
+							propertyStore.showAddPropertySheet = false
+							dismiss()
+							if let property = await propertyStore.getProperty(id: id) {
+								propertyStore.showFriendProperty(property, delay: true)
+							} else {
+								//ERROR
+							}
+						} else {
+							//self.error = "No property with that ID was found."
+						}
+					}
+				}
+			}
+		}
     }
 }
 

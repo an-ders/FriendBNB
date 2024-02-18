@@ -15,8 +15,9 @@ struct PropertyTest {
 
 struct Property: Identifiable, Hashable {
 	let id: String
-	var title: String
-	var owner: String
+	var nickname: String
+	var ownerId: String
+	var ownerName: String
 	var people: Int
 	
 	var notes: String
@@ -36,8 +37,9 @@ struct Property: Identifiable, Hashable {
 	
 	init(
 		id: String,
-		title: String = "",
-		owner: String = "",
+		nickname: String = "",
+		ownerId: String = "",
+		ownerName: String = "",
 		people: Int = 0,
 		cleaningNotes: String = "",
 		wifi: String = "",
@@ -46,15 +48,16 @@ struct Property: Identifiable, Hashable {
 		cost: Int = 0,
 		paymentNotes: String = "",
 		contactInfo: String = "",
-		location: Location = Location(),
 		notes: String = "",
+		location: Location = Location(),
 		bookings: [Booking] = [],
 		available: [Booking] = [],
 		unavailable: [Booking] = []
 	) {
 		self.id = id
-		self.title = title
-		self.owner = owner
+		self.nickname = nickname
+		self.ownerId = ownerId
+		self.ownerName = ownerName
 		self.people = people
 		
 		self.notes = notes
@@ -75,8 +78,9 @@ struct Property: Identifiable, Hashable {
 	
 	init(id: String, data: [String: Any]) {
 		self.id = id
-		self.title = data["title"] as? String ?? ""
-		self.owner = data["owner"] as? String ?? ""
+		self.nickname = data["nickname"] as? String ?? ""
+		self.ownerId = data["ownerId"] as? String ?? ""
+		self.ownerName = data["ownerName"] as? String ?? ""
 		self.people = data["people"] as? Int ?? 0
 		
 		self.notes = data["notes"] as? String ?? ""
@@ -109,6 +113,36 @@ struct Property: Identifiable, Hashable {
 		for busyData in busyDataArray {
 			unavailable.append(Booking(data: busyData))
 		}
+	}
+	
+	var shareMessage: String {
+		"""
+		Install FriendBNB on the app store and add my property!
+		I've got a place you can check out.
+		
+		\(self.nickname.isEmpty ? ownerName + "'s Place" : self.nickname) in \(self.location.city) \(self.location.state)
+		Months available:
+		\(availableMonths)
+		Property id: \(self.id)
+		"""
+	}
+	
+	var availableMonths: String {
+		var string = ""
+		var count = 0
+		for month in available.current().dateSorted().dict().keys {
+			string += "   -\(month)\n"
+			if count >= 4 {
+				string += "    And more..."
+				break
+			}
+			count += 1
+		}
+		return string
+	}
+	
+	var shareLink: URL? {
+		URL(string: "FriendBNB://id=\(self.id)")
 	}
 	
 	func hash(into hasher: inout Hasher) {

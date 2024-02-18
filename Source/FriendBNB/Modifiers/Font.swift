@@ -22,10 +22,17 @@ struct Heading: ViewModifier {
 	}
 }
 
-struct BodyFont: ViewModifier {
+struct BodyLight: ViewModifier {
 	func body(content: Content) -> some View {
 		content
 			.font(.headline).fontWeight(.light)
+	}
+}
+
+struct BodyBold: ViewModifier {
+	func body(content: Content) -> some View {
+		content
+			.font(.headline).fontWeight(.semibold)
 	}
 }
 
@@ -46,7 +53,11 @@ extension View {
 	}
 	
 	func body() -> some View {
-		modifier(BodyFont())
+		modifier(BodyLight())
+	}
+	
+	func bodyBold() -> some View {
+		modifier(BodyBold())
 	}
 	
 	func caption() -> some View {

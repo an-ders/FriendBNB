@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import MapKit
 
 struct NewPropertyConfirmView: View {
 	@EnvironmentObject var propertyStore: PropertyStore
@@ -16,11 +17,8 @@ struct NewPropertyConfirmView: View {
 	var createProperty: () -> Void
 	
     var body: some View {
-		PairButtonWrapper(prevText: "Back", prevAction: {
-			back()
-		}, nextText: "Finish and Set Availability", nextAction: {
-			next()
-		}, content: {
+		let coordinate = CLLocationCoordinate2D(latitude: location.geo.latitude, longitude: location.geo.longitude)
+		
 			ScrollView(showsIndicators: false) {
 				VStack(spacing: Constants.Spacing.regular) {
 					Text(location.addressTitle)
@@ -31,27 +29,25 @@ struct NewPropertyConfirmView: View {
 						.body()
 						.fillLeading()
 					
-					TabView {
-						Image(systemName: "house")
-							.resizable()
-							.scaledToFill()
-							.background(Color.systemGray5)
-						Image(systemName: "house")
-							.resizable()
-							.scaledToFill()
-							.background(Color.systemGray5)
+					Map(position: .constant(MapCameraPosition.region(MKCoordinateRegion(center: coordinate, latitudinalMeters: 1000, longitudinalMeters: 1000)))) {
+						Marker("", coordinate: coordinate)
 					}
 					.frame(height: 250)
 					.cornerRadius(20)
-					.tabViewStyle(.page(indexDisplayMode: .always))
-					.indexViewStyle(PageIndexViewStyle(backgroundDisplayMode: .always))
 					
 					NewPropertyInfoFieldsView(info: info)
 					
-					PairButtonSpacer()
+					PairButtonsView(prevText: "Back", prevAction: {
+						back()
+					}, nextText: "Finish", nextCaption: "and Set Availability", nextAction: {
+						next()
+					})
 				}
 			}
-		})
+			.contentShape(Rectangle())
+			.onTapGesture {
+				hideKeyboard()
+			}
 		.padding(.horizontal, Constants.Padding.regular)
     }
 	

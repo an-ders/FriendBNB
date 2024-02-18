@@ -72,6 +72,10 @@ extension CalendarCellView {
 			
 			let calendar = Calendar(identifier: .gregorian)
 			self.date = calendar.date(from: DateComponents(year: self.year, month: self.month, day: self.day))!.stripTime()
+			
+			if self.date < Date().stripTime() {
+				isCurrentMonth = false
+			}
 		}
 		
 		func updateHighlighting(startDate: Date?, endDate: Date?) {
@@ -116,6 +120,10 @@ extension CalendarCellView {
 				return
 			}
 			
+			isAvailable = false
+			isAvailableStart = false
+			isAvailableEnd = false
+			
 			for avilability in dict[monthYear]! where avilability.overlaps(date: date) {
 				isAvailable = true
 				isAvailableStart = avilability.start == date
@@ -123,9 +131,6 @@ extension CalendarCellView {
 				return
 			}
 			
-			isAvailable = false
-			isAvailableStart = false
-			isAvailableEnd = false
 		}
 		//
 		func updateisUnavailable(_ unavailable: [Booking]) {
@@ -136,16 +141,16 @@ extension CalendarCellView {
 				return
 			}
 			
+			isUnavailable = false
+			isUnavailableStart = false
+			isUnavailableEnd = false
+			
 			for unavilability in dict[monthYear]! where unavilability.overlaps(date: date) {
 				isUnavailable = true
 				isUnavailableStart = unavilability.start == date
 				isUnavailableEnd = unavilability.end == date
 				return
 			}
-			
-			isUnavailable = false
-			isUnavailableStart = false
-			isUnavailableEnd = false
 		}
 	}
 }

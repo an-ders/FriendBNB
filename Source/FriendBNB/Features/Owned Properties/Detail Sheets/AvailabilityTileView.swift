@@ -11,6 +11,7 @@ struct AvailabilityTileView: View {
 	@EnvironmentObject var bookingStore: BookingStore
 	var availibility: Booking
 	var type: BookingType
+	var bgColor: Color
 	var delete: () -> Void
 	
 	@State var deleteConfirm = false
@@ -21,6 +22,7 @@ struct AvailabilityTileView: View {
 				Text(availibility.start, style: .date)
 				Text(availibility.end, style: .date)
 			}
+			.body()
 			
 			Spacer()
 			
@@ -33,9 +35,10 @@ struct AvailabilityTileView: View {
 					.frame(height: 25)
 			})
 		}
+		.foregroundStyle(Color.black)
 		.padding(.horizontal, Constants.Padding.regular)
 		.padding(.vertical, Constants.Padding.small)
-		.background(Color.systemGray3)
+		.background(bgColor)
 		.cornerRadius(20)
 		.alert(isPresented: $deleteConfirm) {
 			Alert(title: Text("Are you sure you want to delete this?"),

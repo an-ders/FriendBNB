@@ -12,27 +12,27 @@ struct NewPropertyInfoView: View {
 	@ObservedObject var info: NewPropertyInfo
 	
 	var body: some View {
-		PairButtonWrapper(prevText: "Back", prevAction: {
-			back()
-		}, nextText: "Next", nextAction: {
-			next()
-		}, content: {
-			VStack {
-				ScrollView(.vertical, showsIndicators: false) {
-					VStack(spacing: Constants.Spacing.regular) {
-						Text("Home Details")
-							.title()
-							.fillLeading()
-							.padding(.bottom, Constants.Spacing.small)
-						NewPropertyInfoFieldsView(info: info)
-												
-						PairButtonSpacer()
-					}
-					.padding(.top, Constants.Padding.regular)
+			ScrollView(.vertical, showsIndicators: false) {
+				VStack(spacing: Constants.Spacing.regular) {
+					Text("Home Details")
+						.title()
+						.fillLeading()
+						.padding(.bottom, Constants.Spacing.small)
+					NewPropertyInfoFieldsView(info: info)
+											
+					PairButtonsView(prevText: "Back", prevAction: {
+						back()
+					}, nextText: "Next", nextCaption: "", nextAction: {
+						next()
+					})
 				}
+				.padding(.top, Constants.Padding.regular)
 			}
-		})
-		.padding(.horizontal, Constants.Padding.regular)
+			.padding(.horizontal, Constants.Padding.regular)
+			.contentShape(Rectangle())
+			.onTapGesture {
+				hideKeyboard()
+			}
 	}
 	
 	func next() {
@@ -52,6 +52,8 @@ struct NewPropertyInfoFieldsView: View {
 	@ObservedObject var info: NewPropertyInfo
 	
 	var body: some View {
+		StyledFloatingTextField(text: $info.nickname, prompt: "Nickname (optional)")
+			.padding(.bottom, Constants.Padding.small)
 		CustomStepperView(text: "Max People", value: $info.people, min: 1)
 		Divider()
 		HStack {
@@ -116,6 +118,7 @@ enum PaymentFee: String, CaseIterable {
 }
 					
 class NewPropertyInfo: ObservableObject {
+	@Published var nickname: String = ""
 	@Published var rooms: Int = 1
 	@Published var people: Int = 4
 	@Published var notes: String = ""
@@ -132,6 +135,7 @@ class NewPropertyInfo: ObservableObject {
 	
 	var dictonary: [String: Any] {
 		[
+			"nickname": nickname,
 			"rooms": rooms,
 			"people": people,
 			"cleaningNotes": cleaningNotes,

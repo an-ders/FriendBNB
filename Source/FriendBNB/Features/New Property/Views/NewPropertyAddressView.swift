@@ -17,22 +17,32 @@ struct NewPropertyAddressView: View {
 		}, nextText: "Next", nextAction: {
 			next()
 		}, content: {
-			VStack(spacing: 4) {
+			VStack {
 				Text("Confirm the address")
-					.font(.largeTitle).fontWeight(.medium)
-					.frame(maxWidth: .infinity, alignment: .leading)
+					.title()
+					.fillLeading()
 					.padding(.bottom, Constants.Spacing.regular)
 				
-				StyledFloatingTextField(text: $location.streetName, prompt: "Street Name")
-				StyledFloatingTextField(text: $location.streetNumber, prompt: "Street Number")
-				StyledFloatingTextField(text: $location.city, prompt: "City")
-				StyledFloatingTextField(text: $location.state, prompt: "State")
-				StyledFloatingTextField(text: $location.zipCode, prompt: "Zip Code")
-				StyledFloatingTextField(text: $location.country, prompt: "Country")
-				
-				ErrorView(error: $location.error)
-				
-				Spacer()
+				ScrollView(showsIndicators: false) {
+					VStack(spacing: 4) {
+						StyledFloatingTextField(text: $location.streetName, prompt: "Street Name")
+						StyledFloatingTextField(text: $location.streetNumber, prompt: "Street Number")
+						StyledFloatingTextField(text: $location.city, prompt: "City")
+						StyledFloatingTextField(text: $location.state, prompt: "State")
+						StyledFloatingTextField(text: $location.zipCode, prompt: "Zip Code")
+						StyledFloatingTextField(text: $location.country, prompt: "Country")
+						
+						ErrorView(error: $location.error)
+						
+						Spacer()
+						
+						PairButtonSpacer()
+					}
+				}
+			}
+			.contentShape(Rectangle())
+			.onTapGesture {
+				hideKeyboard()
 			}
 		})
 		.padding(.horizontal, Constants.Padding.regular)

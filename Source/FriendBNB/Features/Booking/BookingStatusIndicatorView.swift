@@ -13,6 +13,9 @@ struct BookingStatusIndicatorView: View {
 	let disabledOpacity = 0.3
     var body: some View {
 		VStack {
+			Text("Booking Status")
+				.heading()
+				.fillLeading()
 			HStack {
 				Spacer()
 				
@@ -39,6 +42,7 @@ struct BookingStatusIndicatorView: View {
 			}
 			
 			Text(status.rawValue)
+				.bodyBold()
 		}
     }
 }

@@ -36,8 +36,7 @@ struct CalendarView: View {
 				})
 				
 				Text(calendarViewModel.date.monthYearString())
-					.font(.title)
-					.bold()
+					.heading()
 					.animation(.none)
 					.frame(maxWidth: .infinity)
 				
@@ -61,6 +60,7 @@ struct CalendarView: View {
 		HStack(spacing: 1) {
 			ForEach(["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"], id: \.self) { day in
 				Text(day)
+					.body()
 					.frame(maxWidth: .infinity)
 					.padding(.top, 1)
 					.lineLimit(1)

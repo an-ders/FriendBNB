@@ -10,10 +10,11 @@ import FirebaseAuth
 
 struct LoginView: View {
 	@EnvironmentObject var authStore: AuthenticationStore
+	@State var name = ""
 	@State var email = ""
 	@State var password = ""
 	
-	@State var isSignup = false
+	@State var isSignup = true
 	@State var passwordConfirm = ""
 	
 	@State var showPasswordResetSheet = false
@@ -26,6 +27,10 @@ struct LoginView: View {
 			Text("FriendBNB")
 				.font(.system(size: 36, weight: .bold))
 			Spacer()
+			
+			if isSignup {
+				StyledFloatingTextField(text: $name, prompt: "Name")
+			}
 			
 			StyledFloatingTextField(text: $email, prompt: "Email")
 			
@@ -51,7 +56,7 @@ struct LoginView: View {
 			Spacer()
 			
 			Button(action: {
-				cta(email: email, password: password, passwordConfirm: passwordConfirm)
+				cta()
 			}, label: {
 				Text(isSignup ? "Sign Up" : "Log In")
 					.font(.title3).fontWeight(.bold)
@@ -64,22 +69,27 @@ struct LoginView: View {
 				}
 			}, label: {
 				Text(isSignup ? "Already have an account? Log In" : "Dont have an account? Sign Up")
-					.font(.headline).fontWeight(.light)
+					.body()
+					.underline()
 			})
 			.padding(.top, Constants.Spacing.large)
 			Spacer()
 		}
 		.padding(25)
-		
+		.preferredColorScheme(.light)
 		.sheet(isPresented: $showPasswordResetSheet) {
 			ResetPasswordView(showSheet: $showPasswordResetSheet)
 		}
+		.contentShape(Rectangle())
+		.onTapGesture {
+			hideKeyboard()
+		}
 	}
 	
-	func cta(email: String, password: String, passwordConfirm: String) {
+	func cta() {
 		Task {
 			if isSignup {
-				guard let error = await authStore.register(username: email, password: password, passwordConfirm: passwordConfirm) else {
+				guard let error = await authStore.register(name: name, username: email, password: password, passwordConfirm: passwordConfirm) else {
 					self.error = ""
 					return
 				}

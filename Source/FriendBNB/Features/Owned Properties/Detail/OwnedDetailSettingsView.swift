@@ -10,17 +10,9 @@ import SwiftUI
 
 struct OwnedDetailSettingsView: View {
 	@Binding var confirmDelete: Bool
-	
-	var shareAction: () -> Void
-	
+		
 	var body: some View {
 		Menu(content: {
-			Button(action: {
-				shareAction()
-			}, label: {
-				Label("Share", systemImage: "square.and.arrow.up")
-			})
-			
 			Button(role: .destructive, action: {
 				confirmDelete = true
 			}, label: {

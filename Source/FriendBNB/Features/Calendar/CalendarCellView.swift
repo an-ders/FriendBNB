@@ -17,6 +17,8 @@ struct CalendarCellView: View {
 		Button(action: {
 			calendarViewModel.dateClicked(viewModel.date)
 			//print("\(viewModel.day) \(viewModel.month) \(viewModel.year)")
+			print(viewModel.isUnavailable)
+			print(calendarViewModel.isAvailableMode)
 		}, label: {
 			Group {
 				if type == .friend {
@@ -46,11 +48,25 @@ struct CalendarCellView: View {
 		})
 	}
 	
+	var textColor: Color {
+		if viewModel.isHighlighted {
+			return Color.black
+		} else if viewModel.isAvailable && calendarViewModel.isAvailableMode && !viewModel.isUnavailable {
+			return Color.black
+		} else if viewModel.isUnavailable && !calendarViewModel.isAvailableMode {
+			return Color.black
+		} else if viewModel.isCurrentMonth {
+			return Color.black
+		}
+		
+		return Color.systemGray
+	}
+	
 	var ownedCell: some View {
 		Text(String(viewModel.day))
 			.strikethrough(viewModel.isBooked || viewModel.isUnavailable)
 			.padding(Constants.Padding.xsmall)
-			.foregroundColor(viewModel.isCurrentMonth ? viewModel.isBooked || viewModel.isUnavailable ? Color.systemGray : Color.black : Color.systemGray4)
+			.foregroundColor(textColor)
 			.frame(maxWidth: .infinity, maxHeight: .infinity)
 			.background {
 				if viewModel.isHighlighted && calendarViewModel.endDate == nil {

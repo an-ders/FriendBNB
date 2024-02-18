@@ -12,7 +12,7 @@ struct PairButtonSpacer: View {
 		Rectangle()
 			.foregroundColor(.clear)
 			.frame(maxWidth: .infinity)
-			.frame(height: 75)
+			.frame(height: 85)
     }
 }
 

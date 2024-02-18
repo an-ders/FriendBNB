@@ -9,7 +9,7 @@ import SwiftUI
 import FirebaseFirestore
 import FirebaseAuth
 
-enum NewPropertyTabs {
+enum NewPropertyTabs: Int {
 	case search
 	case address
 	case info
@@ -24,23 +24,29 @@ struct NewPropertyView: View {
 	@StateObject var info = NewPropertyInfo()
 	
 	var body: some View {
-		TabView(selection: $currentTab) {
-			NewPropertySearchView(currentTab: $currentTab, location: location)
-				.tag(NewPropertyTabs.search)
-			
-			NewPropertyAddressView(currentTab: $currentTab, location: location)
-				.tag(NewPropertyTabs.address)
-			
-			NewPropertyInfoView(currentTab: $currentTab, info: info)
-				.tag(NewPropertyTabs.info)
-			
-			NewPropertyConfirmView(currentTab: $currentTab, location: location, info: info) {
-				createProperty()
+		VStack(spacing: 0) {
+			ProgressView("", value: Float(currentTab.rawValue) + 1, total: 4)
+				.frame(height: 0)
+				.offset(y: -7)
+				.zIndex(5)
+			TabView(selection: $currentTab) {
+				NewPropertySearchView(currentTab: $currentTab, location: location)
+					.tag(NewPropertyTabs.search)
+				
+				NewPropertyAddressView(currentTab: $currentTab, location: location)
+					.tag(NewPropertyTabs.address)
+				
+				NewPropertyInfoView(currentTab: $currentTab, info: info)
+					.tag(NewPropertyTabs.info)
+				
+				NewPropertyConfirmView(currentTab: $currentTab, location: location, info: info) {
+					createProperty()
+				}
+				.tag(NewPropertyTabs.confirm)
 			}
-			.tag(NewPropertyTabs.confirm)
+			.tabViewStyle(.page(indexDisplayMode: .never))
+			.indexViewStyle(PageIndexViewStyle(backgroundDisplayMode: .always))
 		}
-		.tabViewStyle(.page(indexDisplayMode: .never))
-		.indexViewStyle(PageIndexViewStyle(backgroundDisplayMode: .always))
 	}
 		
 	func createProperty() {
@@ -49,7 +55,7 @@ struct NewPropertyView: View {
 			await propertyStore.addProperty(newId, type: .owned)
 			propertyStore.showNewPropertySheet = false
 			if let property = await propertyStore.getProperty(id: newId) {
-				propertyStore.showProperty(property, showAvailability: true)
+				propertyStore.showOwnedProperty(property, showAvailability: true)
 			}
 		}
 	}

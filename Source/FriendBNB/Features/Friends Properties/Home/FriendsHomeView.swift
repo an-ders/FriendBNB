@@ -13,38 +13,53 @@ struct FriendsHomeView: View {
 	@EnvironmentObject var propertyStore: PropertyStore
 	
 	var body: some View {
-		NavigationView {
+		NavigationStack {
 			Group {
-				if !propertyStore.friendsProperties.isEmpty {
-					ScrollView {
-						VStack {
-							ForEach(propertyStore.friendsProperties) { property in
-								PropertyTileView(property: property) {
-									FriendDetailView(property: property)
+				if propertyStore.loading {
+					EmptyView()
+				} else if !propertyStore.friendsProperties.isEmpty {
+					ZStack {
+						Button(action: {
+							propertyStore.showAddPropertySheet = true
+						}, label: {
+							Image(systemName: "plus.circle.fill")
+								.resizable()
+								.scaledToFit()
+								.frame(height: 35)
+								.background(.white)
+								.clipShape(Circle())
+								.padding(.trailing, Constants.Padding.regular)
+						})
+						.frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topTrailing)
+						.zIndex(5)
+						
+						ScrollView {
+							VStack {
+								Rectangle()
+									.frame(height: 45)
+									.foregroundStyle(Color.clear)
+								
+								ForEach(propertyStore.friendsProperties) { property in
+									Button(action: {
+										propertyStore.showFriendProperty(property)
+									}, label: {
+										PropertyTileView(property: property)
+									})
 								}
 							}
+							.padding(.top, 2)
 						}
-						.padding(.top, 2)
-					}
-					.refreshable {
-						await propertyStore.fetchProperties(.friend)
+						.refreshable {
+							await propertyStore.fetchProperties(.friend)
+						}
 					}
 				} else {
 					FriendHomeEmptyView()
 				}
 			}
-			.toolbar {
-				ToolbarItem(placement: .primaryAction) {
-					Button(action: {
-						propertyStore.showAddPropertySheet = true
-					}, label: {
-						Image(systemName: "plus.circle.fill")
-							.resizable()
-							.scaledToFit()
-							.frame(height: 30)
-							.padding(.trailing, 10)
-					})
-				}
+			.navigationDestination(item: $propertyStore.selectedFriendProperty) { _ in
+				FriendDetailView()
+					.navigationBarTitleDisplayMode(.inline)
 			}
 		}
 	}

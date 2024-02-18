@@ -21,6 +21,7 @@ struct BasicTextField: View {
 					.stroke(lineWidth: 1.0)
 					.foregroundStyle(color)
 			)
+			.contentShape(Rectangle())
     }
 }
 

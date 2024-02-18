@@ -12,53 +12,59 @@ import FirebaseFirestore
 struct OwnedPropertiesView: View {
 	@EnvironmentObject var propertyStore: PropertyStore
 	@State private var navPath = NavigationPath()
-	@State var test = false
 	
 	var body: some View {
 		NavigationStack {
 			Group {
 				if propertyStore.loading {
-					
+					EmptyView()
 				} else if !propertyStore.ownedProperties.isEmpty {
-					VStack {
+					ZStack {
+						Button(action: {
+							propertyStore.showNewPropertySheet = true
+						}, label: {
+							Image(systemName: "plus.circle.fill")
+								.resizable()
+								.scaledToFit()
+								.frame(height: 35)
+								.background(.white)
+								.clipShape(Circle())
+								.padding(.trailing, Constants.Padding.regular)
+						})
+						.frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topTrailing)
+						.zIndex(5)
+						
 						ScrollView {
 							VStack {
+								Rectangle()
+									.frame(height: 45)
+									.foregroundStyle(Color.clear)
+								
 								ForEach(propertyStore.ownedProperties) { property in
-									PropertyTileView(property: property) {
-										propertyStore.showProperty(property)
-									}
+									Button(action: {
+										propertyStore.showOwnedProperty(property)
+									}, label: {
+										PropertyTileView(property: property)
+									})
 								}
 							}
-							.padding(.top, 2)
 						}
 						.refreshable {
 							await propertyStore.fetchProperties(.owned)
 						}
 					}
-					.onChange(of: propertyStore.showOwnedProperty) { _ in
-						Task {
-							await propertyStore.fetchProperties(.owned)
-						}
-					}
+//					.onChange(of: propertyStore.showOwnedProperty) { _ in
+//						Task {
+//							await propertyStore.fetchProperties(.owned)
+//						}
+//					}
 				} else {
 					OwnedPropertiesEmptyView()
 				}
 			}
-			.toolbar {
-				ToolbarItem(placement: .primaryAction) {
-					Button(action: {
-						propertyStore.showNewPropertySheet = true
-					}, label: {
-						Image(systemName: "plus.circle.fill")
-							.resizable()
-							.scaledToFit()
-							.frame(height: 30)
-							.padding(.trailing, 10)
-					})
-				}
-			}
-			.navigationDestination(isPresented: $propertyStore.showOwnedProperty) {
+			.navigationDestination(item: $propertyStore.selectedOwnedProperty) { _ in
 				OwnedDetailView()
+					.navigationBarTitleDisplayMode(.inline)
 			}
 		}
 	}

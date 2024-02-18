@@ -49,6 +49,10 @@
 		565A46762B0355C500D67A03 /* View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 565A46752B0355C500D67A03 /* View.swift */; };
 		565A467B2B0363C200D67A03 /* FriendNewBookingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 565A467A2B0363C200D67A03 /* FriendNewBookingView.swift */; };
 		567B74FE2B0607DB00639540 /* BookingStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 567B74FD2B0607DB00639540 /* BookingStore.swift */; };
+		569C87E02B6CA22A00EDE61D /* FriendTileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 569C87DF2B6CA22A00EDE61D /* FriendTileView.swift */; };
+		56B34D402B72E359008F831A /* TabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56B34D3F2B72E359008F831A /* TabBar.swift */; };
+		56B34D422B7F3A8C008F831A /* FriendDetailSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56B34D412B7F3A8C008F831A /* FriendDetailSettingsView.swift */; };
+		56B34D462B81FACF008F831A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 56B34D452B81FACF008F831A /* Assets.xcassets */; };
 		56D7B0C42AF2F630002B65DD /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = 56D7B0C32AF2F630002B65DD /* .swiftlint.yml */; };
 		56D7B0C82AF2FB95002B65DD /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D7B0C72AF2FB95002B65DD /* RootView.swift */; };
 		56D7B0CB2AF358BF002B65DD /* OwnedPropertiesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D7B0CA2AF358BF002B65DD /* OwnedPropertiesView.swift */; };
@@ -152,6 +156,10 @@
 		565A467A2B0363C200D67A03 /* FriendNewBookingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendNewBookingView.swift; sourceTree = "<group>"; };
 		567B74FD2B0607DB00639540 /* BookingStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookingStore.swift; sourceTree = "<group>"; };
 		569A8FEB2AA82DCD003B3A44 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		569C87DF2B6CA22A00EDE61D /* FriendTileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendTileView.swift; sourceTree = "<group>"; };
+		56B34D3F2B72E359008F831A /* TabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBar.swift; sourceTree = "<group>"; };
+		56B34D412B7F3A8C008F831A /* FriendDetailSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendDetailSettingsView.swift; sourceTree = "<group>"; };
+		56B34D452B81FACF008F831A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		56D7B0C32AF2F630002B65DD /* .swiftlint.yml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = SOURCE_ROOT; };
 		56D7B0C72AF2FB95002B65DD /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
 		56D7B0CA2AF358BF002B65DD /* OwnedPropertiesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OwnedPropertiesView.swift; sourceTree = "<group>"; };
@@ -265,8 +273,6 @@
 				56D7B0EC2AFE1A9A002B65DD /* CustomStepperView.swift */,
 				565A465B2AFF571800D67A03 /* StyledFloatingTextField.swift */,
 				56EC543C2B09FFC300AE12DC /* SecureStyledFloatingTextField.swift */,
-				565A46792B0363A100D67A03 /* Booking */,
-				56EC544C2B0CAF0900AE12DC /* Calendar */,
 				560020A62B636D8800244058 /* ErrorView.swift */,
 				56D7B0F12AFE2C25002B65DD /* PairButtonsView.swift */,
 				56041BE32B64C390005BD4D8 /* PairButtonWrapper.swift */,
@@ -282,6 +288,8 @@
 			isa = PBXGroup;
 			children = (
 				56D7B0CD2AF4BD92002B65DD /* PropertyTileView.swift */,
+				569C87DF2B6CA22A00EDE61D /* FriendTileView.swift */,
+				56B34D3F2B72E359008F831A /* TabBar.swift */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -338,6 +346,7 @@
 				56E24E722AEE2E6E005393C7 /* Features */,
 				560020A52B636D7600244058 /* Components */,
 				569A8FEB2AA82DCD003B3A44 /* Info.plist */,
+				56B34D452B81FACF008F831A /* Assets.xcassets */,
 				565198432AA7DCF200866F0B /* Colors.xcassets */,
 				565198452AA7DCF200866F0B /* Preview Content */,
 				56E24E762AEE30CA005393C7 /* Localizable.strings */,
@@ -445,6 +454,8 @@
 				56D7B0D32AF8CCCD002B65DD /* Settings */,
 				56D7B0C92AF358B5002B65DD /* Owned Properties */,
 				56EC54422B0BF29B00AE12DC /* Friends Properties */,
+				565A46792B0363A100D67A03 /* Booking */,
+				56EC544C2B0CAF0900AE12DC /* Calendar */,
 				560020A02B635E1D00244058 /* Notifications */,
 				565A46552AFF453500D67A03 /* Add Property */,
 				56D7B0DC2AF9B012002B65DD /* New Property */,
@@ -577,6 +588,7 @@
 			isa = PBXGroup;
 			children = (
 				56EC54552B11F83100AE12DC /* FriendDetailView.swift */,
+				56B34D412B7F3A8C008F831A /* FriendDetailSettingsView.swift */,
 			);
 			path = Detail;
 			sourceTree = "<group>";
@@ -704,6 +716,7 @@
 				565198472AA7DCF200866F0B /* Preview Assets.xcassets in Resources */,
 				56E24E772AEE30CA005393C7 /* Localizable.strings in Resources */,
 				56DA6A092B059E0B0007BC40 /* GoogleService-Info.plist in Resources */,
+				56B34D462B81FACF008F831A /* Assets.xcassets in Resources */,
 				565198442AA7DCF200866F0B /* Colors.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -808,6 +821,7 @@
 				565A465C2AFF571800D67A03 /* StyledFloatingTextField.swift in Sources */,
 				56D7B0D02AF4BE97002B65DD /* Property.swift in Sources */,
 				56041BE02B64B8AB005BD4D8 /* OwnerBookingConfirmationView.swift in Sources */,
+				56B34D422B7F3A8C008F831A /* FriendDetailSettingsView.swift in Sources */,
 				56EC544E2B0CAF4200AE12DC /* OwnedAvailabilityView.swift in Sources */,
 				56D7B0C82AF2FB95002B65DD /* RootView.swift in Sources */,
 				56EC54362B09DDB400AE12DC /* SecureFloatingPromptTextField.swift in Sources */,
@@ -822,6 +836,7 @@
 				565A46612B00145400D67A03 /* OwnedDetailView.swift in Sources */,
 				56EC543F2B0B2CCA00AE12DC /* OwnedExistingBookingView.swift in Sources */,
 				565A46692B00AB2600D67A03 /* CalendarCellView.swift in Sources */,
+				569C87E02B6CA22A00EDE61D /* FriendTileView.swift in Sources */,
 				565A46572AFF454400D67A03 /* AddPropertyView.swift in Sources */,
 				5600209F2B634F9C00244058 /* InputField.swift in Sources */,
 				56D7B0D52AF8CCE0002B65DD /* SettingsView.swift in Sources */,
@@ -832,6 +847,7 @@
 				56EC54502B0CB3B800AE12DC /* Availability.swift in Sources */,
 				56EC54392B09F08200AE12DC /* AuthenticationStore.swift in Sources */,
 				565198422AA7DCF200866F0B /* LoginView.swift in Sources */,
+				56B34D402B72E359008F831A /* TabBar.swift in Sources */,
 				56D7B0ED2AFE1A9A002B65DD /* CustomStepperView.swift in Sources */,
 				56041BEC2B65D694005BD4D8 /* CurrencyField.swift in Sources */,
 				56D7B0CE2AF4BD92002B65DD /* PropertyTileView.swift in Sources */,
@@ -947,7 +963,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -1001,7 +1017,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -1024,11 +1040,10 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = FriendBNB/Info.plist;
-				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1058,11 +1073,10 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = FriendBNB/Info.plist;
-				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

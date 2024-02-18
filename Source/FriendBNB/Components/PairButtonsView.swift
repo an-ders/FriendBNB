@@ -12,6 +12,7 @@ struct PairButtonsView: View {
     var prevText: String
     var prevAction: () -> Void
     var nextText: String
+	var nextCaption: String
     var nextAction: () -> Void
     
     var body: some View {
@@ -26,6 +27,7 @@ struct PairButtonsView: View {
             HStack {
                 Button(action: {
                     prevAction()
+					hideKeyboard()
                 }, label: {
                     Text(prevText)
                         .underline()
@@ -35,17 +37,26 @@ struct PairButtonsView: View {
                 
                 Spacer()
                 
-                Button(action: {
-                    nextAction()
-                }, label: {
-                    Text(nextText)
-                        .font(.title3).fontWeight(.medium)
-                        .padding(.horizontal, 20)
-                        .padding(.vertical, 8)
-                        .foregroundColor(.white)
-                        .background(Color.label)
-                        .cornerRadius(20)
-                })
+				if !nextText.isEmpty {
+					Button(action: {
+						nextAction()
+						hideKeyboard()
+					}, label: {
+						VStack {
+							Text(nextText)
+								.bodyBold()
+							if !nextCaption.isEmpty {
+								Text(nextCaption)
+									.caption()
+							}
+						}
+						.padding(.horizontal, 20)
+						.padding(.vertical, 8)
+						.foregroundColor(.white)
+						.background(Color.label)
+						.cornerRadius(20)
+					})
+				}
             }
             .padding(.bottom, Constants.Padding.small)
             .background {

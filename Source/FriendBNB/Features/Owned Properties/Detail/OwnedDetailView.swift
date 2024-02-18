@@ -7,6 +7,7 @@
 
 import SwiftUI
 import FirebaseFirestore
+import MapKit
 
 struct OwnedDetailView: View {
 	@EnvironmentObject var propertyStore: PropertyStore
@@ -16,6 +17,7 @@ struct OwnedDetailView: View {
 	
 	var body: some View {
 		if let property = propertyStore.selectedOwnedProperty {
+			let coordinate = CLLocationCoordinate2D(latitude: property.location.geo.latitude, longitude: property.location.geo.longitude)
 			VStack {
 				ScrollView(showsIndicators: false) {
 					VStack(spacing: Constants.Padding.regular) {
@@ -27,21 +29,13 @@ struct OwnedDetailView: View {
 								.font(.headline).fontWeight(.light)
 								.frame(maxWidth: .infinity, alignment: .leading)
 						}
+						.padding(.top, Constants.Padding.small)
 						
-						TabView {
-							Image(systemName: "house")
-								.resizable()
-								.scaledToFill()
-								.background(Color.systemGray5)
-							Image(systemName: "house")
-								.resizable()
-								.scaledToFill()
-								.background(Color.systemGray5)
+						Map(position: .constant(MapCameraPosition.region(MKCoordinateRegion(center: coordinate, latitudinalMeters: 1000, longitudinalMeters: 1000)))) {
+							Marker("", coordinate: coordinate)
 						}
 						.frame(height: 250)
 						.cornerRadius(20)
-						.tabViewStyle(.page(indexDisplayMode: .always))
-						.indexViewStyle(PageIndexViewStyle(backgroundDisplayMode: .always))
 						
 						HStack {
 							Button(action: {
@@ -69,7 +63,7 @@ struct OwnedDetailView: View {
 										.resizable()
 										.scaledToFit()
 										.frame(width: 40)
-									Text("Availability")
+									Text("Set Availability")
 										.font(.headline).fontWeight(.medium)
 									
 								}
@@ -81,131 +75,70 @@ struct OwnedDetailView: View {
 						}
 						.frame(height: 100)
 						
-						HStack {
-							Image(systemName: "person.2.fill")
-								.resizable()
-								.scaledToFit()
-								.frame(width: 25)
-							Text("Max number of people: ")
-								.body()
-							Text(String(property.people))
-								.font(.headline).fontWeight(.semibold)
-							Spacer()
-						}
-						VStack {
-							HStack {
-								Image(systemName: "dollarsign.circle.fill")
-									.resizable()
-									.scaledToFit()
-									.frame(width: 25)
-								Text("Cost per night: ")
-									.body()
-								Text(property.payment == .free ? "FREE" : "\(property.cost) \(property.payment.rawValue)")
-									.font(.headline).fontWeight(.semibold)
-								Spacer()
-							}
-							Text(property.paymentNotes.isEmpty ? "" : property.paymentNotes)
-								.body()
-								.fillLeading()
-						}
-						
-						if !property.notes.isEmpty {
-							VStack {
-								Text("Notes")
-									.heading()
-									.fillLeading()
-								
-								Text(property.notes)
-									.body()
-									.fillLeading()
-							}
-						}
-						
-						if !property.cleaningNotes.isEmpty {
-							VStack {
-								Text("Cleaning Notes")
-									.heading()
-									.fillLeading()
-								
-								Text(property.cleaningNotes)
-									.body()
-									.fillLeading()
-							}
-						}
-						
-						if !property.wifi.isEmpty {
-							VStack {
-								Text("Wifi")
-									.heading()
-									.fillLeading()
-								
-								Text(property.wifi)
-									.body()
-									.fillLeading()
-							}
-						}
-						
-						if !property.securityCode.isEmpty {
-							VStack {
-								Text("Security Code")
-									.heading()
-									.fillLeading()
-								
-								Text(property.securityCode)
-									.body()
-									.fillLeading()
-							}
-						}
-						if !property.contactInfo.isEmpty {
-							VStack {
-								Text("Contact Info")
-									.heading()
-									.fillLeading()
-								
-								Text(property.contactInfo)
-									.body()
-									.fillLeading()
-							}
-						}
-						
-						Rectangle()
-							.frame(height: 40)
-							.foregroundStyle(Color.clear)
+						PropertyDetailsList(property: property)
 					}
 				}
 				
-				Button(action: {
-					if property.available.current().isEmpty {
+				// MARK: SHARE BUTTON
+//				ShareLink(item: property.shareLink, message: Text(property.shareMessage)) {
+//					HStack {
+//						Image(systemName: "square.and.arrow.up")
+//							.resizable()
+//							.scaledToFit()
+//							.frame(width: 20)
+//						Text("Share")
+//							.bodyBold()
+//					}
+//					.padding(.vertical, Constants.Padding.small)
+//					.frame(maxWidth: .infinity)
+//					.foregroundStyle(Color.white)
+//					.background(property.available.current().isEmpty ? Color.systemGray3 : Color.systemBlue.opacity(0.6))
+//					.cornerRadius(5)
+//					.padding(.bottom, 4)
+//				}
+				if let url = URL(string: "FriendBNB://id=\(property.id)"), !property.available.current().isEmpty {
+					ShareLink(item: url, subject: Text(""), message: Text(property.shareMessage)) {
+						HStack {
+							Image(systemName: "square.and.arrow.up")
+								.resizable()
+								.scaledToFit()
+								.frame(width: 20)
+							Text("Share")
+								.bodyBold()
+						}
+						.padding(.vertical, Constants.Padding.small)
+						.frame(maxWidth: .infinity)
+						.foregroundStyle(Color.white)
+						.background(Color.systemBlue.opacity(0.6))
+						.cornerRadius(5)
+						.padding(.bottom, 4)
+					}
+				} else {
+					Button(action: {
 						notificationStore.pushNotification(message: "Please set availability")
-					} else {
-						
-					}
-				}, label: {
-					HStack {
-						Image(systemName: "square.and.arrow.up")
-							.resizable()
-							.scaledToFit()
-							.frame(width: 20)
-						Text("Share")
-					}
-					.padding(.vertical, Constants.Padding.small)
-					.frame(maxWidth: .infinity)
-					.foregroundStyle(Color.white)
-					.background(property.available.current().isEmpty ? Color.systemGray3 : Color.systemBlue.opacity(0.6))
-					.cornerRadius(5)
-				})
+					}, label: {
+						HStack {
+							Image(systemName: "square.and.arrow.up")
+								.resizable()
+								.scaledToFit()
+								.frame(width: 20)
+							Text("Share")
+								.bodyBold()
+						}
+						.padding(.vertical, Constants.Padding.small)
+						.frame(maxWidth: .infinity)
+						.foregroundStyle(Color.white)
+						.background(Color.systemGray3)
+						.cornerRadius(5)
+						.padding(.bottom, 4)
+					})
+				}
 			}
+			//.navigationTitle(property.nickname)
 			.padding(.horizontal, Constants.Padding.regular)
-			.toolbar(.hidden, for: .bottomBar)
-			.toolbar(.hidden, for: .tabBar)
 			.toolbar {
 				ToolbarItem(placement: .primaryAction) {
-					OwnedDetailSettingsView(confirmDelete: $confirmDelete) {
-						let pasteboard = UIPasteboard.general
-						pasteboard.string = "Open the FriendBNB and add my property: \(property.id)"
-						
-						notificationStore.pushNotification(message: "Share message copied to clipboard")
-					}
+					OwnedDetailSettingsView(confirmDelete: $confirmDelete)
 				}
 			}
 			.alert(isPresented: $confirmDelete) {
@@ -222,11 +155,11 @@ struct OwnedDetailView: View {
 					.interactiveDismissDisabled()
 			}
 			.sheet(isPresented: $propertyStore.showOwnedBooking) {
-				OwnedExistingBookingView(property: property)
+				OwnedExistingBookingView()
 					.interactiveDismissDisabled()
 			}
 			.onAppear {
-				propertyStore.subscribe()
+				propertyStore.subscribe(type: .owned)
 			}
 			.onDisappear {
 				propertyStore.unsubscribe()
@@ -235,12 +168,112 @@ struct OwnedDetailView: View {
 			NoSelectedPropertyView()
 		}
 	}
+	
+//	var propertyShareButton: some View {
+//		VStack {
+//			if let property = propertyStore.selectedOwnedProperty {
+//				
+//			}
+//		}
+//		
+//	}
 }
 
-extension OwnedDetailView {
-	@MainActor
-	class ViewModel: ObservableObject {
-		//@Published var property: Property
+struct PropertyDetailsList: View {
+	var property: Property
+	var hideSensitiveInfo = false
+	
+	var body: some View {
+		HStack {
+			Image(systemName: "person.2.fill")
+				.resizable()
+				.scaledToFit()
+				.frame(width: 25)
+			Text("Max number of people: ")
+				.body()
+			Text(String(property.people))
+				.font(.headline).fontWeight(.semibold)
+			Spacer()
+		}
+		VStack {
+			HStack {
+				Image(systemName: "dollarsign.circle.fill")
+					.resizable()
+					.scaledToFit()
+					.frame(width: 25)
+				Text("Cost per night: ")
+					.body()
+				Text(property.payment == .free ? "FREE" : "\(property.cost) \(property.payment.rawValue)")
+					.font(.headline).fontWeight(.semibold)
+				Spacer()
+			}
+			if !hideSensitiveInfo {
+				Text(property.paymentNotes.isEmpty ? "" : property.paymentNotes)
+					.body()
+					.fillLeading()
+			}
+		}
+		
+		if !hideSensitiveInfo {
+			if !property.notes.isEmpty {
+				VStack {
+					Text("Notes")
+						.heading()
+						.fillLeading()
+					
+					Text(property.notes)
+						.body()
+						.fillLeading()
+				}
+			}
+			
+			if !property.cleaningNotes.isEmpty {
+				VStack {
+					Text("Cleaning Notes")
+						.heading()
+						.fillLeading()
+					
+					Text(property.cleaningNotes)
+						.body()
+						.fillLeading()
+				}
+			}
+			
+			if !property.wifi.isEmpty {
+				VStack {
+					Text("Wifi")
+						.heading()
+						.fillLeading()
+					
+					Text(property.wifi)
+						.body()
+						.fillLeading()
+				}
+			}
+			
+			if !property.securityCode.isEmpty {
+				VStack {
+					Text("Security Code")
+						.heading()
+						.fillLeading()
+					
+					Text(property.securityCode)
+						.body()
+						.fillLeading()
+				}
+			}
+			if !property.contactInfo.isEmpty {
+				VStack {
+					Text("Contact Info")
+						.heading()
+						.fillLeading()
+					
+					Text(property.contactInfo)
+						.body()
+						.fillLeading()
+				}
+			}
+		}
 	}
 }
 

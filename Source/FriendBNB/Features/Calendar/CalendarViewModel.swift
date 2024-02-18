@@ -9,6 +9,7 @@ import Foundation
 import SwiftUI
 import FirebaseFirestore
 
+@MainActor
 class CalendarViewModel: ObservableObject {
 	@Published var date = Date()
 	@Published var startDate: Date?
@@ -50,8 +51,10 @@ class CalendarViewModel: ObservableObject {
 	}
 	
 	func resetDates() {
-		self.startDate = nil
-		self.endDate = nil
+		withAnimation {
+			self.startDate = nil
+			self.endDate = nil
+		}
 	}
 	
 	func previousMonth() {
@@ -66,22 +69,28 @@ class CalendarViewModel: ObservableObject {
 	
 	func dateClicked(_ date: Date) {
 		self.error = ""
+		guard date >= Date().stripTime() else {
+			self.error = "Please select a present date"
+			return
+		}
 		
-		if startDate != nil && endDate != nil {
-			startDate = date
-			endDate = nil
-		} else if startDate == nil && endDate == nil {
-			startDate = date
-			endDate = nil
-		} else {
-			guard startDate != nil else {
-				return
-			}
-			if date < startDate! {
-				endDate = startDate
+		withAnimation {
+			if startDate != nil && endDate != nil {
 				startDate = date
+				endDate = nil
+			} else if startDate == nil && endDate == nil {
+				startDate = date
+				endDate = nil
 			} else {
-				endDate = date
+				guard startDate != nil else {
+					return
+				}
+				if date < startDate! {
+					endDate = startDate
+					startDate = date
+				} else {
+					endDate = date
+				}
 			}
 		}
 	}
