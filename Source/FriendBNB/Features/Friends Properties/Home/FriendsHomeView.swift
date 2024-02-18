@@ -16,7 +16,7 @@ struct FriendsHomeView: View {
 		NavigationStack {
 			Group {
 				if propertyStore.loading {
-					EmptyView()
+					LoadingView()
 				} else if !propertyStore.friendsProperties.isEmpty {
 					ZStack {
 						Button(action: {

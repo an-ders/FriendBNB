@@ -53,6 +53,7 @@
 		56B34D402B72E359008F831A /* TabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56B34D3F2B72E359008F831A /* TabBar.swift */; };
 		56B34D422B7F3A8C008F831A /* FriendDetailSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56B34D412B7F3A8C008F831A /* FriendDetailSettingsView.swift */; };
 		56B34D462B81FACF008F831A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 56B34D452B81FACF008F831A /* Assets.xcassets */; };
+		56B34D482B8214E7008F831A /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56B34D472B8214E7008F831A /* LoadingView.swift */; };
 		56D7B0C42AF2F630002B65DD /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = 56D7B0C32AF2F630002B65DD /* .swiftlint.yml */; };
 		56D7B0C82AF2FB95002B65DD /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D7B0C72AF2FB95002B65DD /* RootView.swift */; };
 		56D7B0CB2AF358BF002B65DD /* OwnedPropertiesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D7B0CA2AF358BF002B65DD /* OwnedPropertiesView.swift */; };
@@ -160,6 +161,7 @@
 		56B34D3F2B72E359008F831A /* TabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBar.swift; sourceTree = "<group>"; };
 		56B34D412B7F3A8C008F831A /* FriendDetailSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendDetailSettingsView.swift; sourceTree = "<group>"; };
 		56B34D452B81FACF008F831A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		56B34D472B8214E7008F831A /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
 		56D7B0C32AF2F630002B65DD /* .swiftlint.yml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = SOURCE_ROOT; };
 		56D7B0C72AF2FB95002B65DD /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
 		56D7B0CA2AF358BF002B65DD /* OwnedPropertiesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OwnedPropertiesView.swift; sourceTree = "<group>"; };
@@ -460,6 +462,7 @@
 				565A46552AFF453500D67A03 /* Add Property */,
 				56D7B0DC2AF9B012002B65DD /* New Property */,
 				56E24E732AEE2E77005393C7 /* Login */,
+				56B34D472B8214E7008F831A /* LoadingView.swift */,
 			);
 			path = Features;
 			sourceTree = "<group>";
@@ -869,6 +872,7 @@
 				565A46672B00A69E00D67A03 /* CalendarHelper.swift in Sources */,
 				56EC54342B09D8E400AE12DC /* FloatingPromptViewExtensions.swift in Sources */,
 				560020A22B635E3500244058 /* NotificationView.swift in Sources */,
+				56B34D482B8214E7008F831A /* LoadingView.swift in Sources */,
 				56041BE82B65B6E7005BD4D8 /* PairButtonSpacer.swift in Sources */,
 				565A466B2B00B88700D67A03 /* Booking.swift in Sources */,
 				56EC54412B0B378D00AE12DC /* BookingTileView.swift in Sources */,

@@ -17,7 +17,7 @@ struct OwnedPropertiesView: View {
 		NavigationStack {
 			Group {
 				if propertyStore.loading {
-					EmptyView()
+					LoadingView()
 				} else if !propertyStore.ownedProperties.isEmpty {
 					ZStack {
 						Button(action: {
