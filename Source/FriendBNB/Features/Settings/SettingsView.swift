@@ -17,30 +17,49 @@ struct SettingsView: View {
         VStack {
 			Spacer()
 			if let user = authStore.user {
-				Text(user.email ?? "")
+				HStack {
+					Image(systemName: "person.fill")
+						.resizable()
+						.scaledToFit()
+						.frame(width: 25)
+					Text("\(user.displayName ?? "MISSING DISPLAY NAME")")
+						.body()
+				}
+				HStack {
+					Image(systemName: "envelope.fill")
+						.resizable()
+						.scaledToFit()
+						.frame(width: 25)
+					Text(user.email ?? "NO EMAIL")
+						.body()
+				}
+				Text(user.uid)
+					.body()
 			}
 			Spacer()
 			
             Text("Sign Out")
+				.body()
                 .onTapGesture {
-                    do {
-                        try Auth.auth().signOut()
-                    } catch {
-                        print("Error while signing out!")
-                    }
-                }
-            Text("Clear properties")
-                .onTapGesture {
-                    Task {
-                        await propertyStore.resetProperty(.friend)
-                        await propertyStore.resetProperty(.owned)
-                    }
+					Task {
+						await authStore.signOut()
+					}
                 }
 			
-			Text("notif")
+//            Text("Clear properties")
+//                .onTapGesture {
+//                    Task {
+//                        await propertyStore.resetProperty(.friend)
+//                        await propertyStore.resetProperty(.owned)
+//                    }
+//                }
+			
+			Text("Test Notification")
+				.body()
 				.onTapGesture {
 					notificationStore.pushNotification(message: "test123")
 				}
+			
 			Spacer()
         }
     }

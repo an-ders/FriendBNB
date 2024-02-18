@@ -7,6 +7,7 @@
 
 import Foundation
 import MapKit
+import FirebaseFirestore
 
 class Location: ObservableObject {
 	@Published var streetNumber: String
@@ -15,6 +16,7 @@ class Location: ObservableObject {
 	@Published var state: String
 	@Published var zipCode: String
 	@Published var country: String
+	@Published var geo: GeoPoint
 	
 	@Published var error: String
 	
@@ -41,10 +43,11 @@ class Location: ObservableObject {
 			"city": city,
 			"state": state,
 			"zipCode": zipCode,
-			"country": country
+			"country": country,
+			"geo": geo
 		]
 	}
-	
+		
 	init(placemark: MKPlacemark) {
 		self.streetName = placemark.thoroughfare ?? ""
 		self.streetNumber = placemark.subThoroughfare ?? ""
@@ -52,6 +55,7 @@ class Location: ObservableObject {
 		self.state = placemark.administrativeArea ?? ""
 		self.zipCode = placemark.postalCode ?? ""
 		self.country = placemark.country ?? ""
+		self.geo = 	GeoPoint.init(latitude: placemark.coordinate.latitude, longitude: placemark.coordinate.longitude)
 		self.error = ""
 	}
 	
@@ -62,6 +66,7 @@ class Location: ObservableObject {
 		self.state = data["state"] as? String ?? ""
 		self.zipCode = data["zipCode"] as? String ?? ""
 		self.country = data["country"] as? String ?? ""
+		self.geo = data["geo"] as? GeoPoint ?? GeoPoint(latitude: 0, longitude: 0)
 		self.error = ""
 	}
 	
@@ -73,6 +78,7 @@ class Location: ObservableObject {
 		self.zipCode = ""
 		self.country = ""
 		self.error = ""
+		self.geo = GeoPoint(latitude: 0, longitude: 0)
 	}
 	
 	func checkAddress() -> Bool {
@@ -93,6 +99,7 @@ class Location: ObservableObject {
 		self.state = placemark.administrativeArea ?? ""
 		self.zipCode = placemark.postalCode ?? ""
 		self.country = placemark.country ?? ""
+		self.geo = GeoPoint.init(latitude: placemark.coordinate.latitude, longitude: placemark.coordinate.longitude)
 		self.error = ""
 	}
 	
@@ -103,6 +110,7 @@ class Location: ObservableObject {
 		self.state = data["state"] as? String ?? ""
 		self.zipCode = data["zipCode"] as? String ?? ""
 		self.country = data["country"] as? String ?? ""
+		self.geo = data["geo"] as? GeoPoint ?? GeoPoint(latitude: 0, longitude: 0)
 		self.error = ""
 	}
 }

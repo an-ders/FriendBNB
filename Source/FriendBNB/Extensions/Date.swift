@@ -43,6 +43,14 @@ extension Date {
     func minusMonth() -> Date {
         return Calendar.current.date(byAdding: .month, value: -1, to: self)!
     }
+	
+	func plusDay() -> Date {
+		return Calendar.current.date(byAdding: .day, value: 1, to: self)!
+	}
+	
+	func minusDay() -> Date {
+		return Calendar.current.date(byAdding: .day, value: -1, to: self)!
+	}
     
     func daysInMonth() -> Int {
         let range = Calendar.current.range(of: .day, in: .month, for: self)!
@@ -64,4 +72,9 @@ extension Date {
         return components.weekday! - 1
     }
     
+	func formattedDate() -> String {
+		let dateFormatter = DateFormatter()
+		dateFormatter.dateFormat = "dd/MM/yyyy"
+		return dateFormatter.string(from: self)
+	}
 }

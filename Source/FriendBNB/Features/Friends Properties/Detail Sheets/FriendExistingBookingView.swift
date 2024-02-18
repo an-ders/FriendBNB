@@ -9,14 +9,13 @@ import SwiftUI
 import FirebaseAuth
 
 struct FriendExistingBookingView: View {
+	@EnvironmentObject var propertyStore: PropertyStore
 	@EnvironmentObject var bookingStore: BookingStore
 	@Environment(\.dismiss) private var dismiss
 	
-	var property: Property
-	
 	let id = Auth.auth().currentUser?.uid ?? ""
 	var body: some View {
-		let bookings = property.bookings.withId(id: id).current()
+		let bookings = propertyStore.selectedFriendProperty!.bookings.withId(id: id).current()
 		if bookings.isEmpty {
 			VStack {
 				Image(systemName: "house")
@@ -56,14 +55,14 @@ struct FriendExistingBookingView: View {
 						
 						ScrollView {
 							VStack {
-								ForEach(bookings) { booking in
-									BookingTileView(booking: booking, delete: {
-										Task {
-											await bookingStore.deleteBooking(booking, type: .booking, property: property)
-										}
-									}, content: {
-										FriendBookingConfirmationView(property: property, booking: booking)
-									})
+								ForEach(propertyStore.selectedFriendProperty!.bookings.withId(id: id).current()) { booking in
+//									BookingTileView(booking: booking, delete: {
+//										Task {
+//											await bookingStore.deleteBooking(booking, type: .booking, property: propertyStore.selectedFriendProperty!)
+//										}
+//									}, content: {
+//										FriendBookingConfirmationView(property: propertyStore.selectedFriendProperty!, booking: booking)
+//									})
 								}
 							}
 						}

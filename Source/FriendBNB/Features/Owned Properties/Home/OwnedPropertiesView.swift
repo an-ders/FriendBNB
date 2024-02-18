@@ -11,34 +11,60 @@ import FirebaseFirestore
 
 struct OwnedPropertiesView: View {
 	@EnvironmentObject var propertyStore: PropertyStore
+	@State private var navPath = NavigationPath()
 	
 	var body: some View {
-		NavigationView {
+		NavigationStack {
 			Group {
 				if propertyStore.loading {
-					
+					EmptyView()
 				} else if !propertyStore.ownedProperties.isEmpty {
-					ScrollView {
-						VStack {
-							ForEach(propertyStore.ownedProperties) { property in
-								PropertyTileView(property: property) {
-									OwnedDetailView(property: property)
+					ZStack {
+						Button(action: {
+							propertyStore.showNewPropertySheet = true
+						}, label: {
+							Image(systemName: "plus.circle.fill")
+								.resizable()
+								.scaledToFit()
+								.frame(height: 35)
+								.background(.white)
+								.clipShape(Circle())
+								.padding(.trailing, Constants.Padding.regular)
+						})
+						.frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topTrailing)
+						.zIndex(5)
+						
+						ScrollView {
+							VStack {
+								Rectangle()
+									.frame(height: 45)
+									.foregroundStyle(Color.clear)
+								
+								ForEach(propertyStore.ownedProperties) { property in
+									Button(action: {
+										propertyStore.showOwnedProperty(property)
+									}, label: {
+										PropertyTileView(property: property)
+									})
 								}
 							}
 						}
-						.padding(.top, 2)
+						.refreshable {
+							await propertyStore.fetchProperties(.owned)
+						}
 					}
-					.refreshable {
-						await propertyStore.fetchProperties(.owned)
-					}
+//					.onChange(of: propertyStore.showOwnedProperty) { _ in
+//						Task {
+//							await propertyStore.fetchProperties(.owned)
+//						}
+//					}
 				} else {
 					OwnedPropertiesEmptyView()
 				}
 			}
-			.toolbar {
-				ToolbarItem(placement: .primaryAction) {
-					HomeMenu()
-				}
+			.navigationDestination(item: $propertyStore.selectedOwnedProperty) { _ in
+				OwnedDetailView()
+					.navigationBarTitleDisplayMode(.inline)
 			}
 		}
 	}

@@ -22,13 +22,13 @@ class NotificationStore: ObservableObject {
 			self.notification = nil
 		}
 		
-		DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+		DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
 			withAnimation {
 				self.notification = Notification(message: message, backgroundColor: backgroundColor, dismissable: dismissable)
 			}
 		}
 		
-		DispatchQueue.main.asyncAfter(deadline: .now() + 15) {
+		DispatchQueue.main.asyncAfter(deadline: .now() + 10) {
 			self.dismissNotification()
 		}
 	}

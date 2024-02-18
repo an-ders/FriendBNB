@@ -12,7 +12,6 @@ target 'FriendBNB' do
   pod 'FirebaseFirestore'
   
   pod 'SwiftLint'
-  pod 'SwiftUIIntrospect', '~> 1.0'
 
 #  target 'FriendBNBTests' do
 #    inherit! :search_paths

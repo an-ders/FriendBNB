@@ -14,7 +14,7 @@ enum BookingStatus: String {
 	case confirmed = "CONFIRMED"
 }
 
-struct Booking: Equatable, Identifiable {
+struct Booking: Equatable, Identifiable, Hashable {
     var id = UUID()
 	var start: Date
 	var end: Date
@@ -22,6 +22,7 @@ struct Booking: Equatable, Identifiable {
 	var email: String
 	var name: String
 	var status: BookingStatus
+	var statusMessage: String
     
     init(data: [String: Any]) {
 		self.start = Date()
@@ -37,15 +38,17 @@ struct Booking: Equatable, Identifiable {
 		self.email = data["email"] as? String ?? ""
 		self.name = data["name"] as? String ?? ""
 		self.status = BookingStatus(rawValue: data["status"] as? String ?? "PENDING") ?? .pending
+		self.statusMessage = data["statusMessage"] as? String ?? ""
     }
     
-	init(start: Date, end: Date, userId: String, email: String, name: String, status: BookingStatus) {
+	init(start: Date, end: Date, userId: String, email: String, name: String, status: BookingStatus, statusMessage: String) {
         self.start = start
         self.end = end
         self.userId = userId
 		self.email = email
 		self.name = name
 		self.status = status
+		self.statusMessage = statusMessage
     }
     
     var bookingDates: (ClosedRange<Date>) {

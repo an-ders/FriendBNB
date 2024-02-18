@@ -9,15 +9,14 @@ import SwiftUI
 import FirebaseFirestore
 
 struct AddPropertyView: View {
-	@EnvironmentObject var rootManager: PropertyStore
-	
+	@EnvironmentObject var propertyStore: PropertyStore
+	@Environment(\.dismiss) private var dismiss
+
 	@State var propertyId: String = ""
 	@State var error: String = ""
 	var body: some View {
 		PairButtonWrapper(prevText: "Close", prevAction: {
-			Task { @MainActor in
-				rootManager.showAddPropertySheet = false
-			}
+			dismiss()
 		}, nextText: "Add", nextAction: {
 			guard !propertyId.isEmpty else {
 				self.error = "Please enter a property ID."
@@ -25,9 +24,9 @@ struct AddPropertyView: View {
 			}
 			
 			Task {
-				if let id = await rootManager.checkValidId(propertyId) {
-					await rootManager.addProperty(id, type: .friend)
-					rootManager.showAddPropertySheet = false
+				if let id = await propertyStore.checkValidId(propertyId) {
+					await propertyStore.addProperty(id, type: .friend)
+					propertyStore.showAddPropertySheet = false
 					self.propertyId = ""
 				} else {
 					self.error = "No property with that ID was found."
@@ -35,15 +34,15 @@ struct AddPropertyView: View {
 			}
 		}, content: {
 			VStack {
-				Text("Add an existing property")
-					.font(.largeTitle).fontWeight(.medium)
+				Text("Add a property")
+					.title()
 					.frame(maxWidth: .infinity, alignment: .leading)
 					.padding(.bottom, Constants.Spacing.small)
-				Text("Enter the property ID below:")
-					.font(.title3).fontWeight(.light)
+				Text("Enter the property code below:")
+					.body()
 					.frame(maxWidth: .infinity, alignment: .leading)
 				
-				StyledFloatingTextField(text: $propertyId, prompt: "Property ID")
+				StyledFloatingTextField(text: $propertyId, prompt: "Property Code")
 				
 				Spacer()
 				

@@ -26,7 +26,7 @@ struct OwnedPropertiesEmptyView: View {
 			Button(action: {
 				propertyStore.showNewPropertySheet = true
 			}, label: {
-				Text("New Property")
+				Text("Add your home")
 					.font(.headline)
 					.padding(.horizontal, 16)
 					.padding(.vertical, 8)

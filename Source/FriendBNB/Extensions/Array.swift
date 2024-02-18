@@ -35,11 +35,34 @@ extension Array where Element == Booking {
 		return dict
 	}
 	
+	func arrayMonths() -> [Date] {
+		var months: [Date] = []
+		var monthsString: [String] = []
+		for booking in self {
+			// Adding start date to booking
+			if !monthsString.contains(booking.start.monthYearString()) {
+				monthsString.append(booking.start.monthYearString())
+				months.append(booking.start)
+			}
+			// Adding end date if start and end date are different
+			if !monthsString.contains(booking.end.monthYearString()) {
+				monthsString.append(booking.end.monthYearString())
+				months.append(booking.end)
+			}
+		}
+		
+		return months
+	}
+	
 	func current() -> [Booking] {
-		self.filter({ $0.end > Date() })
+		self.filter{ ($0.end > Date().stripTime()) }
+	}
+	
+	func dateSorted() -> [Booking] {
+		self.sorted{ $0.start < $1.end }
 	}
 	
 	func withId(id: String) -> [Booking] {
-		self.filter({ $0.userId == id})
+		self.filter{ $0.userId == id}
 	}
 }

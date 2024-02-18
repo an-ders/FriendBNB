@@ -43,7 +43,6 @@ extension NewPropertySearchView {
                 print("ERROR WITH MKLOCALSEARCH")
             }
             return nil
-            
         }
     }
 }
