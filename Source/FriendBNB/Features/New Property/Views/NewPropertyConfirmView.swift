@@ -22,11 +22,11 @@ struct NewPropertyConfirmView: View {
 			ScrollView(showsIndicators: false) {
 				VStack(spacing: Constants.Spacing.regular) {
 					Text(location.addressTitle)
-						.title()
+						.styled(.title)
 						.fillLeading()
-						.padding(.top, Constants.Padding.regular)
+						.padding(.top, Constants.Spacing.regular)
 					Text(location.addressDescription)
-						.body()
+						.styled(.body)
 						.fillLeading()
 					
 					Map(position: .constant(MapCameraPosition.region(MKCoordinateRegion(center: coordinate, latitudinalMeters: 1000, longitudinalMeters: 1000)))) {
@@ -48,7 +48,7 @@ struct NewPropertyConfirmView: View {
 			.onTapGesture {
 				hideKeyboard()
 			}
-		.padding(.horizontal, Constants.Padding.regular)
+		.padding(.horizontal, Constants.Spacing.regular)
     }
 	
 	func next() {

@@ -16,7 +16,7 @@ struct CustomStepperView: View {
     var body: some View {
         HStack {
             Text(text)
-                .body()
+                .styled(.body)
             Spacer()
             HStack {
                 Button(action: {
@@ -30,7 +30,7 @@ struct CustomStepperView: View {
                 })
                 
                 Text(String(value))
-                    .body()
+                    .styled(.body)
                     .frame(width: 45, alignment: .center)
                 
                 Button(action: {

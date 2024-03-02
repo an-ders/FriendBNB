@@ -1,29 +1,20 @@
 //
-//  HomeTileView.swift
+//  OwnedPropertyTileView.swift
 //  FriendBNB
 //
-//  Created by Anders Tai on 2023-11-03.
+//  Created by Anders Tai on 2024-02-27.
 //
 
 import SwiftUI
 import MapKit
 
-struct AnnotatedItem: Identifiable {
-	let id = UUID()
-	let name: String
-	let coordinate: CLLocationCoordinate2D
-}
-
-struct PropertyTileView: View {
-	@EnvironmentObject var propertyStore: PropertyStore
-	@EnvironmentObject var authStore: AuthenticationStore
-    var property: Property
-	var type: PropertyType
-	var bookingAction: (Booking) -> Void
+struct OwnedPropertyTileView: View {
+	var property: Property
+	@Binding var selectedBooking: Booking?
 	
 	let decimals = 3
-    
-    var body: some View {
+	
+	var body: some View {
 		let coordinate = CLLocationCoordinate2D(latitude: property.location.geo.latitude, longitude: property.location.geo.longitude)
 		let center =  CLLocationCoordinate2D(latitude: property.location.geo.latitude, longitude: property.location.geo.longitude - 500 / 111111)
 		VStack(spacing: 0) {
@@ -62,9 +53,9 @@ struct PropertyTileView: View {
 			.frame(height: 175)
 
 			VStack(spacing: 0) {
-				ForEach(type == .owned ? property.bookings.current().dateSorted() : property.bookings.withId(id: authStore.user?.uid ?? "").current().dateSorted(), id: \.id) { booking in
+				ForEach(property.bookings.current().dateSorted(), id: \.id) { booking in
 					Button(action: {
-						bookingAction(booking)
+						selectedBooking = booking
 					}, label: {
 						VStack {
 							HStack {
@@ -96,11 +87,5 @@ struct PropertyTileView: View {
 		.clipShape(RoundedRectangle(cornerRadius: 10))
 		.shadow(radius: 5)
 		.padding(.horizontal, Constants.Spacing.regular)
-    }
+	}
 }
-
-//struct HomeTileView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        HomeTileView(property: Property(id: "test123", data: ["title": "testtitle123", "owner": "Anders"]))
-//    }
-//}

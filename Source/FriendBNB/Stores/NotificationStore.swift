@@ -8,23 +8,22 @@
 import Foundation
 import SwiftUI
 
-struct Notification {
+struct CustomNotification {
 	var message: String
-	var backgroundColor: Color
 	var dismissable: Bool
 }
 
 class NotificationStore: ObservableObject {
-	@Published var notification: Notification?
+	@Published var notification: CustomNotification?
 	
-	func pushNotification(message: String, backgroundColor: Color = .gray, dismissable: Bool = true) {
+	func pushNotification(message: String, dismissable: Bool = true) {
 		withAnimation {
 			self.notification = nil
 		}
 		
 		DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
 			withAnimation {
-				self.notification = Notification(message: message, backgroundColor: backgroundColor, dismissable: dismissable)
+				self.notification = CustomNotification(message: message, dismissable: dismissable)
 			}
 		}
 		

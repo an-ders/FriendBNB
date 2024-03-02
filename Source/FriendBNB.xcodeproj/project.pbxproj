@@ -15,11 +15,9 @@
 		560020AB2B6449AC00244058 /* Array.swift in Sources */ = {isa = PBXBuildFile; fileRef = 560020AA2B6449AC00244058 /* Array.swift */; };
 		56041BDA2B647657005BD4D8 /* CalendarViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56041BD92B647656005BD4D8 /* CalendarViewModel.swift */; };
 		56041BDC2B6493B5005BD4D8 /* CalendarCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56041BDB2B6493B5005BD4D8 /* CalendarCellViewModel.swift */; };
-		56041BDE2B64B453005BD4D8 /* FriendBookingConfirmationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56041BDD2B64B453005BD4D8 /* FriendBookingConfirmationView.swift */; };
-		56041BE02B64B8AB005BD4D8 /* OwnerBookingConfirmationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56041BDF2B64B8AB005BD4D8 /* OwnerBookingConfirmationView.swift */; };
+		56041BE02B64B8AB005BD4D8 /* OwnedBookingConfirmationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56041BDF2B64B8AB005BD4D8 /* OwnedBookingConfirmationView.swift */; };
 		56041BE22B64BFE5005BD4D8 /* BookingStatusIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56041BE12B64BFE5005BD4D8 /* BookingStatusIndicatorView.swift */; };
 		56041BE42B64C390005BD4D8 /* PairButtonWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56041BE32B64C390005BD4D8 /* PairButtonWrapper.swift */; };
-		56041BE62B64DB01005BD4D8 /* OwnedBookingTileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56041BE52B64DB01005BD4D8 /* OwnedBookingTileView.swift */; };
 		56041BE82B65B6E7005BD4D8 /* PairButtonSpacer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56041BE72B65B6E7005BD4D8 /* PairButtonSpacer.swift */; };
 		56041BEA2B65C898005BD4D8 /* Font.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56041BE92B65C898005BD4D8 /* Font.swift */; };
 		56041BEC2B65D694005BD4D8 /* CurrencyField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56041BEB2B65D694005BD4D8 /* CurrencyField.swift */; };
@@ -28,6 +26,8 @@
 		56041BF32B65F955005BD4D8 /* OptionalInfoField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56041BF22B65F955005BD4D8 /* OptionalInfoField.swift */; };
 		56041BF52B66075D005BD4D8 /* NewPropertyConfirmView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56041BF42B66075D005BD4D8 /* NewPropertyConfirmView.swift */; };
 		56041BFA2B661F1B005BD4D8 /* NoSelectedPropertyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56041BF92B661F1B005BD4D8 /* NoSelectedPropertyView.swift */; };
+		564DE5FE2B85AFC5008E1880 /* DetailSheetTitle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 564DE5FD2B85AFC5008E1880 /* DetailSheetTitle.swift */; };
+		564DE6002B85BD1A008E1880 /* BookingConfirmationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 564DE5FF2B85BD1A008E1880 /* BookingConfirmationView.swift */; };
 		565198402AA7DCF200866F0B /* FriendBNBApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5651983F2AA7DCF200866F0B /* FriendBNBApp.swift */; };
 		565198422AA7DCF200866F0B /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 565198412AA7DCF200866F0B /* LoginView.swift */; };
 		565198442AA7DCF200866F0B /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 565198432AA7DCF200866F0B /* Colors.xcassets */; };
@@ -35,6 +35,7 @@
 		565198512AA7DCF200866F0B /* FriendBNBTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 565198502AA7DCF200866F0B /* FriendBNBTests.swift */; };
 		5651985B2AA7DCF200866F0B /* FriendBNBUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5651985A2AA7DCF200866F0B /* FriendBNBUITests.swift */; };
 		5651985D2AA7DCF200866F0B /* FriendBNBUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5651985C2AA7DCF200866F0B /* FriendBNBUITestsLaunchTests.swift */; };
+		565492A62B82CBBE006BF8B8 /* Podfile in Resources */ = {isa = PBXBuildFile; fileRef = 565492A52B82CBBE006BF8B8 /* Podfile */; };
 		565A46572AFF454400D67A03 /* AddPropertyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 565A46562AFF454400D67A03 /* AddPropertyView.swift */; };
 		565A465C2AFF571800D67A03 /* StyledFloatingTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 565A465B2AFF571800D67A03 /* StyledFloatingTextField.swift */; };
 		565A465E2B00118600D67A03 /* OwnedPropertyEmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 565A465D2B00118600D67A03 /* OwnedPropertyEmptyView.swift */; };
@@ -48,15 +49,25 @@
 		565A46742B02E55700D67A03 /* OwnedDetailSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 565A46732B02E55700D67A03 /* OwnedDetailSettingsView.swift */; };
 		565A46762B0355C500D67A03 /* View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 565A46752B0355C500D67A03 /* View.swift */; };
 		565A467B2B0363C200D67A03 /* FriendNewBookingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 565A467A2B0363C200D67A03 /* FriendNewBookingView.swift */; };
+		565B7E732B847BB9009A5EDD /* CurrencyInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 565B7E722B847BB9009A5EDD /* CurrencyInputView.swift */; };
 		567B74FE2B0607DB00639540 /* BookingStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 567B74FD2B0607DB00639540 /* BookingStore.swift */; };
-		569C87E02B6CA22A00EDE61D /* FriendTileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 569C87DF2B6CA22A00EDE61D /* FriendTileView.swift */; };
+		569409F62B8DB7E3009CF998 /* OwnedPropertyTileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 569409F52B8DB7E3009CF998 /* OwnedPropertyTileView.swift */; };
+		569409F82B8EEA88009CF998 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 569409F72B8EEA88009CF998 /* AppDelegate.swift */; };
+		569409FA2B8EEC83009CF998 /* PermissionStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 569409F92B8EEC83009CF998 /* PermissionStore.swift */; };
+		569409FD2B8FF88C009CF998 /* BookingStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 569409FC2B8FF88C009CF998 /* BookingStatus.swift */; };
+		569409FF2B8FF8AD009CF998 /* PropertyType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 569409FE2B8FF8AD009CF998 /* PropertyType.swift */; };
+		56940A012B8FF8C7009CF998 /* PropertyBookingGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56940A002B8FF8C7009CF998 /* PropertyBookingGroup.swift */; };
+		56940A032B8FF983009CF998 /* PropertyInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56940A022B8FF983009CF998 /* PropertyInfo.swift */; };
+		56940A052B90046C009CF998 /* ScheduleType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56940A042B90046C009CF998 /* ScheduleType.swift */; };
+		56944F9E2B8B0FD300B36175 /* ToggleInfoDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56944F9D2B8B0FD300B36175 /* ToggleInfoDetail.swift */; };
+		56944FA02B8D9C7300B36175 /* Coordinate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56944F9F2B8D9C7300B36175 /* Coordinate.swift */; };
 		56B34D402B72E359008F831A /* TabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56B34D3F2B72E359008F831A /* TabBar.swift */; };
 		56B34D422B7F3A8C008F831A /* FriendDetailSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56B34D412B7F3A8C008F831A /* FriendDetailSettingsView.swift */; };
 		56B34D462B81FACF008F831A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 56B34D452B81FACF008F831A /* Assets.xcassets */; };
 		56B34D482B8214E7008F831A /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56B34D472B8214E7008F831A /* LoadingView.swift */; };
 		56D7B0C42AF2F630002B65DD /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = 56D7B0C32AF2F630002B65DD /* .swiftlint.yml */; };
 		56D7B0C82AF2FB95002B65DD /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D7B0C72AF2FB95002B65DD /* RootView.swift */; };
-		56D7B0CB2AF358BF002B65DD /* OwnedPropertiesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D7B0CA2AF358BF002B65DD /* OwnedPropertiesView.swift */; };
+		56D7B0CB2AF358BF002B65DD /* OwnedHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D7B0CA2AF358BF002B65DD /* OwnedHomeView.swift */; };
 		56D7B0CE2AF4BD92002B65DD /* PropertyTileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D7B0CD2AF4BD92002B65DD /* PropertyTileView.swift */; };
 		56D7B0D02AF4BE97002B65DD /* Property.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D7B0CF2AF4BE97002B65DD /* Property.swift */; };
 		56D7B0D22AF74E09002B65DD /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D7B0D12AF74E09002B65DD /* Colors.swift */; };
@@ -92,6 +103,7 @@
 		56EC54542B11F81B00AE12DC /* FriendHomeEmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56EC54532B11F81B00AE12DC /* FriendHomeEmptyView.swift */; };
 		56EC54562B11F83100AE12DC /* FriendDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56EC54552B11F83100AE12DC /* FriendDetailView.swift */; };
 		56EC54582B11FAB000AE12DC /* FriendExistingBookingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56EC54572B11FAB000AE12DC /* FriendExistingBookingView.swift */; };
+		56F4BA582B8AE04900FE41E7 /* PropertyDetailList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56F4BA572B8AE04900FE41E7 /* PropertyDetailList.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -119,11 +131,9 @@
 		560020AA2B6449AC00244058 /* Array.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Array.swift; sourceTree = "<group>"; };
 		56041BD92B647656005BD4D8 /* CalendarViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarViewModel.swift; sourceTree = "<group>"; };
 		56041BDB2B6493B5005BD4D8 /* CalendarCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarCellViewModel.swift; sourceTree = "<group>"; };
-		56041BDD2B64B453005BD4D8 /* FriendBookingConfirmationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendBookingConfirmationView.swift; sourceTree = "<group>"; };
-		56041BDF2B64B8AB005BD4D8 /* OwnerBookingConfirmationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OwnerBookingConfirmationView.swift; sourceTree = "<group>"; };
+		56041BDF2B64B8AB005BD4D8 /* OwnedBookingConfirmationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OwnedBookingConfirmationView.swift; sourceTree = "<group>"; };
 		56041BE12B64BFE5005BD4D8 /* BookingStatusIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookingStatusIndicatorView.swift; sourceTree = "<group>"; };
 		56041BE32B64C390005BD4D8 /* PairButtonWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PairButtonWrapper.swift; sourceTree = "<group>"; };
-		56041BE52B64DB01005BD4D8 /* OwnedBookingTileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OwnedBookingTileView.swift; sourceTree = "<group>"; };
 		56041BE72B65B6E7005BD4D8 /* PairButtonSpacer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PairButtonSpacer.swift; sourceTree = "<group>"; };
 		56041BE92B65C898005BD4D8 /* Font.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Font.swift; sourceTree = "<group>"; };
 		56041BEB2B65D694005BD4D8 /* CurrencyField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyField.swift; sourceTree = "<group>"; };
@@ -132,6 +142,8 @@
 		56041BF22B65F955005BD4D8 /* OptionalInfoField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionalInfoField.swift; sourceTree = "<group>"; };
 		56041BF42B66075D005BD4D8 /* NewPropertyConfirmView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPropertyConfirmView.swift; sourceTree = "<group>"; };
 		56041BF92B661F1B005BD4D8 /* NoSelectedPropertyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoSelectedPropertyView.swift; sourceTree = "<group>"; };
+		564DE5FD2B85AFC5008E1880 /* DetailSheetTitle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailSheetTitle.swift; sourceTree = "<group>"; };
+		564DE5FF2B85BD1A008E1880 /* BookingConfirmationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookingConfirmationView.swift; sourceTree = "<group>"; };
 		5651983C2AA7DCF200866F0B /* FriendBNB.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FriendBNB.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5651983F2AA7DCF200866F0B /* FriendBNBApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendBNBApp.swift; sourceTree = "<group>"; };
 		565198412AA7DCF200866F0B /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
@@ -142,6 +154,8 @@
 		565198562AA7DCF200866F0B /* FriendBNBUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FriendBNBUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		5651985A2AA7DCF200866F0B /* FriendBNBUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendBNBUITests.swift; sourceTree = "<group>"; };
 		5651985C2AA7DCF200866F0B /* FriendBNBUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendBNBUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		565492A42B82C7A3006BF8B8 /* FriendBNB.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = FriendBNB.entitlements; sourceTree = "<group>"; };
+		565492A52B82CBBE006BF8B8 /* Podfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Podfile; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		565A46562AFF454400D67A03 /* AddPropertyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPropertyView.swift; sourceTree = "<group>"; };
 		565A465B2AFF571800D67A03 /* StyledFloatingTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StyledFloatingTextField.swift; sourceTree = "<group>"; };
 		565A465D2B00118600D67A03 /* OwnedPropertyEmptyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OwnedPropertyEmptyView.swift; sourceTree = "<group>"; };
@@ -155,16 +169,26 @@
 		565A46732B02E55700D67A03 /* OwnedDetailSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OwnedDetailSettingsView.swift; sourceTree = "<group>"; };
 		565A46752B0355C500D67A03 /* View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = View.swift; sourceTree = "<group>"; };
 		565A467A2B0363C200D67A03 /* FriendNewBookingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendNewBookingView.swift; sourceTree = "<group>"; };
+		565B7E722B847BB9009A5EDD /* CurrencyInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyInputView.swift; sourceTree = "<group>"; };
 		567B74FD2B0607DB00639540 /* BookingStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookingStore.swift; sourceTree = "<group>"; };
+		569409F52B8DB7E3009CF998 /* OwnedPropertyTileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OwnedPropertyTileView.swift; sourceTree = "<group>"; };
+		569409F72B8EEA88009CF998 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		569409F92B8EEC83009CF998 /* PermissionStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionStore.swift; sourceTree = "<group>"; };
+		569409FC2B8FF88C009CF998 /* BookingStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookingStatus.swift; sourceTree = "<group>"; };
+		569409FE2B8FF8AD009CF998 /* PropertyType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PropertyType.swift; sourceTree = "<group>"; };
+		56940A002B8FF8C7009CF998 /* PropertyBookingGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PropertyBookingGroup.swift; sourceTree = "<group>"; };
+		56940A022B8FF983009CF998 /* PropertyInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PropertyInfo.swift; sourceTree = "<group>"; };
+		56940A042B90046C009CF998 /* ScheduleType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleType.swift; sourceTree = "<group>"; };
+		56944F9D2B8B0FD300B36175 /* ToggleInfoDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToggleInfoDetail.swift; sourceTree = "<group>"; };
+		56944F9F2B8D9C7300B36175 /* Coordinate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinate.swift; sourceTree = "<group>"; };
 		569A8FEB2AA82DCD003B3A44 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
-		569C87DF2B6CA22A00EDE61D /* FriendTileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendTileView.swift; sourceTree = "<group>"; };
 		56B34D3F2B72E359008F831A /* TabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBar.swift; sourceTree = "<group>"; };
 		56B34D412B7F3A8C008F831A /* FriendDetailSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendDetailSettingsView.swift; sourceTree = "<group>"; };
 		56B34D452B81FACF008F831A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		56B34D472B8214E7008F831A /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
 		56D7B0C32AF2F630002B65DD /* .swiftlint.yml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = SOURCE_ROOT; };
 		56D7B0C72AF2FB95002B65DD /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
-		56D7B0CA2AF358BF002B65DD /* OwnedPropertiesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OwnedPropertiesView.swift; sourceTree = "<group>"; };
+		56D7B0CA2AF358BF002B65DD /* OwnedHomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OwnedHomeView.swift; sourceTree = "<group>"; };
 		56D7B0CD2AF4BD92002B65DD /* PropertyTileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PropertyTileView.swift; sourceTree = "<group>"; };
 		56D7B0CF2AF4BE97002B65DD /* Property.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Property.swift; sourceTree = "<group>"; };
 		56D7B0D12AF74E09002B65DD /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
@@ -198,6 +222,7 @@
 		56EC54532B11F81B00AE12DC /* FriendHomeEmptyView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FriendHomeEmptyView.swift; sourceTree = "<group>"; };
 		56EC54552B11F83100AE12DC /* FriendDetailView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FriendDetailView.swift; sourceTree = "<group>"; };
 		56EC54572B11FAB000AE12DC /* FriendExistingBookingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FriendExistingBookingView.swift; sourceTree = "<group>"; };
+		56F4BA572B8AE04900FE41E7 /* PropertyDetailList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PropertyDetailList.swift; sourceTree = "<group>"; };
 		89B92C97B306D5AD425B48AB /* Pods-FriendBNB.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FriendBNB.release.xcconfig"; path = "Target Support Files/Pods-FriendBNB/Pods-FriendBNB.release.xcconfig"; sourceTree = "<group>"; };
 		A88517334A19E262D7241542 /* Pods-FriendBNB.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FriendBNB.debug.xcconfig"; path = "Target Support Files/Pods-FriendBNB/Pods-FriendBNB.debug.xcconfig"; sourceTree = "<group>"; };
 		E19B548CCA72EEB2AD42091C /* Pods_FriendBNB.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FriendBNB.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -245,6 +270,7 @@
 				56EC54382B09F08200AE12DC /* AuthenticationStore.swift */,
 				560020A32B635F5E00244058 /* NotificationStore.swift */,
 				567B74FD2B0607DB00639540 /* BookingStore.swift */,
+				569409F92B8EEC83009CF998 /* PermissionStore.swift */,
 			);
 			path = Stores;
 			sourceTree = "<group>";
@@ -257,6 +283,8 @@
 				56D7B0CF2AF4BE97002B65DD /* Property.swift */,
 				56D7B0E12AFC9C9B002B65DD /* Location.swift */,
 				5600209E2B634F9C00244058 /* InputField.swift */,
+				56940A002B8FF8C7009CF998 /* PropertyBookingGroup.swift */,
+				56940A022B8FF983009CF998 /* PropertyInfo.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -282,6 +310,7 @@
 				56041BEB2B65D694005BD4D8 /* CurrencyField.swift */,
 				56041BF02B65F3B5005BD4D8 /* BasicTextField.swift */,
 				56041BF22B65F955005BD4D8 /* OptionalInfoField.swift */,
+				56944F9D2B8B0FD300B36175 /* ToggleInfoDetail.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -290,8 +319,8 @@
 			isa = PBXGroup;
 			children = (
 				56D7B0CD2AF4BD92002B65DD /* PropertyTileView.swift */,
-				569C87DF2B6CA22A00EDE61D /* FriendTileView.swift */,
 				56B34D3F2B72E359008F831A /* TabBar.swift */,
+				569409F52B8DB7E3009CF998 /* OwnedPropertyTileView.swift */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -310,6 +339,23 @@
 				56041BF92B661F1B005BD4D8 /* NoSelectedPropertyView.swift */,
 			);
 			path = Error;
+			sourceTree = "<group>";
+		};
+		564DE5FA2B85AF97008E1880 /* Detail */ = {
+			isa = PBXGroup;
+			children = (
+				564DE5FB2B85AFA2008E1880 /* Sheets */,
+				56F4BA572B8AE04900FE41E7 /* PropertyDetailList.swift */,
+			);
+			path = Detail;
+			sourceTree = "<group>";
+		};
+		564DE5FB2B85AFA2008E1880 /* Sheets */ = {
+			isa = PBXGroup;
+			children = (
+				564DE5FD2B85AFC5008E1880 /* DetailSheetTitle.swift */,
+			);
+			path = Sheets;
 			sourceTree = "<group>";
 		};
 		565198332AA7DCF200866F0B = {
@@ -337,10 +383,13 @@
 		5651983E2AA7DCF200866F0B /* FriendBNB */ = {
 			isa = PBXGroup;
 			children = (
+				565492A52B82CBBE006BF8B8 /* Podfile */,
+				565492A42B82C7A3006BF8B8 /* FriendBNB.entitlements */,
 				56DA6A082B059E0B0007BC40 /* GoogleService-Info.plist */,
 				56D7B0C32AF2F630002B65DD /* .swiftlint.yml */,
 				56EC54372B09E0FA00AE12DC /* Packages */,
 				56041BEF2B65ED4F005BD4D8 /* Modifiers */,
+				569409FB2B8FF87A009CF998 /* Enums */,
 				56E24E7A2AF2EFD3005393C7 /* Extensions */,
 				5600209B2B634E9500244058 /* Models */,
 				5600209A2B634B7B00244058 /* Stores */,
@@ -354,6 +403,7 @@
 				56E24E762AEE30CA005393C7 /* Localizable.strings */,
 				56D7B0C72AF2FB95002B65DD /* RootView.swift */,
 				5651983F2AA7DCF200866F0B /* FriendBNBApp.swift */,
+				569409F72B8EEA88009CF998 /* AppDelegate.swift */,
 			);
 			path = FriendBNB;
 			sourceTree = "<group>";
@@ -403,13 +453,30 @@
 		565A46792B0363A100D67A03 /* Booking */ = {
 			isa = PBXGroup;
 			children = (
-				56EC54402B0B378D00AE12DC /* BookingTileView.swift */,
-				56041BDD2B64B453005BD4D8 /* FriendBookingConfirmationView.swift */,
-				56041BDF2B64B8AB005BD4D8 /* OwnerBookingConfirmationView.swift */,
-				56041BE12B64BFE5005BD4D8 /* BookingStatusIndicatorView.swift */,
-				56041BE52B64DB01005BD4D8 /* OwnedBookingTileView.swift */,
+				56944F9C2B8AF3ED00B36175 /* Components */,
+				56041BDF2B64B8AB005BD4D8 /* OwnedBookingConfirmationView.swift */,
+				564DE5FF2B85BD1A008E1880 /* BookingConfirmationView.swift */,
 			);
 			path = Booking;
+			sourceTree = "<group>";
+		};
+		569409FB2B8FF87A009CF998 /* Enums */ = {
+			isa = PBXGroup;
+			children = (
+				569409FC2B8FF88C009CF998 /* BookingStatus.swift */,
+				569409FE2B8FF8AD009CF998 /* PropertyType.swift */,
+				56940A042B90046C009CF998 /* ScheduleType.swift */,
+			);
+			path = Enums;
+			sourceTree = "<group>";
+		};
+		56944F9C2B8AF3ED00B36175 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				56041BE12B64BFE5005BD4D8 /* BookingStatusIndicatorView.swift */,
+				56EC54402B0B378D00AE12DC /* BookingTileView.swift */,
+			);
+			path = Components;
 			sourceTree = "<group>";
 		};
 		56D7B0C92AF358B5002B65DD /* Owned Properties */ = {
@@ -451,6 +518,7 @@
 		56E24E722AEE2E6E005393C7 /* Features */ = {
 			isa = PBXGroup;
 			children = (
+				564DE5FA2B85AF97008E1880 /* Detail */,
 				56041BF82B661EFC005BD4D8 /* Error */,
 				560020A92B640C3A00244058 /* Home */,
 				56D7B0D32AF8CCCD002B65DD /* Settings */,
@@ -481,6 +549,7 @@
 			children = (
 				56D7B0EF2AFE1E5F002B65DD /* Constants.swift */,
 				565A46662B00A69E00D67A03 /* CalendarHelper.swift */,
+				56944F9F2B8D9C7300B36175 /* Coordinate.swift */,
 			);
 			path = Utility;
 			sourceTree = "<group>";
@@ -513,6 +582,7 @@
 			isa = PBXGroup;
 			children = (
 				56EC542E2B09D85600AE12DC /* Floating Prompt */,
+				565B7E722B847BB9009A5EDD /* CurrencyInputView.swift */,
 			);
 			path = Packages;
 			sourceTree = "<group>";
@@ -542,7 +612,7 @@
 		56EC54482B0CACBF00AE12DC /* Home */ = {
 			isa = PBXGroup;
 			children = (
-				56D7B0CA2AF358BF002B65DD /* OwnedPropertiesView.swift */,
+				56D7B0CA2AF358BF002B65DD /* OwnedHomeView.swift */,
 				565A465D2B00118600D67A03 /* OwnedPropertyEmptyView.swift */,
 			);
 			path = Home;
@@ -623,8 +693,6 @@
 			dependencies = (
 			);
 			name = FriendBNB;
-			packageProductDependencies = (
-			);
 			productName = FriendBNB;
 			productReference = 5651983C2AA7DCF200866F0B /* FriendBNB.app */;
 			productType = "com.apple.product-type.application";
@@ -697,8 +765,6 @@
 				Base,
 			);
 			mainGroup = 565198332AA7DCF200866F0B;
-			packageReferences = (
-			);
 			productRefGroup = 5651983D2AA7DCF200866F0B /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -720,6 +786,7 @@
 				56E24E772AEE30CA005393C7 /* Localizable.strings in Resources */,
 				56DA6A092B059E0B0007BC40 /* GoogleService-Info.plist in Resources */,
 				56B34D462B81FACF008F831A /* Assets.xcassets in Resources */,
+				565492A62B82CBBE006BF8B8 /* Podfile in Resources */,
 				565198442AA7DCF200866F0B /* Colors.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -816,14 +883,15 @@
 				56EC54562B11F83100AE12DC /* FriendDetailView.swift in Sources */,
 				565A466D2B00C70600D67A03 /* Date.swift in Sources */,
 				56041BF52B66075D005BD4D8 /* NewPropertyConfirmView.swift in Sources */,
+				564DE5FE2B85AFC5008E1880 /* DetailSheetTitle.swift in Sources */,
 				565A46762B0355C500D67A03 /* View.swift in Sources */,
 				565A465E2B00118600D67A03 /* OwnedPropertyEmptyView.swift in Sources */,
 				56D7B0E72AFC9DB3002B65DD /* NewPropertySearchViewModel.swift in Sources */,
-				56041BE62B64DB01005BD4D8 /* OwnedBookingTileView.swift in Sources */,
 				560020AB2B6449AC00244058 /* Array.swift in Sources */,
 				565A465C2AFF571800D67A03 /* StyledFloatingTextField.swift in Sources */,
+				56940A032B8FF983009CF998 /* PropertyInfo.swift in Sources */,
 				56D7B0D02AF4BE97002B65DD /* Property.swift in Sources */,
-				56041BE02B64B8AB005BD4D8 /* OwnerBookingConfirmationView.swift in Sources */,
+				56041BE02B64B8AB005BD4D8 /* OwnedBookingConfirmationView.swift in Sources */,
 				56B34D422B7F3A8C008F831A /* FriendDetailSettingsView.swift in Sources */,
 				56EC544E2B0CAF4200AE12DC /* OwnedAvailabilityView.swift in Sources */,
 				56D7B0C82AF2FB95002B65DD /* RootView.swift in Sources */,
@@ -836,18 +904,25 @@
 				56EC54522B0D593000AE12DC /* AvailabilityTileView.swift in Sources */,
 				56EC54302B09D88200AE12DC /* FloatingPromptTextField.swift in Sources */,
 				56E24E7C2AF2EFE5005393C7 /* String.swift in Sources */,
+				569409F62B8DB7E3009CF998 /* OwnedPropertyTileView.swift in Sources */,
 				565A46612B00145400D67A03 /* OwnedDetailView.swift in Sources */,
 				56EC543F2B0B2CCA00AE12DC /* OwnedExistingBookingView.swift in Sources */,
+				56940A012B8FF8C7009CF998 /* PropertyBookingGroup.swift in Sources */,
 				565A46692B00AB2600D67A03 /* CalendarCellView.swift in Sources */,
-				569C87E02B6CA22A00EDE61D /* FriendTileView.swift in Sources */,
 				565A46572AFF454400D67A03 /* AddPropertyView.swift in Sources */,
 				5600209F2B634F9C00244058 /* InputField.swift in Sources */,
+				56944FA02B8D9C7300B36175 /* Coordinate.swift in Sources */,
 				56D7B0D52AF8CCE0002B65DD /* SettingsView.swift in Sources */,
 				56041BFA2B661F1B005BD4D8 /* NoSelectedPropertyView.swift in Sources */,
+				569409FA2B8EEC83009CF998 /* PermissionStore.swift in Sources */,
+				569409FD2B8FF88C009CF998 /* BookingStatus.swift in Sources */,
 				56D7B0F22AFE2C25002B65DD /* PairButtonsView.swift in Sources */,
 				56D7B0DE2AFACF44002B65DD /* NewPropertySearchView.swift in Sources */,
+				56940A052B90046C009CF998 /* ScheduleType.swift in Sources */,
 				56D7B0E22AFC9C9B002B65DD /* Location.swift in Sources */,
 				56EC54502B0CB3B800AE12DC /* Availability.swift in Sources */,
+				564DE6002B85BD1A008E1880 /* BookingConfirmationView.swift in Sources */,
+				56944F9E2B8B0FD300B36175 /* ToggleInfoDetail.swift in Sources */,
 				56EC54392B09F08200AE12DC /* AuthenticationStore.swift in Sources */,
 				565198422AA7DCF200866F0B /* LoginView.swift in Sources */,
 				56B34D402B72E359008F831A /* TabBar.swift in Sources */,
@@ -858,13 +933,13 @@
 				56EC54322B09D8AE00AE12DC /* FloatingPrompyEnvironmentValues.swift in Sources */,
 				56EC543D2B09FFC300AE12DC /* SecureStyledFloatingTextField.swift in Sources */,
 				56041BE22B64BFE5005BD4D8 /* BookingStatusIndicatorView.swift in Sources */,
+				56F4BA582B8AE04900FE41E7 /* PropertyDetailList.swift in Sources */,
 				56D7B0EB2AFDC7AF002B65DD /* NewPropertyAddressView.swift in Sources */,
 				560020A72B636D8800244058 /* ErrorView.swift in Sources */,
 				567B74FE2B0607DB00639540 /* BookingStore.swift in Sources */,
 				56EC54542B11F81B00AE12DC /* FriendHomeEmptyView.swift in Sources */,
 				56D7B0E02AFC9C03002B65DD /* NewPropertyInfoView.swift in Sources */,
-				56D7B0CB2AF358BF002B65DD /* OwnedPropertiesView.swift in Sources */,
-				56041BDE2B64B453005BD4D8 /* FriendBookingConfirmationView.swift in Sources */,
+				56D7B0CB2AF358BF002B65DD /* OwnedHomeView.swift in Sources */,
 				565198402AA7DCF200866F0B /* FriendBNBApp.swift in Sources */,
 				56D7B0F02AFE1E5F002B65DD /* Constants.swift in Sources */,
 				56D7B0E92AFC9E19002B65DD /* AddressSearchResult.swift in Sources */,
@@ -875,9 +950,12 @@
 				56B34D482B8214E7008F831A /* LoadingView.swift in Sources */,
 				56041BE82B65B6E7005BD4D8 /* PairButtonSpacer.swift in Sources */,
 				565A466B2B00B88700D67A03 /* Booking.swift in Sources */,
+				569409F82B8EEA88009CF998 /* AppDelegate.swift in Sources */,
 				56EC54412B0B378D00AE12DC /* BookingTileView.swift in Sources */,
+				565B7E732B847BB9009A5EDD /* CurrencyInputView.swift in Sources */,
 				56041BEA2B65C898005BD4D8 /* Font.swift in Sources */,
 				56EC543B2B09F74900AE12DC /* ResetPasswordView.swift in Sources */,
+				569409FF2B8FF8AD009CF998 /* PropertyType.swift in Sources */,
 				56041BDA2B647657005BD4D8 /* CalendarViewModel.swift in Sources */,
 				56041BF12B65F3B5005BD4D8 /* BasicTextField.swift in Sources */,
 				56EC54442B0BF3D900AE12DC /* FriendsHomeView.swift in Sources */,
@@ -1037,6 +1115,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = FriendBNB/FriendBNB.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"FriendBNB/Preview Content\"";
@@ -1047,6 +1126,7 @@
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1070,6 +1150,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = FriendBNB/FriendBNB.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"FriendBNB/Preview Content\"";
@@ -1080,6 +1161,7 @@
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

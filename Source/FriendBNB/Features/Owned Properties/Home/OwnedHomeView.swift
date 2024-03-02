@@ -1,5 +1,5 @@
 //
-//  HomeView.swift
+//  OwnedHomeView.swift
 //  FriendBNB
 //
 //  Created by Anders Tai on 2023-11-02.
@@ -9,8 +9,9 @@ import SwiftUI
 import FirebaseAuth
 import FirebaseFirestore
 
-struct OwnedPropertiesView: View {
+struct OwnedHomeView: View {
 	@EnvironmentObject var propertyStore: PropertyStore
+	@EnvironmentObject var notificationStore: NotificationStore
 	@State private var navPath = NavigationPath()
 	
 	var body: some View {
@@ -29,22 +30,24 @@ struct OwnedPropertiesView: View {
 								.frame(height: 35)
 								.background(.white)
 								.clipShape(Circle())
-								.padding(.trailing, Constants.Padding.regular)
+								.padding(.trailing, Constants.Spacing.regular)
 						})
 						.frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topTrailing)
 						.zIndex(5)
 						
 						ScrollView {
-							VStack {
+							VStack(spacing: Constants.Spacing.regular) {
 								Rectangle()
 									.frame(height: 45)
 									.foregroundStyle(Color.clear)
 								
 								ForEach(propertyStore.ownedProperties) { property in
 									Button(action: {
-										propertyStore.showOwnedProperty(property)
+										propertyStore.showProperty(property, type: .owned)
 									}, label: {
-										PropertyTileView(property: property)
+										PropertyTileView(property: property, type: .owned) { booking in
+											propertyStore.ownedSelectedBooking = PropertyBookingGroup(property: property, booking: booking)
+										}
 									})
 								}
 							}
@@ -53,32 +56,25 @@ struct OwnedPropertiesView: View {
 							await propertyStore.fetchProperties(.owned)
 						}
 					}
-//					.onChange(of: propertyStore.showOwnedProperty) { _ in
-//						Task {
-//							await propertyStore.fetchProperties(.owned)
-//						}
-//					}
 				} else {
 					OwnedPropertiesEmptyView()
 				}
 			}
-			.navigationDestination(item: $propertyStore.selectedOwnedProperty) { _ in
+			.navigationDestination(item: $propertyStore.ownedSelectedProperty) { _ in
 				OwnedDetailView()
 					.navigationBarTitleDisplayMode(.inline)
+			}
+			.sheet(item: $propertyStore.ownedSelectedBooking) { group in
+				OwnedBookingConfirmationView(property: group.property, booking: group.booking, showDismiss: true) { message in
+					notificationStore.pushNotification(message: message)
+				}
 			}
 		}
 	}
 }
 
-extension OwnedPropertiesView {
-	@MainActor
-	class ViewModel: ObservableObject {
-		
-	}
-}
-
-struct HomeView_Previews: PreviewProvider {
-	static var previews: some View {
-		OwnedPropertiesView()
-	}
-}
+//struct HomeView_Previews: PreviewProvider {
+//	static var previews: some View {
+//		OwnedHomeView()
+//	}
+//}

@@ -35,6 +35,12 @@ extension Date {
         dateFormatter.dateFormat = "LLL yyyy"
         return dateFormatter.string(from: self)
     }
+	
+	func dayMonthString() -> String {
+		let dateFormatter = DateFormatter()
+		dateFormatter.dateFormat = "dd LLL"
+		return dateFormatter.string(from: self)
+	}
     
     func plusMonth() -> Date {
         return Calendar.current.date(byAdding: .month, value: 1, to: self)!

@@ -8,13 +8,17 @@
 import SwiftUI
 
 struct ErrorView: View {
-	@Binding var error: String
+	var error: String
 	
     var body: some View {
-		Text(error)
-			.font(.footnote)
-			.foregroundColor(Color.systemRed)
-			.frame(maxWidth: .infinity, alignment: .leading)
-			.padding(.top, Constants.Padding.small)
+		if error.isEmpty {
+			EmptyView()
+		} else {
+			Text(error)
+				.font(.footnote)
+				.foregroundColor(Color.systemRed)
+				.frame(maxWidth: .infinity, alignment: .leading)
+				.padding(.top, Constants.Spacing.small)
+		}
     }
 }

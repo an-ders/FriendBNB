@@ -8,28 +8,30 @@
 import SwiftUI
 import FirebaseFirestore
 import MapKit
+import FirebaseDynamicLinks
 
 struct OwnedDetailView: View {
 	@EnvironmentObject var propertyStore: PropertyStore
 	@EnvironmentObject var notificationStore: NotificationStore
 	
 	@State var confirmDelete = false
+	@State var url: URL?
 	
 	var body: some View {
-		if let property = propertyStore.selectedOwnedProperty {
+		if let property = propertyStore.getSelectedProperty(.owned) {
 			let coordinate = CLLocationCoordinate2D(latitude: property.location.geo.latitude, longitude: property.location.geo.longitude)
 			VStack {
 				ScrollView(showsIndicators: false) {
-					VStack(spacing: Constants.Padding.regular) {
+					VStack(spacing: Constants.Spacing.regular) {
 						VStack {
 							Text(property.location.addressTitle)
-								.font(.title).fontWeight(.medium)
-								.frame(maxWidth: .infinity, alignment: .leading)
+								.styled(.headline)
+								.fillLeading()
 							Text(property.location.addressDescription)
-								.font(.headline).fontWeight(.light)
-								.frame(maxWidth: .infinity, alignment: .leading)
+								.styled(.body)
+								.fillLeading()
 						}
-						.padding(.top, Constants.Padding.small)
+						.padding(.top, Constants.Spacing.small)
 						
 						Map(position: .constant(MapCameraPosition.region(MKCoordinateRegion(center: coordinate, latitudinalMeters: 1000, longitudinalMeters: 1000)))) {
 							Marker("", coordinate: coordinate)
@@ -39,24 +41,37 @@ struct OwnedDetailView: View {
 						
 						HStack {
 							Button(action: {
-								propertyStore.showOwnedBooking.toggle()
+								propertyStore.showOwnedExistingBookingsSheet.toggle()
 							}, label: {
-								VStack {
-									Image(systemName: "calendar.badge.clock")
-										.resizable()
-										.scaledToFit()
-										.frame(width: 40)
-									Text("Bookings")
-										.font(.headline).fontWeight(.medium)
+								HStack(spacing: 0) {
+									VStack {
+										Image(systemName: "calendar.badge.clock")
+											.resizable()
+											.scaledToFit()
+											.frame(width: 40)
+										Text("Bookings")
+											.font(.headline).fontWeight(.medium)
+									}
+									.frame(maxWidth: .infinity, maxHeight: .infinity)
+									.foregroundStyle(Color.white)
+									.background(Color.systemBlue.opacity(0.6))
+									
+									VStack(spacing: 0) {
+										ForEach(BookingStatus.allCases, id: \.self) { status in
+											Text(String(property.bookings.current().filter {$0.status == status}.count))
+												.styled(.caption, weight: .semibold)
+												.frame(maxHeight: .infinity)
+												.frame(width: 20)
+												.background(status.colorBG)
+												.foregroundStyle(Color.black)
+										}
+									}
 								}
-								.frame(maxWidth: .infinity, maxHeight: .infinity)
-								.foregroundStyle(Color.white)
-								.background(Color.systemBlue.opacity(0.6))
 								.cornerRadius(5)
 							})
 							
 							Button(action: {
-								propertyStore.showOwnedAvailability.toggle()
+								propertyStore.showOwnedAvailabilitySheet.toggle()
 							}, label: {
 								VStack {
 									Image(systemName: "calendar.badge.plus")
@@ -75,38 +90,23 @@ struct OwnedDetailView: View {
 						}
 						.frame(height: 100)
 						
-						PropertyDetailsList(property: property)
+						PropertyDetailList(property: property, showAll: true)
 					}
 				}
 				
 				// MARK: SHARE BUTTON
-//				ShareLink(item: property.shareLink, message: Text(property.shareMessage)) {
-//					HStack {
-//						Image(systemName: "square.and.arrow.up")
-//							.resizable()
-//							.scaledToFit()
-//							.frame(width: 20)
-//						Text("Share")
-//							.bodyBold()
-//					}
-//					.padding(.vertical, Constants.Padding.small)
-//					.frame(maxWidth: .infinity)
-//					.foregroundStyle(Color.white)
-//					.background(property.available.current().isEmpty ? Color.systemGray3 : Color.systemBlue.opacity(0.6))
-//					.cornerRadius(5)
-//					.padding(.bottom, 4)
-//				}
-				if let url = URL(string: "FriendBNB://id=\(property.id)"), !property.available.current().isEmpty {
+				if let url = url, !property.available.current().isEmpty {
 					ShareLink(item: url, subject: Text(""), message: Text(property.shareMessage)) {
 						HStack {
 							Image(systemName: "square.and.arrow.up")
 								.resizable()
 								.scaledToFit()
 								.frame(width: 20)
-							Text("Share")
-								.bodyBold()
+								.offset(y: -2)
+							Text("Share Property")
+								.styled(.bodyBold)
 						}
-						.padding(.vertical, Constants.Padding.small)
+						.padding(.vertical, Constants.Spacing.small)
 						.frame(maxWidth: .infinity)
 						.foregroundStyle(Color.white)
 						.background(Color.systemBlue.opacity(0.6))
@@ -122,10 +122,11 @@ struct OwnedDetailView: View {
 								.resizable()
 								.scaledToFit()
 								.frame(width: 20)
+								.offset(y: -2)
 							Text("Share")
-								.bodyBold()
+								.styled(.bodyBold)
 						}
-						.padding(.vertical, Constants.Padding.small)
+						.padding(.vertical, Constants.Spacing.small)
 						.frame(maxWidth: .infinity)
 						.foregroundStyle(Color.white)
 						.background(Color.systemGray3)
@@ -134,8 +135,8 @@ struct OwnedDetailView: View {
 					})
 				}
 			}
-			//.navigationTitle(property.nickname)
-			.padding(.horizontal, Constants.Padding.regular)
+			.navigationTitle(property.info.nickname)
+			.padding(.horizontal, Constants.Spacing.regular)
 			.toolbar {
 				ToolbarItem(placement: .primaryAction) {
 					OwnedDetailSettingsView(confirmDelete: $confirmDelete)
@@ -145,21 +146,20 @@ struct OwnedDetailView: View {
 				Alert(title: Text("Are you sure you want to delete this property?"),
 					  primaryButton: .destructive(Text("Delete")) {
 					Task {
-						await propertyStore.deleteProperty(id: property.id, type: .owned)
+						await propertyStore.deleteProperty(id: property.id)
 					}
 				},
 					  secondaryButton: .default(Text("Cancel")))
 			}
-			.sheet(isPresented: $propertyStore.showOwnedAvailability) {
+			.sheet(isPresented: $propertyStore.showOwnedAvailabilitySheet) {
 				OwnedAvailabilityView(property: property)
-					.interactiveDismissDisabled()
 			}
-			.sheet(isPresented: $propertyStore.showOwnedBooking) {
+			.sheet(isPresented: $propertyStore.showOwnedExistingBookingsSheet) {
 				OwnedExistingBookingView()
-					.interactiveDismissDisabled()
 			}
 			.onAppear {
 				propertyStore.subscribe(type: .owned)
+				generateLink(property: property)
 			}
 			.onDisappear {
 				propertyStore.unsubscribe()
@@ -169,110 +169,43 @@ struct OwnedDetailView: View {
 		}
 	}
 	
-//	var propertyShareButton: some View {
-//		VStack {
-//			if let property = propertyStore.selectedOwnedProperty {
-//				
-//			}
-//		}
-//		
-//	}
-}
-
-struct PropertyDetailsList: View {
-	var property: Property
-	var hideSensitiveInfo = false
-	
-	var body: some View {
-		HStack {
-			Image(systemName: "person.2.fill")
-				.resizable()
-				.scaledToFit()
-				.frame(width: 25)
-			Text("Max number of people: ")
-				.body()
-			Text(String(property.people))
-				.font(.headline).fontWeight(.semibold)
-			Spacer()
-		}
-		VStack {
-			HStack {
-				Image(systemName: "dollarsign.circle.fill")
-					.resizable()
-					.scaledToFit()
-					.frame(width: 25)
-				Text("Cost per night: ")
-					.body()
-				Text(property.payment == .free ? "FREE" : "\(property.cost) \(property.payment.rawValue)")
-					.font(.headline).fontWeight(.semibold)
-				Spacer()
-			}
-			if !hideSensitiveInfo {
-				Text(property.paymentNotes.isEmpty ? "" : property.paymentNotes)
-					.body()
-					.fillLeading()
-			}
-		}
+	func generateLink(property: Property) {
+		var components = URLComponents()
+		components.scheme = "https"
+		components.host = "www.friendbnb.com"
+		components.path = "/property"
+		components.queryItems = [URLQueryItem(name: "friendID", value: property.id)]
 		
-		if !hideSensitiveInfo {
-			if !property.notes.isEmpty {
-				VStack {
-					Text("Notes")
-						.heading()
-						.fillLeading()
-					
-					Text(property.notes)
-						.body()
-						.fillLeading()
+		guard let linkParam = components.url else { return }
+		
+		guard let shareLink = DynamicLinkComponents(link: linkParam, domainURIPrefix: "https://friendbnb.page.link") else {
+			print("Cant create dynamic link")
+			return
+		}
+		shareLink.iOSParameters = DynamicLinkIOSParameters(bundleID: Bundle.main.bundleIdentifier ?? "com.baboo.FriendBNB")
+		shareLink.iOSParameters?.appStoreID = "284815942"
+		
+		shareLink.socialMetaTagParameters = DynamicLinkSocialMetaTagParameters()
+		shareLink.socialMetaTagParameters?.title = "Add \(property.info.nickname.isEmpty ? property.ownerName + "'s property" : property.info.nickname) in the FriendBNB app and book your stay!"
+		shareLink.socialMetaTagParameters?.descriptionText = "If it is your first time installing the app please ALLOW paste from the browser!"
+		shareLink.socialMetaTagParameters?.imageURL = URL(string: "https://i.imgur.com/hSv4Ev1.jpeg")
+		shareLink.shorten { url, warnings, error in
+			if let error = error {
+				print("Error shortening link: \(error)")
+				return
+			}
+			
+			if let warnings = warnings {
+				for warning in warnings {
+					print("Dynamic Link warning: \(warning)")
 				}
 			}
 			
-			if !property.cleaningNotes.isEmpty {
-				VStack {
-					Text("Cleaning Notes")
-						.heading()
-						.fillLeading()
-					
-					Text(property.cleaningNotes)
-						.body()
-						.fillLeading()
-				}
+			guard let url = url else {
+				return
 			}
-			
-			if !property.wifi.isEmpty {
-				VStack {
-					Text("Wifi")
-						.heading()
-						.fillLeading()
-					
-					Text(property.wifi)
-						.body()
-						.fillLeading()
-				}
-			}
-			
-			if !property.securityCode.isEmpty {
-				VStack {
-					Text("Security Code")
-						.heading()
-						.fillLeading()
-					
-					Text(property.securityCode)
-						.body()
-						.fillLeading()
-				}
-			}
-			if !property.contactInfo.isEmpty {
-				VStack {
-					Text("Contact Info")
-						.heading()
-						.fillLeading()
-					
-					Text(property.contactInfo)
-						.body()
-						.fillLeading()
-				}
-			}
+			print("URLShortened")
+			self.url = url
 		}
 	}
 }

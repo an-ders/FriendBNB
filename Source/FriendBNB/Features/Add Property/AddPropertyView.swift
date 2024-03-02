@@ -25,7 +25,7 @@ struct AddPropertyView: View {
 			
 			Task {
 				if let id = await propertyStore.checkValidId(propertyId) {
-					await propertyStore.addProperty(id, type: .friend)
+					await propertyStore.addPropertyToUser(id, type: .friend)
 					propertyStore.showAddPropertySheet = false
 					self.propertyId = ""
 				} else {
@@ -35,11 +35,11 @@ struct AddPropertyView: View {
 		}, content: {
 			VStack {
 				Text("Add a property")
-					.title()
+					.styled(.title)
 					.frame(maxWidth: .infinity, alignment: .leading)
 					.padding(.bottom, Constants.Spacing.small)
 				Text("Enter the property code below:")
-					.body()
+					.styled(.body)
 					.frame(maxWidth: .infinity, alignment: .leading)
 				
 				StyledFloatingTextField(text: $propertyId, prompt: "Property Code")
@@ -48,8 +48,8 @@ struct AddPropertyView: View {
 				
 			}
 		})
-		.padding(.top, Constants.Padding.regular)
-		.padding(.horizontal, Constants.Padding.regular)
+		.padding(.top, Constants.Spacing.regular)
+		.padding(.horizontal, Constants.Spacing.regular)
 	}
 }
 

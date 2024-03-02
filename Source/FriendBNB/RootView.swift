@@ -7,6 +7,8 @@
 
 import SwiftUI
 import FirebaseAuth
+import FirebaseDynamicLinks
+import FirebaseMessaging
 
 enum RootTabs: String, Hashable, Equatable, CaseIterable {
     case owned
@@ -39,6 +41,7 @@ enum RootTabs: String, Hashable, Equatable, CaseIterable {
 struct RootView: View {
 	@EnvironmentObject var propertyStore: PropertyStore
 	@EnvironmentObject var authStore: AuthenticationStore
+	@EnvironmentObject var notificationStore: NotificationStore
 	@Environment(\.dismiss) private var dismiss
 	
     @State var loggedIn = false
@@ -47,12 +50,12 @@ struct RootView: View {
 	@State var selectedTab: RootTabs = .owned
     
     var body: some View {
-        NotificationView {
+		NotificationView(notification: $notificationStore.notification) {
 			if authStore.loggedIn {
 				VStack(spacing: 0) {
 					switch propertyStore.selectedTab {
 					case .owned:
-						OwnedPropertiesView()
+						OwnedHomeView()
 					case .friends:
 						FriendsHomeView()
 					case .settings:
@@ -71,7 +74,7 @@ struct RootView: View {
 											.scaledToFit()
 											.frame(height: 20)
 										Text(tab.name)
-											.caption()
+											.styled(.caption)
 									}
 									.frame(maxWidth: .infinity)
 									.contentShape(Rectangle())
@@ -79,20 +82,39 @@ struct RootView: View {
 								})
 							}
 						}
-						.padding(.top, Constants.Padding.small)
+						.padding(.top, Constants.Spacing.small)
+					}
+				}
+				.onAppear {
+					if let propertyID = propertyStore.addPropertyID {
+						Task { @MainActor in
+							if let id = await propertyStore.checkValidId(propertyID) {
+								await propertyStore.addPropertyToUser(id, type: .friend)
+								dismiss()
+								if let property = await propertyStore.getProperty(id: id) {
+									propertyStore.showProperty(property, type: .friend)
+								} else {
+									//ERROR
+								}
+							} else {
+								//self.error = "No property with that ID was found."
+							}
+							propertyStore.addPropertyID = nil
+						}
 					}
 				}
             } else {
                 LoginView()
             }
         }
+		.onAppear {
+			
+		}
 		.sheet(isPresented: $propertyStore.showNewPropertySheet) {
             NewPropertyView()
-                .interactiveDismissDisabled()
         }
 		.sheet(isPresented: $propertyStore.showAddPropertySheet) {
             AddPropertyView()
-                .interactiveDismissDisabled()
         }
         .onChange(of: authStore.loggedIn) { _ in
             Task {
@@ -101,36 +123,70 @@ struct RootView: View {
             }
         }
 		.onOpenURL { url in
-			let string = url.absoluteString.replacingOccurrences(of: "friendbnb://", with: "")
-			print(string)
-			let components = string.components(separatedBy: "?")
+			print("Incomming url: \(url.absoluteString)")
+			propertyStore.loading = true
 			
-			for component in components {
-				if component.contains("id=") {
-					let idRequest = component.replacingOccurrences(of: "id=", with: "")
-					Task { @MainActor in
-						if let id = await propertyStore.checkValidId(idRequest) {
-							await propertyStore.addProperty(id, type: .friend)
-							propertyStore.showAddPropertySheet = false
-							dismiss()
-							if let property = await propertyStore.getProperty(id: id) {
-								propertyStore.showFriendProperty(property, delay: true)
+			let linkHandled = DynamicLinks.dynamicLinks().handleUniversalLink(url) { dynamicLink, error in
+				guard error == nil else {
+					print("Error with dynamic link: \(error?.localizedDescription)")
+					propertyStore.loading = false
+					return
+				}
+				
+				handleDynamicLink(dynamicLink)
+			}
+			
+			if let dynamicLink = DynamicLinks.dynamicLinks().dynamicLink(fromCustomSchemeURL: url) {
+				handleDynamicLink(dynamicLink)
+			} else {
+				propertyStore.loading = false
+			}
+		}
+    }
+	
+	func handleDynamicLink(_ dynamicLink: DynamicLink?) {
+		if let dynamicLink = dynamicLink {
+			if let url = dynamicLink.url {
+				print("Actual deeplink from dynamic link is: \(url)")
+				print("Match Type: \(dynamicLink.matchType)")
+				
+				let string = url.absoluteString.replacingOccurrences(of: "https://friendbnb.com/", with: "")
+				print(string)
+				let components = string.components(separatedBy: "?")
+				
+				for component in components {
+					if component.contains("friendID=") {
+						let idRequest = component.replacingOccurrences(of: "friendID=", with: "")
+						Task { @MainActor in
+							if let id = await propertyStore.checkValidId(idRequest) {
+								await propertyStore.addPropertyToUser(id, type: .friend)
+								dismiss()
+								if let property = await propertyStore.getProperty(id: id) {
+									propertyStore.showProperty(property, type: .friend)
+								} else {
+									propertyStore.addPropertyID = idRequest
+								}
 							} else {
-								//ERROR
+								propertyStore.addPropertyID = idRequest
 							}
-						} else {
-							//self.error = "No property with that ID was found."
+						}
+					} else if component.contains("ownedID=") {
+						let idRequest = component.replacingOccurrences(of: "ownedID=", with: "")
+						Task { @MainActor in
+							if let id = await propertyStore.checkValidId(idRequest) {
+								if let property = await propertyStore.getProperty(id: id) {
+									if property.ownerId == authStore.user?.uid {
+										await propertyStore.addPropertyToUser(id, type: .owned)
+										propertyStore.showProperty(property, type: .owned)
+									}
+								}
+							}
 						}
 					}
 				}
 			}
 		}
-    }
-}
-
-extension RootView {
-    class ViewModel: ObservableObject {
-    }
+	}
 }
 
 struct RootView_Previews: PreviewProvider {

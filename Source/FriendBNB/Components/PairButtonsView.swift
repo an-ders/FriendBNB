@@ -14,16 +14,19 @@ struct PairButtonsView: View {
     var nextText: String
 	var nextCaption: String
     var nextAction: () -> Void
+	var includeShadow = true
     
     var body: some View {
         VStack(spacing: 0) {
-            Rectangle()
-                .fill(
-                    LinearGradient(gradient: Gradient(colors: [.white, .clear]),
-                                   startPoint: .bottom, endPoint: .top)
-                )
-                .frame(maxWidth: .infinity)
-                .frame(height: 35)
+			if includeShadow {
+				Rectangle()
+					.fill(
+						LinearGradient(gradient: Gradient(colors: [.white, .clear]),
+									   startPoint: .bottom, endPoint: .top)
+					)
+					.frame(maxWidth: .infinity)
+					.frame(height: 35)
+			}
             HStack {
                 Button(action: {
                     prevAction()
@@ -44,10 +47,10 @@ struct PairButtonsView: View {
 					}, label: {
 						VStack {
 							Text(nextText)
-								.bodyBold()
+								.styled(.bodyBold)
 							if !nextCaption.isEmpty {
 								Text(nextCaption)
-									.caption()
+									.styled(.caption)
 							}
 						}
 						.padding(.horizontal, 20)
@@ -58,7 +61,7 @@ struct PairButtonsView: View {
 					})
 				}
             }
-            .padding(.bottom, Constants.Padding.small)
+            .padding(.bottom, Constants.Spacing.small)
             .background {
                 Color.white
                     .ignoresSafeArea()

@@ -112,7 +112,7 @@ extension CalendarCellView {
 			isBooked = false
 		}
 		
-		func updateIsAvailabile(_ available: [Booking]) {
+		func updateIsAvailabile(_ available: [Availability]) {
 			let monthYear = date.monthYearString()
 			let dict = available.dict()
 			guard dict.keys.contains(monthYear) else {
@@ -130,10 +130,9 @@ extension CalendarCellView {
 				isAvailableEnd = avilability.end == date
 				return
 			}
-			
 		}
 		//
-		func updateisUnavailable(_ unavailable: [Booking]) {
+		func updateisUnavailable(_ unavailable: [Availability]) {
 			let monthYear = date.monthYearString()
 			let dict = unavailable.dict()
 			guard dict.keys.contains(monthYear) else {

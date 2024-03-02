@@ -16,14 +16,14 @@ struct BookingTileView: View {
 	
 	var body: some View {
 		HStack {
-			VStack {
+			VStack(alignment: .leading) {
 				if showName {
-					Text("\(booking.name) (\(booking.email))")
+					Text("**\(booking.name)**")
+					Text("\(booking.email)")
 				}
-				Text(booking.start, style: .date)
-				Text(booking.end, style: .date)
+				Text("**\(booking.start.dayMonthString())** to **\(booking.end.dayMonthString())**")
 			}
-			.body()
+			.styled(.body)
 			.padding(.leading, statusIndicatorWidth)
 			
 			Spacer()
@@ -33,24 +33,15 @@ struct BookingTileView: View {
 				.scaledToFit()
 				.frame(height: 20)
 		}
-		.padding(Constants.Padding.small)
+		.padding(Constants.Spacing.small)
 		.background {
 			HStack(spacing: 0) {
-				Group {
-					switch booking.status {
-					case .confirmed:
-						Color.systemGreen
-					case .declined:
-						Color.systemRed
-					case .pending:
-						Color.systemYellow
-					}
-				}
-				.frame(width: statusIndicatorWidth)
+				booking.status.colorBG
+					.frame(width: statusIndicatorWidth)
 				Color.systemGray6
 			}
 		}
-		.cornerRadius(20)
+		.cornerRadius(10)
 	}
 }
 

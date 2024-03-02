@@ -51,7 +51,7 @@ struct LoginView: View {
 				SecureStyledFloatingTextField(text: $passwordConfirm, prompt: "Confirm Password")
 			}
 			
-			ErrorView(error: $error)
+			ErrorView(error: error)
 			
 			Spacer()
 			
@@ -69,7 +69,7 @@ struct LoginView: View {
 				}
 			}, label: {
 				Text(isSignup ? "Already have an account? Log In" : "Dont have an account? Sign Up")
-					.body()
+					.styled(.body)
 					.underline()
 			})
 			.padding(.top, Constants.Spacing.large)

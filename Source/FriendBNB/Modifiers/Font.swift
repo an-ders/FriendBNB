@@ -8,60 +8,42 @@
 import Foundation
 import SwiftUI
 
-struct Title: ViewModifier {
-	func body(content: Content) -> some View {
-		content
-			.font(.largeTitle).fontWeight(.medium)
-	}
-}
-
-struct Heading: ViewModifier {
-	func body(content: Content) -> some View {
-		content
-			.font(.title).fontWeight(.regular)
-	}
-}
-
-struct BodyLight: ViewModifier {
-	func body(content: Content) -> some View {
-		content
-			.font(.headline).fontWeight(.light)
-	}
-}
-
-struct BodyBold: ViewModifier {
-	func body(content: Content) -> some View {
-		content
-			.font(.headline).fontWeight(.semibold)
-	}
-}
-
-struct Caption: ViewModifier {
-	func body(content: Content) -> some View {
-		content
-			.font(.caption).fontWeight(.regular)
-	}
-}
-
-extension View {
-	func title() -> some View {
-		modifier(Title())
+enum FontType {
+	case title
+	case headline
+	case body
+	case bodyBold
+	case caption
+	
+	var font: Font {
+		switch self {
+		case .title: .largeTitle
+		case .headline: .title
+		case .body: .headline
+		case .bodyBold: .headline
+		case .caption: .caption
+			
+		}
 	}
 	
-	func heading() -> some View {
-		modifier(Heading())
+	var weight: Font.Weight {
+		switch self {
+		case .title: .medium
+		case .headline: .regular
+		case .body: .light
+		case .bodyBold: .semibold
+		case .caption: .regular
+		}
 	}
+}
+
+struct StyledText: ViewModifier {
+	var type: FontType
+	var weight: Font.Weight?
 	
-	func body() -> some View {
-		modifier(BodyLight())
-	}
-	
-	func bodyBold() -> some View {
-		modifier(BodyBold())
-	}
-	
-	func caption() -> some View {
-		modifier(Caption())
+	func body(content: Content) -> some View {
+		content
+			.font(type.font).fontWeight(weight != nil ? weight : type.weight)
 	}
 }
 
@@ -73,6 +55,10 @@ struct FillLeading: ViewModifier {
 }
 
 extension View {
+	func styled(_ font: FontType, weight: Font.Weight? = nil) -> some View {
+		modifier(StyledText(type: font, weight: weight))
+	}
+	
 	func fillLeading() -> some View {
 		modifier(FillLeading())
 	}

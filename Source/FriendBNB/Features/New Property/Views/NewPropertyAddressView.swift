@@ -19,7 +19,7 @@ struct NewPropertyAddressView: View {
 		}, content: {
 			VStack {
 				Text("Confirm the address")
-					.title()
+					.styled(.title)
 					.fillLeading()
 					.padding(.bottom, Constants.Spacing.regular)
 				
@@ -32,7 +32,7 @@ struct NewPropertyAddressView: View {
 						StyledFloatingTextField(text: $location.zipCode, prompt: "Zip Code")
 						StyledFloatingTextField(text: $location.country, prompt: "Country")
 						
-						ErrorView(error: $location.error)
+						ErrorView(error: location.error)
 						
 						Spacer()
 						
@@ -45,8 +45,8 @@ struct NewPropertyAddressView: View {
 				hideKeyboard()
 			}
 		})
-		.padding(.horizontal, Constants.Padding.regular)
-		.padding(.top, Constants.Padding.regular)
+		.padding(.horizontal, Constants.Spacing.regular)
+		.padding(.top, Constants.Spacing.regular)
 	}
 	
 	func back() {

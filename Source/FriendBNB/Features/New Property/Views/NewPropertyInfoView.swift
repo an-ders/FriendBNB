@@ -15,9 +15,8 @@ struct NewPropertyInfoView: View {
 			ScrollView(.vertical, showsIndicators: false) {
 				VStack(spacing: Constants.Spacing.regular) {
 					Text("Home Details")
-						.title()
+						.styled(.title)
 						.fillLeading()
-						.padding(.bottom, Constants.Spacing.small)
 					NewPropertyInfoFieldsView(info: info)
 											
 					PairButtonsView(prevText: "Back", prevAction: {
@@ -26,9 +25,9 @@ struct NewPropertyInfoView: View {
 						next()
 					})
 				}
-				.padding(.top, Constants.Padding.regular)
+				.padding(.top, Constants.Spacing.regular)
 			}
-			.padding(.horizontal, Constants.Padding.regular)
+			.padding(.horizontal, Constants.Spacing.regular)
 			.contentShape(Rectangle())
 			.onTapGesture {
 				hideKeyboard()
@@ -53,13 +52,15 @@ struct NewPropertyInfoFieldsView: View {
 	
 	var body: some View {
 		StyledFloatingTextField(text: $info.nickname, prompt: "Nickname (optional)")
-			.padding(.bottom, Constants.Padding.small)
+			.padding(.bottom, Constants.Spacing.small)
 		CustomStepperView(text: "Max People", value: $info.people, min: 1)
 		Divider()
 		HStack {
-			Text("Rate Per Night")
-				.body()
-				.frame(maxWidth: .infinity, alignment: .leading)
+			if info.payment == .free {
+				Text("Rate Per Night")
+					.styled(.body)
+					.frame(maxWidth: .infinity, alignment: .leading)
+			}
 			
 			ForEach(PaymentFee.allCases, id: \.rawValue) { payment in
 				Button(action: {
@@ -69,45 +70,50 @@ struct NewPropertyInfoFieldsView: View {
 				}, label: {
 					Text(payment.rawValue)
 						.foregroundStyle(Color.white)
-						.body()
-						.padding(.horizontal, Constants.Padding.small)
-						.padding(.vertical, Constants.Padding.xsmall)
+						.styled(.caption)
+						.padding(.horizontal, Constants.Spacing.small)
+						.padding(.vertical, Constants.Spacing.xsmall)
 						.background(info.payment == payment ? Color.systemBlue.opacity(0.6) : Color.systemGray3)
 						.cornerRadius(5)
 				})
 			}
+			
+			if info.payment != .free {
+				CurrencyTextField("Rate Per Night", value: $info.cost)
+					.styled(.bodyBold)
+					.padding(.horizontal, Constants.Spacing.small)
+					.padding(.vertical, Constants.Spacing.xsmall)
+					.overlay(
+						RoundedRectangle(cornerRadius: 5)
+							.stroke(lineWidth: 1.0)
+							.foregroundStyle(Color.systemGray3)
+					)
+					.frame(maxWidth: .infinity, alignment: .trailing)
+			}
 		}
 		
 		if info.payment != .free {
-			CurrencyField(title: "Cost", defaultText: "", value: $info.cost)
-			
 			VStack(spacing: 2) {
-				BasicTextField(defaultText: "Payment Details (EMT, Venmo, Cash)", text: $info.paymentNotes)
-				Text("Please note we do not handle payments")
-					.caption()
+				BasicTextField(defaultText: "Payment Details...", text: $info.paymentNotes)
+				Text("Add your EMT, Venmo, or cash instructions above. Please note we do not handle payments")
+					.styled(.caption)
 					.fillLeading()
 					.foregroundStyle(Color.systemGray3)
 			}
 		}
 		
-		VStack {
-			Text("Extra notes")
-				.title()
-				.fillLeading()
-			Text("All information below will be shared with friends upon booking approval")
-				.body()
-				.fillLeading()
-			BasicTextField(defaultText: "Dont forget to feed the fish!", text: $info.notes)
-		}
-		.padding(.top, 16)
+		Text("Information below only shared upon approval")
+			.styled(.headline)
+			.fillLeading()
+			.padding(.top, 16)
+		
+		OptionalInfoField(infoName: "Contact Information", defaultText: "Cell: (555)-555-5555", text: $info.contactInfo)
 		
 		OptionalInfoField(infoName: "Cleaning Instructions", defaultText: "Run dishwasher before leaving...", text: $info.cleaningNotes)
 		
 		OptionalInfoField(infoName: "Wifi Password", defaultText: "TopSecretWifiPassword123", text: $info.wifi)
 		
 		OptionalInfoField(infoName: "Security Code", defaultText: "12345", text: $info.securityCode)
-		
-		OptionalInfoField(infoName: "Contact Information", defaultText: "Cell: (555)-555-5555", text: $info.contactInfo)
 	}
 }
 
@@ -125,7 +131,7 @@ class NewPropertyInfo: ObservableObject {
 	@Published var error: String = ""
 	
 	@Published var payment: PaymentFee = .free
-	@Published var cost: Int = 0
+	@Published var cost: Double?
 	@Published var paymentNotes: String = ""
 	
 	@Published var cleaningNotes: String = ""
@@ -134,7 +140,7 @@ class NewPropertyInfo: ObservableObject {
 	@Published var contactInfo: String = ""
 	
 	var dictonary: [String: Any] {
-		[
+		["info": [
 			"nickname": nickname,
 			"rooms": rooms,
 			"people": people,
@@ -143,9 +149,10 @@ class NewPropertyInfo: ObservableObject {
 			"securityCode": securityCode,
 			"contactInfo": contactInfo,
 			"payment": payment.rawValue,
-			"cost": cost,
+			"cost": cost ?? 0,
 			"paymentNotes": paymentNotes,
 			"notes": notes
+			]
 		]
 	}
 	

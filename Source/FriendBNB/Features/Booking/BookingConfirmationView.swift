@@ -7,40 +7,39 @@
 
 import SwiftUI
 
-struct FriendBookingConfirmationView: View {
+struct BookingConfirmationView<Content: View>: View {
 	@EnvironmentObject var authStore: AuthenticationStore
 	@EnvironmentObject var bookingStore: BookingStore
 	@Environment(\.dismiss) private var dismiss
 	
 	@State var confirmDelete: Bool = false
+	
 	var property: Property
 	var booking: Booking
+	var showDismiss: Bool = true
+	
+	@ViewBuilder var bottomBar: Content
 	
 	var body: some View {
-		PairButtonWrapper(prevText: "Delete", prevAction: {
-			confirmDelete.toggle()
-		}, nextText: "Done", nextAction: {
-			dismiss()
-		}, content: {
-			ScrollView {
-				VStack {
-					Text("Booking Detail")
-						.title()
-						.fillLeading()
-						.padding(.vertical, Constants.Spacing.regular)
+		VStack {
+			ScrollView(showsIndicators: false) {
+				VStack(spacing: Constants.Spacing.medium) {
+					DetailSheetTitle(title: "Booking Details", showDismiss: showDismiss)
 					
 					HStack {
 						Image(systemName: "person.fill")
 						Text("\(booking.name) (\(booking.email))")
 					}
-					.body()
+					.styled(.body)
 					.fillLeading()
+					
+					Divider()
 					
 					VStack(spacing: 8) {
 						HStack {
 							Image(systemName: "calendar")
 							Text("Booking Dates")
-								.heading()
+								.styled(.headline)
 								.fillLeading()
 						}
 						
@@ -48,55 +47,55 @@ struct FriendBookingConfirmationView: View {
 							Text("Start: ")
 							Text(booking.start, style: .date)
 						}
-						.body()
+						.styled(.body)
 						.fillLeading()
+						
 						HStack {
 							Text("End: ")
 							Text(booking.end, style: .date)
-							
 						}
-						.body()
+						.styled(.body)
 						.fillLeading()
 					}
-					.padding(.top, Constants.Padding.regular)
 					
-					BookingStatusIndicatorView(status: booking.status)
-						.padding(.vertical, Constants.Padding.regular)
+					Divider()
+					
+					BookingStatusIndicatorView(currentStatus: booking.status)
+					
+					Divider()
 					
 					if !booking.statusMessage.isEmpty {
 						VStack(spacing: Constants.Spacing.regular) {
 							Text("Booking Confirmation Note")
-								.heading()
+								.styled(.headline)
 								.fillLeading()
 							Text(booking.statusMessage)
-								.body()
+								.styled(.body)
 								.fillLeading()
 						}
-						.padding(.bottom, Constants.Padding.regular)
+						.padding(.bottom, Constants.Spacing.regular)
+						
+						Divider()
 					}
 					
 					Text("Booking Info")
-						.heading()
+						.styled(.headline)
 						.fillLeading()
-					PropertyDetailsList(property: property, hideSensitiveInfo: booking.status == .confirmed)
+					
+					PropertyDetailList(property: property, sensitiveInfo: booking.sensitiveInfo)
+					
 					if booking.status != .confirmed {
 						Text("Awaiting confirmation for more details...")
 							.fillLeading()
-							.bodyBold()
+							.styled(.bodyBold)
 					}
+					
+					PairButtonSpacer()
 				}
 			}
-		})
-		.padding(.horizontal, Constants.Padding.regular)
-		.alert(isPresented: $confirmDelete) {
-			Alert(title: Text("Are you sure you want to delete this booking?"),
-				  primaryButton: .destructive(Text("Delete")) {
-				Task {
-					await bookingStore.deleteBooking(booking, type: .booking, property: property)
-					dismiss()
-				}
-			},
-				  secondaryButton: .default(Text("Cancel")))
+			.padding(.horizontal, Constants.Spacing.regular)
+
+			bottomBar
 		}
 	}
 }

@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct OptionalInfoField: View {
-	@State var showField: Bool
+	@State var showField: Bool = false
 	@Binding var text: String
 	var infoName: String
 	var defaultText: String
@@ -17,46 +17,22 @@ struct OptionalInfoField: View {
 		self.infoName = infoName
 		self.defaultText = defaultText
 		self._text = text
-		
-		self._showField = State(initialValue: !text.wrappedValue.isEmpty)
 	}
 	
     var body: some View {
-		if !showField {
-			Button(action: {
-				withAnimation {
-					showField = true
-				}
-			}, label: {
-				HStack(alignment: .center) {
-					Image(systemName: "plus.circle")
-					Text("Add " + infoName)
-				}
-				.fillLeading()
-				.foregroundStyle(Color.systemBlue.opacity(0.8))
-				.contentShape(Rectangle())
-			})
-		} else {
-			VStack(spacing: 4) {
-				HStack(alignment: .center) {
-					Text(infoName)
-						.body()
-						.fillLeading()
-					
-					Button(action: {
-						withAnimation {
-							showField = false
-							text = ""
-						}
-					}, label: {
-						Image(systemName: "x.circle.fill")
-							.resizable()
-							.scaledToFit()
-							.frame(width: 15)
-							.foregroundStyle(Color.systemRed.opacity(0.8))
-					})
-				}
+		VStack(spacing: 8) {
+			Toggle(isOn: $showField) {
+				Text(infoName)
+					.styled(.body)
+			}
+			.padding(.trailing, 4)
+			if showField {
 				BasicTextField(defaultText: defaultText, text: $text)
+			}
+		}
+		.onAppear {
+			if !text.isEmpty {
+				showField = true
 			}
 		}
     }

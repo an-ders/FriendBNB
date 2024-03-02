@@ -12,6 +12,7 @@ struct SettingsView: View {
     @EnvironmentObject var propertyStore: PropertyStore
 	@EnvironmentObject var authStore: AuthenticationStore
 	@EnvironmentObject var notificationStore: NotificationStore
+	@EnvironmentObject var permissionStore: PermissionStore
     
     var body: some View {
         VStack {
@@ -23,7 +24,7 @@ struct SettingsView: View {
 						.scaledToFit()
 						.frame(width: 25)
 					Text("\(user.displayName ?? "MISSING DISPLAY NAME")")
-						.body()
+						.styled(.body)
 				}
 				HStack {
 					Image(systemName: "envelope.fill")
@@ -31,15 +32,15 @@ struct SettingsView: View {
 						.scaledToFit()
 						.frame(width: 25)
 					Text(user.email ?? "NO EMAIL")
-						.body()
+						.styled(.body)
 				}
 				Text(user.uid)
-					.body()
+					.styled(.body)
 			}
 			Spacer()
 			
             Text("Sign Out")
-				.body()
+				.styled(.body)
                 .onTapGesture {
 					Task {
 						await authStore.signOut()
@@ -55,11 +56,25 @@ struct SettingsView: View {
 //                }
 			
 			Text("Test Notification")
-				.body()
+				.styled(.body)
 				.onTapGesture {
 					notificationStore.pushNotification(message: "test123")
 				}
 			
+			Button {
+				Task {
+					await permissionStore.request()
+				}
+			} label: {
+				Text("Request notification permission")
+			}
+			.padding()
+			.buttonStyle(.bordered)
+			.disabled(permissionStore.hasPermission)
+			.task {
+				await permissionStore.getAuthStatus()
+			}
+
 			Spacer()
         }
     }

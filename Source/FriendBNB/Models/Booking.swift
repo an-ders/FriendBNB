@@ -7,15 +7,10 @@
 
 import Foundation
 import FirebaseFirestore
+import SwiftUI
 
-enum BookingStatus: String {
-	case declined = "DECLINED"
-	case pending = "PENDING"
-	case confirmed = "CONFIRMED"
-}
-
-struct Booking: Equatable, Identifiable, Hashable {
-    var id = UUID()
+struct Booking: DateRange, Identifiable, Hashable {
+	var id: String
 	var start: Date
 	var end: Date
 	var userId: String
@@ -23,8 +18,10 @@ struct Booking: Equatable, Identifiable, Hashable {
 	var name: String
 	var status: BookingStatus
 	var statusMessage: String
+	var sensitiveInfo: [String]
     
-    init(data: [String: Any]) {
+	init(id: String, data: [String: Any]) {
+		self.id = id
 		self.start = Date()
         if let newStart = data["start"] as? Timestamp {
             self.start = newStart.dateValue().stripTime()
@@ -39,19 +36,27 @@ struct Booking: Equatable, Identifiable, Hashable {
 		self.name = data["name"] as? String ?? ""
 		self.status = BookingStatus(rawValue: data["status"] as? String ?? "PENDING") ?? .pending
 		self.statusMessage = data["statusMessage"] as? String ?? ""
+		
+		self.sensitiveInfo = []
+		let infoArray = data["sensitiveInfo"] as? [String] ?? []
+		for info in infoArray {
+			sensitiveInfo.append(info)
+		}
     }
     
-	init(start: Date, end: Date, userId: String, email: String, name: String, status: BookingStatus, statusMessage: String) {
+	init(id: String, start: Date, end: Date, userId: String, email: String?, name: String?, status: BookingStatus, statusMessage: String, sensitiveInfo: [String]) {
+		self.id = id
         self.start = start
         self.end = end
         self.userId = userId
-		self.email = email
-		self.name = name
+		self.email = email ?? "MISSING EMAIL"
+		self.name = name ?? "MISSING NAME"
 		self.status = status
 		self.statusMessage = statusMessage
+		self.sensitiveInfo = sensitiveInfo
     }
     
-    var bookingDates: (ClosedRange<Date>) {
+    var range: (ClosedRange<Date>) {
         (start ... end)
     }
 	

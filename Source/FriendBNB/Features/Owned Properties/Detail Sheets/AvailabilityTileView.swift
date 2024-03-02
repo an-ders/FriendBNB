@@ -9,20 +9,20 @@ import SwiftUI
 
 struct AvailabilityTileView: View {
 	@EnvironmentObject var bookingStore: BookingStore
-	var availibility: Booking
-	var type: BookingType
+	var availibility: Availability
 	var bgColor: Color
 	var delete: () -> Void
+	var statusIndicatorWidth: CGFloat = 20
 	
 	@State var deleteConfirm = false
 	
 	var body: some View {
 		HStack {
-			VStack {
-				Text(availibility.start, style: .date)
-				Text(availibility.end, style: .date)
+			VStack(alignment: .leading) {
+				Text("**\(availibility.start.dayMonthString())** to **\(availibility.end.dayMonthString())**")
 			}
-			.body()
+			.styled(.body)
+			.padding(.leading, statusIndicatorWidth)
 			
 			Spacer()
 			
@@ -32,14 +32,20 @@ struct AvailabilityTileView: View {
 				Image(systemName: "trash")
 					.resizable()
 					.scaledToFit()
-					.frame(height: 25)
+					.frame(height: 20)
 			})
 		}
 		.foregroundStyle(Color.black)
-		.padding(.horizontal, Constants.Padding.regular)
-		.padding(.vertical, Constants.Padding.small)
-		.background(bgColor)
-		.cornerRadius(20)
+		.padding(.horizontal, Constants.Spacing.regular)
+		.padding(.vertical, Constants.Spacing.small)
+		.background {
+			HStack(spacing: 0) {
+				availibility.type.colorBG
+					.frame(width: statusIndicatorWidth)
+				Color.systemGray6
+			}
+		}
+		.cornerRadius(10)
 		.alert(isPresented: $deleteConfirm) {
 			Alert(title: Text("Are you sure you want to delete this?"),
 				  primaryButton: .destructive(Text("Delete")) {

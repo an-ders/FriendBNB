@@ -9,16 +9,26 @@ import Foundation
 import MapKit
 import FirebaseFirestore
 
-class Location: ObservableObject {
-	@Published var streetNumber: String
-	@Published var streetName: String
-	@Published var city: String
-	@Published var state: String
-	@Published var zipCode: String
-	@Published var country: String
-	@Published var geo: GeoPoint
+protocol PropertyLocation {
+	var streetNumber: String { get set }
+	var streetName: String { get set }
+	var city: String { get set }
+	var state: String { get set }
+	var zipCode: String { get set }
+	var country: String { get set }
+	var geo: GeoPoint { get set }
+}
+
+class Location: PropertyLocation, ObservableObject {
+	@Published var streetNumber: String = ""
+	@Published var streetName: String = ""
+	@Published var city: String = ""
+	@Published var state: String = ""
+	@Published var zipCode: String = ""
+	@Published var country: String = ""
+	@Published var geo: GeoPoint = GeoPoint(latitude: 0, longitude: 0)
 	
-	@Published var error: String
+	@Published var error: String = ""
 	
 	var formattedAddress: String {
 		return """
@@ -37,7 +47,7 @@ class Location: ObservableObject {
 	}
 	
 	var dictonary: [String: Any] {
-		[
+		["location": [
 			"streetNumber": streetNumber,
 			"streetName": streetName,
 			"city": city,
@@ -45,6 +55,7 @@ class Location: ObservableObject {
 			"zipCode": zipCode,
 			"country": country,
 			"geo": geo
+			]
 		]
 	}
 		
@@ -70,16 +81,7 @@ class Location: ObservableObject {
 		self.error = ""
 	}
 	
-	init() {
-		self.streetName = ""
-		self.streetNumber = ""
-		self.city = ""
-		self.state = ""
-		self.zipCode = ""
-		self.country = ""
-		self.error = ""
-		self.geo = GeoPoint(latitude: 0, longitude: 0)
-	}
+	init() {}
 	
 	func checkAddress() -> Bool {
 		let emptyError = "Field cannot be empty."

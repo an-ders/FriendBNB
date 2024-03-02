@@ -7,6 +7,7 @@
 
 import SwiftUI
 import FirebaseFirestore
+import FirebaseAuth
 import MapKit
 
 struct FriendDetailView: View {
@@ -14,24 +15,25 @@ struct FriendDetailView: View {
 	@EnvironmentObject var propertyStore: PropertyStore
 	@Environment(\.dismiss) private var dismiss
 	
-	@State var confirmDelete = false
-    
+	@State var deleteProperty = false
+	@State var deleteBooking = false
+
     var body: some View {
-		if let property = propertyStore.selectedFriendProperty {
+		if let property = propertyStore.friendSelectedProperty {
 			let coordinate = CLLocationCoordinate2D(latitude: property.location.geo.latitude, longitude: property.location.geo.longitude)
 			let bookings = property.bookings.withId(id: property.ownerId).current().dateSorted()
 			VStack {
 				ScrollView(showsIndicators: false) {
-					VStack(spacing: Constants.Padding.regular) {
+					VStack(spacing: Constants.Spacing.regular) {
 						VStack {
 							Text(property.location.addressTitle)
-								.heading()
+								.styled(.headline)
 								.fillLeading()
 							Text(property.location.addressDescription)
-								.body()
+								.styled(.body)
 								.fillLeading()
 						}
-						.padding(.top, Constants.Padding.small)
+						.padding(.top, Constants.Spacing.small)
 						
 						Map(position: .constant(MapCameraPosition.region(MKCoordinateRegion(center: coordinate, latitudinalMeters: 1000, longitudinalMeters: 1000)))) {
 							Marker("", coordinate: coordinate)
@@ -39,16 +41,16 @@ struct FriendDetailView: View {
 						.frame(height: 250)
 						.cornerRadius(20)
 						
-						PropertyDetailsList(property: property, hideSensitiveInfo: true)
+						PropertyDetailList(property: property)
 						
 						if !bookings.isEmpty {
 							Text("Your Bookings")
-								.heading()
+								.styled(.headline)
 								.fillLeading()
 							
-							ForEach(property.bookings.withId(id: property.ownerId).current().dateSorted(), id: \.id) { booking in
+							ForEach(property.bookings.withId(id: Auth.auth().currentUser?.uid ?? "").current().dateSorted(), id: \.id) { booking in
 								Button(action: {
-									propertyStore.showFriendExistingBooking = booking
+									propertyStore.friendSelectedBookingInDetail = booking
 								}, label: {
 									BookingTileView(booking: booking)
 								})
@@ -62,7 +64,7 @@ struct FriendDetailView: View {
 				}
 				
 				Button(action: {
-					propertyStore.showFriendNewBooking.toggle()
+					propertyStore.showFriendNewBookingSheet.toggle()
 				}, label: {
 					HStack {
 						Image(systemName: "calendar.badge.plus")
@@ -73,40 +75,53 @@ struct FriendDetailView: View {
 							.font(.headline).fontWeight(.medium)
 						
 					}
-					.padding(.vertical, Constants.Padding.small)
+					.padding(.vertical, Constants.Spacing.small)
 					.frame(maxWidth: .infinity)
 					.foregroundStyle(Color.white)
 					.background(Color.systemBlue.opacity(0.6))
 					.cornerRadius(5)
 				})
 			}
-			.padding(.horizontal, Constants.Padding.regular)
+			.navigationTitle(property.info.nickname)
+			.padding(.horizontal, Constants.Spacing.regular)
 			.toolbar {
 				ToolbarItem(placement: .primaryAction) {
-					FriendDetailSettingsView(confirmDelete: $confirmDelete)
+					FriendDetailSettingsView(confirmDelete: $deleteProperty)
 				}
 			}
-			.alert(isPresented: $confirmDelete) {
+			.alert(isPresented: $deleteProperty) {
 				Alert(title: Text("Are you sure you want to remove this property?"),
 					  primaryButton: .destructive(Text("Delete")) {
 					Task {
-						await propertyStore.removeProperty(property.id, type: .friend)
+						await propertyStore.removePropertyFromUser(property.id, type: .friend)
 						dismiss()
 					}
 				},
 					  secondaryButton: .default(Text("Cancel")))
 			}
-			.sheet(item: $propertyStore.showFriendExistingBooking) { booking in
-				FriendBookingConfirmationView(property: property, booking: booking)
-					.interactiveDismissDisabled()
+			.sheet(item: $propertyStore.friendSelectedBookingInDetail) { booking in
+				BookingConfirmationView(property: property, booking: booking) {
+					PairButtonsView(prevText: "Delete", prevAction: {
+						deleteBooking.toggle()
+					}, nextText: "Done", nextCaption: "", nextAction: {
+						propertyStore.friendSelectedBookingInDetail = nil
+					}, includeShadow: false)
+					.padding(.horizontal, Constants.Spacing.regular)
+				}
+				.alert(isPresented: $deleteBooking) {
+					Alert(title: Text("Are you sure you want to delete this booking?"),
+						  primaryButton: .destructive(Text("Delete")) {
+						Task {
+							await bookingStore.deleteBooking(booking, propertyId: property.id)
+							propertyStore.friendSelectedBookingInDetail = nil
+							await propertyStore.fetchProperties(.friend)
+						}
+					},
+						  secondaryButton: .default(Text("Cancel")))
+				}
 			}
-//			.sheet(isPresented: $propertyStore.showFriendExistingBooking) {
-//				FriendExistingBookingView()
-//					.interactiveDismissDisabled()
-//			}
-			.sheet(isPresented: $propertyStore.showFriendNewBooking) {
+			.sheet(isPresented: $propertyStore.showFriendNewBookingSheet) {
 				FriendNewBookingView(property: property)
-					.interactiveDismissDisabled()
 			}
 			.onAppear {
 				propertyStore.subscribe(type: .friend)

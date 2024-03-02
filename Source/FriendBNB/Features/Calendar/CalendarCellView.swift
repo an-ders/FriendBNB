@@ -16,9 +16,6 @@ struct CalendarCellView: View {
 	var body: some View {
 		Button(action: {
 			calendarViewModel.dateClicked(viewModel.date)
-			//print("\(viewModel.day) \(viewModel.month) \(viewModel.year)")
-			print(viewModel.isUnavailable)
-			print(calendarViewModel.isAvailableMode)
 		}, label: {
 			Group {
 				if type == .friend {
@@ -51,9 +48,9 @@ struct CalendarCellView: View {
 	var textColor: Color {
 		if viewModel.isHighlighted {
 			return Color.black
-		} else if viewModel.isAvailable && calendarViewModel.isAvailableMode && !viewModel.isUnavailable {
+		} else if viewModel.isAvailable && calendarViewModel.mode == .available && !viewModel.isUnavailable {
 			return Color.black
-		} else if viewModel.isUnavailable && !calendarViewModel.isAvailableMode {
+		} else if viewModel.isUnavailable && calendarViewModel.mode == .unavailable {
 			return Color.black
 		} else if viewModel.isCurrentMonth {
 			return Color.black
@@ -64,8 +61,8 @@ struct CalendarCellView: View {
 	
 	var ownedCell: some View {
 		Text(String(viewModel.day))
-			.strikethrough(viewModel.isBooked || viewModel.isUnavailable)
-			.padding(Constants.Padding.xsmall)
+			.strikethrough(viewModel.isUnavailable)
+			.padding(Constants.Spacing.xsmall)
 			.foregroundColor(textColor)
 			.frame(maxWidth: .infinity, maxHeight: .infinity)
 			.background {
@@ -89,7 +86,7 @@ struct CalendarCellView: View {
 								topTrailingRadius: viewModel.isEndDate ? 20 : 0
 							)
 						)
-				} else if viewModel.isUnavailable && !calendarViewModel.isAvailableMode {
+				} else if viewModel.isUnavailable && calendarViewModel.mode == .unavailable {
 					Color.systemRed.opacity(0.5)
 						.clipShape(
 							.rect(
@@ -99,7 +96,7 @@ struct CalendarCellView: View {
 								topTrailingRadius: 20
 							)
 						)
-				} else if viewModel.isAvailable && calendarViewModel.isAvailableMode && !viewModel.isUnavailable {
+				} else if viewModel.isAvailable && calendarViewModel.mode == .available && !viewModel.isUnavailable {
 					Color.green.opacity(0.5)
 						.clipShape(
 							.rect(
@@ -116,7 +113,7 @@ struct CalendarCellView: View {
 	var friendCell: some View {
 		Text(String(viewModel.day))
 			.strikethrough(viewModel.isBooked || viewModel.isUnavailable)
-			.padding(Constants.Padding.xsmall)
+			.padding(Constants.Spacing.xsmall)
 			.foregroundColor(viewModel.isCurrentMonth ? viewModel.isBooked || viewModel.isUnavailable ? Color.systemGray : Color.black : Color.systemGray4)
 			.frame(maxWidth: .infinity, maxHeight: .infinity)
 			.background {
@@ -140,8 +137,18 @@ struct CalendarCellView: View {
 								topTrailingRadius: viewModel.isEndDate ? 20 : 0
 							)
 						)
-				} else if viewModel.isUnavailable || viewModel.isBooked {
+				} else if viewModel.isUnavailable {
 					Color.systemRed.opacity(0.5)
+						.clipShape(
+							.rect(
+								topLeadingRadius: 20,
+								bottomLeadingRadius: 20,
+								bottomTrailingRadius: 20,
+								topTrailingRadius: 20
+							)
+						)
+				} else if viewModel.isBooked {
+					Color.systemYellow.opacity(0.5)
 						.clipShape(
 							.rect(
 								topLeadingRadius: 20,
