@@ -47,6 +47,11 @@ struct NotificationView<Content: View>: View {
 					insertion: .move(edge: .leading),
 					removal: .move(edge: .trailing)
 				))
+				.onTapGesture {
+					withAnimation {
+						self.notification = nil
+					}
+				}
 			}
 		}
 	}

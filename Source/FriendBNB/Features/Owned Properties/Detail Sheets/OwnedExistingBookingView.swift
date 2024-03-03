@@ -18,7 +18,7 @@ struct OwnedExistingBookingView: View {
 	@State var bookingDetail: Booking?
 
 	var body: some View {
-		if let property = propertyStore.getSelectedProperty(.owned) {
+		if let property = propertyStore.ownedSelectedProperty {
 			if property.bookings.current().isEmpty {
 				emptyView
 			} else {

@@ -23,15 +23,6 @@ class PermissionStore: ObservableObject {
 		}
 	}
 	
-	func request() async {
-		do {
-			try await UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound])
-			 await getAuthStatus()
-		} catch {
-			print(error)
-		}
-	}
-	
 	func getAuthStatus() async {
 		let status = await UNUserNotificationCenter.current().notificationSettings()
 		switch status.authorizationStatus {
@@ -58,10 +49,10 @@ class PermissionStore: ObservableObject {
 				return
 			}
 			
-			var fcms: [String] = data["FCMs"] as? [String] ?? [String]()
+			var fcms: [String] = data["devices"] as? [String] ?? [String]()
 			if !fcms.contains(fcm) {
 				fcms.append(fcm)
-				try await db.collection("Accounts").document(userId).setData(["FCMs": fcms])
+				try await db.collection("Accounts").document(userId).updateData(["devices": fcms])
 			}
 		} catch {
 			

@@ -31,12 +31,13 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 }
 
 //extension AppDelegate : UNUserNotificationCenterDelegate {
-//	func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
-//		Messaging.messaging().apnsToken = deviceToken
-//	}
-//}
+	//}
 
 extension AppDelegate: UNUserNotificationCenterDelegate {
+	func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+		Messaging.messaging().apnsToken = deviceToken
+	}
+
 	// Receive displayed notifications for iOS 10 devices.
 	func userNotificationCenter(_ center: UNUserNotificationCenter,
 								willPresent notification: UNNotification) async
@@ -75,7 +76,6 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
 
 extension AppDelegate: MessagingDelegate {
 	func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {
-		
 		if let fcm = Messaging.messaging().fcmToken {
 			print("fcm", fcm)
 		}

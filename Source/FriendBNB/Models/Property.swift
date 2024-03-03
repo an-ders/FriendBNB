@@ -81,6 +81,7 @@ struct Property: Identifiable, Hashable {
 		self.available = property.available
 		self.unavailable = property.unavailable
 		
+		self.bookings = []
 		for document in bookingDocuments {
 			let data = document.data()
 			let newBooking = Booking(id: document.documentID, data: data)
@@ -123,6 +124,6 @@ struct Property: Identifiable, Hashable {
 	}
 	
 	static func == (lhs: Property, rhs: Property) -> Bool {
-		lhs.id == rhs.id
+		lhs.id == rhs.id && lhs.bookings == rhs.bookings && lhs.info == rhs.info && lhs.location == rhs.location
 	}
 }

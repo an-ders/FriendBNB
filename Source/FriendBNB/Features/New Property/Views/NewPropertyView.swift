@@ -52,6 +52,7 @@ struct NewPropertyView: View {
 	func createProperty() {
 		Task {
 			let newId = await propertyStore.createProperty(location: location, info: info)
+
 			await propertyStore.addPropertyToUser(newId, type: .owned)
 			propertyStore.showNewPropertySheet = false
 			await propertyStore.fetchProperties(.owned)

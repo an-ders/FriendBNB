@@ -10,9 +10,11 @@ import SwiftUI
 struct BookingConfirmationView<Content: View>: View {
 	@EnvironmentObject var authStore: AuthenticationStore
 	@EnvironmentObject var bookingStore: BookingStore
+	@EnvironmentObject var propertyStore: PropertyStore
 	@Environment(\.dismiss) private var dismiss
 	
 	@State var confirmDelete: Bool = false
+	@State var selectedCalendar: PropertyBookingGroup?
 	
 	var property: Property
 	var booking: Booking
@@ -44,18 +46,31 @@ struct BookingConfirmationView<Content: View>: View {
 						}
 						
 						HStack {
-							Text("Start: ")
-							Text(booking.start, style: .date)
+							VStack {
+								HStack {
+									Text("Start: ")
+									Text(booking.start, style: .date)
+								}
+								.styled(.body)
+								.fillLeading()
+								
+								HStack {
+									Text("End: ")
+									Text(booking.end, style: .date)
+								}
+								.styled(.body)
+								.fillLeading()
+							}
+							
+							Button(action: {
+								selectedCalendar = PropertyBookingGroup(property: property, booking: booking)
+							}, label: {
+								Image(systemName: "calendar")
+									.resizable()
+									.scaledToFit()
+									.frame(height: 20)
+							})
 						}
-						.styled(.body)
-						.fillLeading()
-						
-						HStack {
-							Text("End: ")
-							Text(booking.end, style: .date)
-						}
-						.styled(.body)
-						.fillLeading()
 					}
 					
 					Divider()
@@ -96,6 +111,11 @@ struct BookingConfirmationView<Content: View>: View {
 			.padding(.horizontal, Constants.Spacing.regular)
 
 			bottomBar
+		}
+		.sheet(item: $selectedCalendar) { group in
+			EventEditViewController(group: group) {
+				selectedCalendar = nil
+			}
 		}
 	}
 }

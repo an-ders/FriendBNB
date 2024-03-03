@@ -43,14 +43,14 @@ struct FriendsHomeView: View {
 									.foregroundStyle(Color.clear)
 								
 								ForEach(propertyStore.friendsProperties) { property in
-									Button(action: {
-										propertyStore.showProperty(property, type: .friend)
-									}, label: {
-										PropertyTileView(property: property, type: .friend) { booking in
-											propertyStore.showBooking(booking: booking, property: property, type: .friend)
-										}
-									})
+									PropertyTileView(property: property, type: .friend) { booking in
+										propertyStore.showBooking(booking: booking, property: property, type: .friend)
+									}
 								}
+								
+								Rectangle()
+									.frame(height: 45)
+									.foregroundStyle(Color.clear)
 							}
 							.padding(.top, 2)
 						}

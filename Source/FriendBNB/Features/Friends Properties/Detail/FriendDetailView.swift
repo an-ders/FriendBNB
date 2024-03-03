@@ -91,7 +91,7 @@ struct FriendDetailView: View {
 			}
 			.alert(isPresented: $deleteProperty) {
 				Alert(title: Text("Are you sure you want to remove this property?"),
-					  primaryButton: .destructive(Text("Delete")) {
+					  primaryButton: .destructive(Text("Remove")) {
 					Task {
 						await propertyStore.removePropertyFromUser(property.id, type: .friend)
 						dismiss()

@@ -25,9 +25,11 @@ class BookingStore: ObservableObject {
 			let id = db.collection("Properties").document(property.id).collection("Bookings").document().documentID
 			try await db.collection("Properties").document(property.id).collection("Bookings").document(id).setData(
 				["id": id,
+				 "nickname": property.info.nickname,
 				 "start": startDate as Any,
 				 "end": endDate as Any,
 				 "userId": user.uid,
+				 "ownerId": property.ownerId,
 				 "email": user.email ?? "",
 				 "name": user.displayName ?? "",
 				 "status": BookingStatus.pending.rawValue,

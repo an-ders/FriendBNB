@@ -70,6 +70,6 @@ struct Booking: DateRange, Identifiable, Hashable {
     }
     
     static func == (lhs: Booking, rhs: Booking) -> Bool {
-        return lhs.start == rhs.start && lhs.end == rhs.end
+        return lhs.start == rhs.start && lhs.end == rhs.end && lhs.status == rhs.status && lhs.statusMessage == rhs.statusMessage && lhs.sensitiveInfo == rhs.sensitiveInfo && lhs.id == rhs.id
     }
 }

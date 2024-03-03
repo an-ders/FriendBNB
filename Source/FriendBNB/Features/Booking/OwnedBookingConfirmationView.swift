@@ -16,6 +16,8 @@ struct OwnedBookingConfirmationView: View {
 	var booking: Booking
 	var showDismiss = true
 	var sendNotification: (String) -> Void
+	
+	@State var selectedCalendar: PropertyBookingGroup?
 	@State var error: String = ""
 	@State var bookingMessage = ""
 	@State var extraNotes = true
@@ -50,18 +52,31 @@ struct OwnedBookingConfirmationView: View {
 						}
 						
 						HStack {
-							Text("Start: ")
-							Text(booking.start, style: .date)
+							VStack {
+								HStack {
+									Text("Start: ")
+									Text(booking.start, style: .date)
+								}
+								.styled(.body)
+								.fillLeading()
+								
+								HStack {
+									Text("End: ")
+									Text(booking.end, style: .date)
+								}
+								.styled(.body)
+								.fillLeading()
+							}
+							
+							Button(action: {
+								selectedCalendar = PropertyBookingGroup(property: property, booking: booking)
+							}, label: {
+								Image(systemName: "calendar")
+									.resizable()
+									.scaledToFit()
+									.frame(height: 20)
+							})
 						}
-						.styled(.body)
-						.fillLeading()
-						
-						HStack {
-							Text("End: ")
-							Text(booking.end, style: .date)
-						}
-						.styled(.body)
-						.fillLeading()
 					}
 					
 					Divider()
@@ -147,6 +162,7 @@ struct OwnedBookingConfirmationView: View {
 			
 			HStack(spacing: Constants.Spacing.small) {
 				Button(action: {
+					// NOTE IF YOU EVER UPDATE THE DECLINE ACTION UPDATE THE SWIPE ACTION ON HOME PAGE PROPERTY TILE ALSO
 					if booking.status == .declined && booking.statusMessage == bookingMessage {
 						return
 					}
@@ -172,6 +188,7 @@ struct OwnedBookingConfirmationView: View {
 			
 				var didChange = getSensitiveInfoList() != booking.sensitiveInfo || bookingMessage != booking.statusMessage
 				Button(action: {
+					// NOTE IF YOU EVER UPDATE THE APPROVE ACTION UPDATE THE SWIPE ACTION ON HOME PAGE PROPERTY TILE ALSO
 					if !didChange && (booking.status == .confirmed) {
 						return
 					}
@@ -211,6 +228,11 @@ struct OwnedBookingConfirmationView: View {
 				cleaningNotes = booking.sensitiveInfo.contains(SensitiveInfoType.cleaningNotes.rawValue)
 				wifi = booking.sensitiveInfo.contains(SensitiveInfoType.wifi.rawValue)
 				securityCode = booking.sensitiveInfo.contains(SensitiveInfoType.securityCode.rawValue)
+			}
+		}
+		.sheet(item: $selectedCalendar) { group in
+			EventEditViewController(group: group) {
+				selectedCalendar = nil
 			}
 		}
 	}

@@ -19,7 +19,7 @@ protocol PropertyLocation {
 	var geo: GeoPoint { get set }
 }
 
-class Location: PropertyLocation, ObservableObject {
+class Location: PropertyLocation, ObservableObject, Equatable {
 	@Published var streetNumber: String = ""
 	@Published var streetName: String = ""
 	@Published var city: String = ""
@@ -31,11 +31,7 @@ class Location: PropertyLocation, ObservableObject {
 	@Published var error: String = ""
 	
 	var formattedAddress: String {
-		return """
-				\(streetNumber) \(streetName),
-				\(city), \(state) \(zipCode)
-				\(country)
-			"""
+		return "\(streetNumber) \(streetName) \(city), \(state) \(zipCode) \(country)"
 	}
 	
 	var addressTitle: String {
@@ -114,5 +110,9 @@ class Location: PropertyLocation, ObservableObject {
 		self.country = data["country"] as? String ?? ""
 		self.geo = data["geo"] as? GeoPoint ?? GeoPoint(latitude: 0, longitude: 0)
 		self.error = ""
+	}
+	
+	static func == (lhs: Location, rhs: Location) -> Bool {
+		lhs.streetName == rhs.streetName && lhs.streetNumber == rhs.streetNumber && lhs.city == rhs.city && lhs.state == rhs.state && lhs.zipCode == rhs.zipCode && lhs.country == rhs.country
 	}
 }

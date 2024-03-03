@@ -40,12 +40,26 @@ class PropertyStore: ObservableObject {
 	@Published var showNewPropertySheet = false
 	@Published var showAddPropertySheet = false
 	
+	@Published var selectedAddToCalendar: PropertyBookingGroup?
+	
 	@Published var addPropertyID: String?
 	
 	@Published var loading = false
 	
 	var propertyListener: ListenerRegistration?
 	var bookingListener: ListenerRegistration?
+	
+	var numberPending: Int {
+		var count = 0
+		for properties in ownedProperties {
+			for booking in properties.bookings {
+				if booking.status == .pending {
+					count += 1
+				}
+			}
+		}
+		return count
+	}
 	
 	func showProperty(_ property: Property, type: PropertyType, showAvailability: Bool = false) {
 		self.selectedTab = type == .owned ? .owned : .friends
@@ -299,6 +313,9 @@ class PropertyStore: ObservableObject {
 	}
 	
 	func createProperty(location: Location, info: NewPropertyInfo) async -> String {
+		if info.nickname == "", let name = Auth.auth().currentUser?.displayName {
+			info.nickname = name + "'s Property"
+		}
 		var newDict = location.dictonary.merging(info.dictonary) { (_, new) in new }
 		if let user = Auth.auth().currentUser {
 			newDict = newDict.merging([

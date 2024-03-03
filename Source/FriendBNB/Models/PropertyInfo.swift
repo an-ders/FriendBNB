@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct PropertyInfo {
+struct PropertyInfo: Equatable {
 	var nickname: String = ""
 	var people: Int = 0
 	var notes: String = ""

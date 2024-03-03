@@ -39,14 +39,17 @@ struct SettingsView: View {
 			}
 			Spacer()
 			
-            Text("Sign Out")
-				.styled(.body)
-                .onTapGesture {
-					Task {
-						await authStore.signOut()
-					}
-                }
-			
+            Button(action: {
+				Task {
+					await authStore.signOut()
+				}
+			}, label: {
+				Text("Sign Out")
+					.styled(.body)
+					.padding()
+					.background(Color.systemGray3)
+					.cornerRadius(5)
+			})
 //            Text("Clear properties")
 //                .onTapGesture {
 //                    Task {
@@ -55,25 +58,13 @@ struct SettingsView: View {
 //                    }
 //                }
 			
-			Text("Test Notification")
-				.styled(.body)
-				.onTapGesture {
-					notificationStore.pushNotification(message: "test123")
-				}
+//			Text("Test Notification")
+//				.styled(.body)
+//				.onTapGesture {
+//					notificationStore.pushNotification(message: "test123")
+//				}
 			
-			Button {
-				Task {
-					await permissionStore.request()
-				}
-			} label: {
-				Text("Request notification permission")
-			}
-			.padding()
-			.buttonStyle(.bordered)
-			.disabled(permissionStore.hasPermission)
-			.task {
-				await permissionStore.getAuthStatus()
-			}
+			
 
 			Spacer()
         }

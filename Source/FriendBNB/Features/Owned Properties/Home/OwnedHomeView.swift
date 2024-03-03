@@ -42,14 +42,14 @@ struct OwnedHomeView: View {
 									.foregroundStyle(Color.clear)
 								
 								ForEach(propertyStore.ownedProperties) { property in
-									Button(action: {
-										propertyStore.showProperty(property, type: .owned)
-									}, label: {
-										PropertyTileView(property: property, type: .owned) { booking in
-											propertyStore.ownedSelectedBooking = PropertyBookingGroup(property: property, booking: booking)
-										}
-									})
+									PropertyTileView(property: property, type: .owned) { booking in
+										propertyStore.ownedSelectedBooking = PropertyBookingGroup(property: property, booking: booking)
+									}
 								}
+								
+								Rectangle()
+									.frame(height: 45)
+									.foregroundStyle(Color.clear)
 							}
 						}
 						.refreshable {

@@ -31,7 +31,6 @@ struct OwnedDetailView: View {
 								.styled(.body)
 								.fillLeading()
 						}
-						.padding(.top, Constants.Spacing.small)
 						
 						Map(position: .constant(MapCameraPosition.region(MKCoordinateRegion(center: coordinate, latitudinalMeters: 1000, longitudinalMeters: 1000)))) {
 							Marker("", coordinate: coordinate)
