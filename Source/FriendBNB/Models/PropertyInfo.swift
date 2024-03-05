@@ -12,7 +12,8 @@ struct PropertyInfo: Equatable {
 	var people: Int = 0
 	var notes: String = ""
 	var cleaningNotes: String = ""
-	var wifi: String = ""
+	var wifiName: String = ""
+	var wifiPass: String = ""
 	var securityCode: String = ""
 	var contactInfo: String = ""
 	var payment: PaymentFee = .free
@@ -27,7 +28,8 @@ struct PropertyInfo: Equatable {
 		
 		self.notes = data["notes"] as? String ?? ""
 		self.cleaningNotes = data["cleaningNotes"] as? String ?? ""
-		self.wifi = data["wifi"] as? String ?? ""
+		self.wifiName = data["wifiName"] as? String ?? ""
+		self.wifiPass = data["wifiPass"] as? String ?? ""
 		self.securityCode = data["securityCode"] as? String ?? ""
 		self.contactInfo = data["contactInfo"] as? String ?? ""
 		

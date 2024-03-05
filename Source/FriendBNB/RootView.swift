@@ -65,32 +65,35 @@ struct RootView: View {
 						}
 						
 						if propertyStore.showTabBar {
-							HStack {
-								ForEach(RootTabs.allCases, id: \.self) { tab in
-									Button(action: {
-										propertyStore.selectedTab = tab
-									}, label: {
-										VStack {
-											Image(systemName: tab.image)
-												.resizable()
-												.scaledToFit()
-												.frame(height: 20)
-												.overlay(
-													NotificationCountView(
-														value: propertyStore.numberPending
+							VStack(spacing: Constants.Spacing.small) {
+								Divider()
+								HStack {
+									ForEach(RootTabs.allCases, id: \.self) { tab in
+										Button(action: {
+											propertyStore.selectedTab = tab
+										}, label: {
+											VStack {
+												Image(systemName: tab.image)
+													.resizable()
+													.scaledToFit()
+													.frame(height: 20)
+													.overlay(
+														NotificationCountView(
+															value: propertyStore.numberPending
+														)
+														.opacity(tab == .owned && propertyStore.numberPending != 0 ? 1 : 0)
+														.offset(y: 2)
 													)
-													.opacity(tab == .owned && propertyStore.numberPending != 0 ? 1 : 0)
-												)
-											Text(tab.name)
-												.styled(.caption)
-										}
-										.frame(maxWidth: .infinity)
-										.contentShape(Rectangle())
-										.foregroundStyle(propertyStore.selectedTab == tab ? Color.systemBlue : Color.systemGray2)
-									})
+												Text(tab.name)
+													.styled(.caption)
+											}
+											.frame(maxWidth: .infinity)
+											.contentShape(Rectangle())
+											.foregroundStyle(propertyStore.selectedTab == tab ? Color.systemBlue : Color.systemGray2)
+										})
+									}
 								}
 							}
-							.padding(.top, Constants.Spacing.small)
 						}
 					}
 					.onAppear {
@@ -98,7 +101,7 @@ struct RootView: View {
 							Task { @MainActor in
 								if let id = await propertyStore.checkValidId(propertyID) {
 									await propertyStore.addPropertyToUser(id, type: .friend)
-									dismiss()
+									await propertyStore.fetchProperties(.friend)
 									if let property = await propertyStore.getProperty(id: id) {
 										await propertyStore.fetchProperties(.friend)
 										propertyStore.showProperty(property, type: .friend)

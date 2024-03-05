@@ -24,78 +24,95 @@ struct BookingConfirmationView<Content: View>: View {
 	
 	var body: some View {
 		VStack {
+			DetailSheetTitle(title: "YOUR BOOKING", showDismiss: showDismiss)
+				.padding(.leading, Constants.Spacing.medium)
+				.padding(.vertical, Constants.Spacing.large)
+				.padding(.trailing, Constants.Spacing.large)
+
 			ScrollView(showsIndicators: false) {
-				VStack(spacing: Constants.Spacing.medium) {
-					DetailSheetTitle(title: "Booking Details", showDismiss: showDismiss)
-					
-					HStack {
-						Image(systemName: "person.fill")
-						Text("\(booking.name) (\(booking.email))")
-					}
-					.styled(.body)
-					.fillLeading()
-					
-					Divider()
-					
-					VStack(spacing: 8) {
-						HStack {
-							Image(systemName: "calendar")
-							Text("Booking Dates")
-								.styled(.headline)
-								.fillLeading()
-						}
-						
-						HStack {
-							VStack {
-								HStack {
-									Text("Start: ")
-									Text(booking.start, style: .date)
-								}
-								.styled(.body)
-								.fillLeading()
-								
-								HStack {
-									Text("End: ")
-									Text(booking.end, style: .date)
-								}
-								.styled(.body)
-								.fillLeading()
-							}
-							
-							Button(action: {
-								selectedCalendar = PropertyBookingGroup(property: property, booking: booking)
-							}, label: {
-								Image(systemName: "calendar")
-									.resizable()
-									.scaledToFit()
-									.frame(height: 20)
-							})
-						}
-					}
-					
-					Divider()
-					
+				VStack(spacing: 50) {
 					BookingStatusIndicatorView(currentStatus: booking.status)
-					
-					Divider()
+
+					Button(action: {
+						if booking.status == .confirmed {
+							selectedCalendar = PropertyBookingGroup(type: .friend, property: property, booking: booking)
+						}
+					}, label: {
+						VStack(spacing: 8) {
+							Text("BOOKING DATES")
+								.styled(.bodyBold)
+								.fillLeading()
+								.foregroundStyle(Color.systemGray)
+							
+							HStack {
+								VStack {
+									HStack {
+										Text("Start: ")
+										Text(booking.start, style: .date)
+									}
+									.styled(.body)
+									.fillLeading()
+									
+									HStack {
+										Text("End: ")
+										Text(booking.end, style: .date)
+									}
+									.styled(.body)
+									.fillLeading()
+								}
+								.foregroundStyle(Color.black)
+								
+								if booking.status == .confirmed {
+									Image(systemName: "calendar")
+											.size(height: 20)
+								}
+							}
+						}
+						.contentShape(Rectangle())
+					})
+					.disabled(booking.status != .confirmed)
 					
 					if !booking.statusMessage.isEmpty {
 						VStack(spacing: Constants.Spacing.regular) {
-							Text("Booking Confirmation Note")
-								.styled(.headline)
+							Text("BOOKING CONFIRMATION NOTE")
+								.styled(.bodyBold)
 								.fillLeading()
+								.foregroundStyle(Color.systemGray)
 							Text(booking.statusMessage)
 								.styled(.body)
 								.fillLeading()
 						}
 						.padding(.bottom, Constants.Spacing.regular)
-						
-						Divider()
 					}
 					
-					Text("Booking Info")
-						.styled(.headline)
-						.fillLeading()
+					if booking.status == .confirmed {
+						VStack(spacing: 4) {
+							Text("ADDRESS")
+								.styled(.bodyBold)
+								.fillLeading()
+								.foregroundStyle(Color.systemGray)
+							Button(action: {
+								if let url = URL(string: "http://maps.apple.com/?address=" + property.location.formattedAddress) {
+									UIApplication.shared.open(url)
+								}
+							}, label: {
+								HStack {
+									VStack {
+										Text(property.location.addressTitle)
+											.styled(.body)
+											.fillLeading()
+										Text(property.location.addressDescription)
+											.styled(.body)
+											.fillLeading()
+									}
+									
+									Image(systemName: "map.fill")
+										.size(width: 20, height: 20)
+								}
+								.foregroundStyle(.black)
+							})
+						}
+					}
 					
 					PropertyDetailList(property: property, sensitiveInfo: booking.sensitiveInfo)
 					
@@ -104,9 +121,8 @@ struct BookingConfirmationView<Content: View>: View {
 							.fillLeading()
 							.styled(.bodyBold)
 					}
-					
-					PairButtonSpacer()
 				}
+				.padding(.bottom, 50)
 			}
 			.padding(.horizontal, Constants.Spacing.regular)
 

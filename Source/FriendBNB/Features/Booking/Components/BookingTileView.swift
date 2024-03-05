@@ -7,41 +7,35 @@
 
 import SwiftUI
 
-struct BookingTileView: View {
+struct BookingTileView<Content: View>: View {
 	@EnvironmentObject var bookingStore: BookingStore
 	
 	var booking: Booking
-	var showName: Bool = false
-	var statusIndicatorWidth: CGFloat = 20
+	var showName: Bool = true
+	@ViewBuilder var button: Content
 	
 	var body: some View {
 		HStack {
+			RoundedRectangle(cornerRadius: 5)
+				.frame(width: 15)
+				.foregroundStyle(booking.status.colorBG)
+				.padding(.vertical, 10)
 			VStack(alignment: .leading) {
 				if showName {
 					Text("**\(booking.name)**")
-					Text("\(booking.email)")
+				} else {
+					Text("**\(booking.status.rawValue)**")
 				}
-				Text("**\(booking.start.dayMonthString())** to **\(booking.end.dayMonthString())**")
+				Text("\(booking.start.dayMonthString()) to \(booking.end.dayMonthString())")
 			}
 			.styled(.body)
-			.padding(.leading, statusIndicatorWidth)
 			
 			Spacer()
 			
-			Image(systemName: "arrow.up.left.and.arrow.down.right")
-				.resizable()
-				.scaledToFit()
-				.frame(height: 20)
+			button
 		}
-		.padding(Constants.Spacing.small)
-		.background {
-			HStack(spacing: 0) {
-				booking.status.colorBG
-					.frame(width: statusIndicatorWidth)
-				Color.systemGray6
-			}
-		}
-		.cornerRadius(10)
+		.padding(.trailing, Constants.Spacing.medium)
+		.background(Color.white)
 	}
 }
 

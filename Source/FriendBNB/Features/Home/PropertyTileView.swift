@@ -27,7 +27,7 @@ struct PropertyTileView: View {
 	
 	var body: some View {
 		let coordinate = CLLocationCoordinate2D(latitude: property.location.geo.latitude, longitude: property.location.geo.longitude)
-		let center =  CLLocationCoordinate2D(latitude: property.location.geo.latitude, longitude: property.location.geo.longitude - 500 / 111111)
+		let center =  CLLocationCoordinate2D(latitude: property.location.geo.latitude - 100 / 111111, longitude: property.location.geo.longitude)
 		VStack(spacing: 0) {
 			Button(action: {
 				propertyStore.showProperty(property, type: type)
@@ -38,30 +38,19 @@ struct PropertyTileView: View {
 					}
 					.disabled(true)
 					
-					VStack(spacing: 0) {
-						if property.info.nickname.isEmpty {
-							Text(property.location.addressTitle)
-								.styled(.title, weight: .bold)
-								.frame(maxWidth: .infinity, alignment: .leading)
-							Text(property.location.addressDescription)
-								.styled(.caption, weight: .semibold)
-								.frame(maxWidth: .infinity, alignment: .leading)
-						} else {
+					VStack {
+						VStack(spacing: 0) {
 							Text(property.info.nickname)
 								.styled(.title, weight: .bold)
-								.frame(maxWidth: .infinity, alignment: .leading)
-							Text(property.location.addressTitle)
-								.styled(.caption, weight: .semibold)
-								.frame(maxWidth: .infinity, alignment: .leading)
-							Text(property.location.addressDescription)
-								.styled(.caption, weight: .semibold)
-								.frame(maxWidth: .infinity, alignment: .leading)
 						}
+						.padding(Constants.Spacing.medium)
+						.background(.black.opacity(0.4))
+						.cornerRadius(5)
+						.foregroundStyle(Color.white)
+						.padding(.top, 50)
 					}
-					.frame(maxHeight: .infinity)
-					.padding(Constants.Spacing.medium)
-					.foregroundStyle(Color.white)
-					.background(Color.black.opacity(0.3))
+					.frame(maxWidth: .infinity, maxHeight: .infinity)
+					.background(.black.opacity(0.4))
 				}
 				.frame(height: 175)
 			})
@@ -72,22 +61,10 @@ struct PropertyTileView: View {
 					Button(action: {
 						bookingAction(booking)
 					}, label: {
-						VStack {
-							HStack {
-								RoundedRectangle(cornerRadius: 5)
-									.frame(width: 15)
-									.foregroundStyle(booking.status.colorBG)
-									.padding(.vertical, 10)
-								VStack(alignment: .leading) {
-									Text("**\(booking.name)**")
-									Text("\(booking.start.dayMonthString()) to \(booking.end.dayMonthString())")
-								}
-								.styled(.body)
-								
-								Spacer()
-								
+						BookingTileView(booking: booking, showName: type == .owned) {
+							if booking.status == .confirmed {
 								Button(action: {
-									propertyStore.selectedAddToCalendar = PropertyBookingGroup(property: property, booking: booking)
+									propertyStore.selectedAddToCalendar = PropertyBookingGroup(type: type, property: property, booking: booking)
 								}, label: {
 									Image(systemName: "calendar")
 										.resizable()
@@ -95,12 +72,10 @@ struct PropertyTileView: View {
 										.frame(height: 20)
 								})
 							}
-							.padding(.trailing, Constants.Spacing.medium)
 						}
-						.background(Color.white)
 					})
 					.swipeActions(edge: .trailing, allowsFullSwipe: false) {
-						if type == .owned {
+						if type == .owned && booking.status == .pending {
 							Button(action: {
 								Task {
 									if let error = await bookingStore.updateBooking(booking: booking, property: property, status: .confirmed, message: "", sensitiveInfo: [SensitiveInfoType.notes.rawValue, SensitiveInfoType.contactInfo.rawValue, SensitiveInfoType.cleaningNotes.rawValue, SensitiveInfoType.wifi.rawValue, SensitiveInfoType.securityCode.rawValue, SensitiveInfoType.paymentNotes.rawValue]) {
@@ -109,17 +84,14 @@ struct PropertyTileView: View {
 									
 									notificationStore.pushNotification(message: "Booking approved!")
 									await propertyStore.fetchProperties(.owned)
-									propertyStore.dismissProperty()
+									//propertyStore.dismissProperty()
 								}
 							}, label: {
 								Label("Approve", systemImage: "checkmark")
 									.contentShape(Rectangle())
 							})
 							.tint(Color.systemGreen)
-						}
-					}
-					.swipeActions(edge: .leading, allowsFullSwipe: false) {
-						if type == .owned {
+							
 							Button(action: {
 								Task {
 									if let error = await bookingStore.updateBooking(booking: booking, property: property, status: .declined, message: "", sensitiveInfo: []) {
@@ -127,7 +99,7 @@ struct PropertyTileView: View {
 									}
 									notificationStore.pushNotification(message: "Booking declined.")
 									await propertyStore.fetchProperties(.owned)
-									propertyStore.dismissProperty()
+									//propertyStore.dismissProperty()
 								}
 							}, label: {
 								Label("Decline", systemImage: "xmark")
@@ -138,9 +110,9 @@ struct PropertyTileView: View {
 					}
 				}
 			}
-			.environment(\.defaultMinListRowHeight, 80)
+			.environment(\.defaultMinListRowHeight, 90)
 			.listStyle(.plain)
-			.frame(height: 80 * CGFloat(bookings.count))
+			.frame(height: 90 * CGFloat(bookings.count))
 			.zIndex(4)
 			//.padding(.bottom, Constants.Spacing.medium)
 		}

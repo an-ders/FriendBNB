@@ -24,15 +24,18 @@ struct FriendNewBookingView: View {
 	var body: some View {
 		if let property = propertyStore.friendSelectedProperty {
 			NavigationStack {
-				VStack {
+				VStack(spacing: 0) {
+					VStack(spacing: 0) {
+						DetailSheetTitle(title: "REQUEST BOOKING")
+							.padding(.horizontal, Constants.Spacing.medium)
+							.padding(.vertical, Constants.Spacing.large)
+
+						Divider()
+							.padding(.horizontal, -Constants.Spacing.regular)
+					}
+
 					ScrollView {
 						VStack(spacing: Constants.Spacing.small) {
-							DetailSheetTitle(title: "Request Booking")
-							
-							Text("Confirm your dates:")
-								.styled(.body)
-								.fillLeading()
-							
 							CalendarView(type: .friend)
 								.environmentObject(calendarViewModel)
 								.padding(.horizontal, Constants.Spacing.regular)
@@ -43,25 +46,31 @@ struct FriendNewBookingView: View {
 								.frame(maxWidth: .infinity, alignment: .leading)
 								.foregroundColor(Color.systemRed)
 							
-							HStack(alignment: .top) {
-								Text("Available Months:")
-									.styled(.body)
-									.frame(maxWidth: .infinity, alignment: .center)
-								VStack {
-									ForEach(Array(property.available.current().dateSorted().arrayMonths()), id: \.self) { date in
-										Button(action: {
-											calendarViewModel.date = date
-										}, label: {
-											Text(date.monthYearString())
-												.styled(.body)
-												.frame(maxWidth: .infinity, alignment: .center)
-												.padding(.bottom, Constants.Spacing.xsmall)
-										})
+							let months = property.available.current().dateSorted().arrayMonths()
+							
+							if !months.isEmpty {
+								HStack(alignment: .top) {
+									Text("Available Months:")
+										.styled(.body)
+										.frame(maxWidth: .infinity, alignment: .center)
+									VStack {
+										ForEach(Array(months), id: \.self) { date in
+											Button(action: {
+												calendarViewModel.date = date
+											}, label: {
+												Text(date.monthYearString())
+													.styled(.body)
+													.frame(maxWidth: .infinity, alignment: .center)
+													.padding(.bottom, Constants.Spacing.xsmall)
+											})
+										}
 									}
 								}
 							}
+							
 							Spacer()
 						}
+						.padding(.top, Constants.Spacing.large)
 					}
 					
 					HStack {
@@ -109,9 +118,10 @@ struct FriendNewBookingView: View {
 									dismiss()
 								}
 							}
-						}, includeShadow: false)
+						})
 						.padding(.horizontal, Constants.Spacing.regular)
 					}
+					.padding(.top, -Constants.Spacing.medium)
 				}
 			}
 		} else {
@@ -132,7 +142,7 @@ struct FriendNewBookingView: View {
 			
 			guard let property = propertyStore.friendSelectedProperty else {  return }
 			
-			if let error = bookingStore.checkBookingDates(startDate: calendarViewModel.startDate, endDate: calendarViewModel.endDate, property: property) {
+			if let error = bookingStore.checkBookingDates(startDate: calendarViewModel.startDate, endDate: calendarViewModel.endDate, property: property), error != "Unknown" {
 				self.calendarViewModel.error = error
 				return
 			}

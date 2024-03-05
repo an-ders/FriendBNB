@@ -13,14 +13,16 @@ struct ToggleInfoDetail: View {
 	var text: String
 	
     var body: some View {
-		Toggle(title, isOn: $toggle)
-			.styled(.bodyBold)
-			.padding(.trailing, 4)
-		
-		if toggle {
-			Text(text)
-				.styled(.body)
-				.fillLeading()
+		VStack(spacing: 4) {
+			Toggle(title, isOn: $toggle)
+				.styled(.bodyBold)
+				.padding(.trailing, 4)
+			
+			if toggle {
+				Text(text)
+					.styled(.body)
+					.fillLeading()
+			}
 		}
     }
 }

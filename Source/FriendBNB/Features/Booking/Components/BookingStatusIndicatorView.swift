@@ -12,9 +12,10 @@ struct BookingStatusIndicatorView: View {
 	
     var body: some View {
 		VStack(spacing: Constants.Spacing.medium) {
-			Text("Booking Status")
-				.styled(.headline)
+			Text("BOOKING STATUS")
+				.styled(.bodyBold)
 				.fillLeading()
+				.foregroundStyle(Color.systemGray)
 			HStack {
 				ForEach(BookingStatus.allCases, id: \.self) { status in
 					BookingStatusIndicator(status: status, currentStatus: currentStatus)

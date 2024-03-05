@@ -14,133 +14,63 @@ struct OwnedDetailView: View {
 	@EnvironmentObject var propertyStore: PropertyStore
 	@EnvironmentObject var notificationStore: NotificationStore
 	
+	@Environment(\.dismiss) private var dismiss
+	@Environment(\.safeAreaInsets) private var safeAreaInsets
+	
 	@State var confirmDelete = false
+	@State var edit = false
 	@State var url: URL?
+	@State var copied = false
 	
 	var body: some View {
 		if let property = propertyStore.getSelectedProperty(.owned) {
-			let coordinate = CLLocationCoordinate2D(latitude: property.location.geo.latitude, longitude: property.location.geo.longitude)
-			VStack {
+			VStack(spacing: 0) {
 				ScrollView(showsIndicators: false) {
-					VStack(spacing: Constants.Spacing.regular) {
-						VStack {
-							Text(property.location.addressTitle)
-								.styled(.headline)
-								.fillLeading()
-							Text(property.location.addressDescription)
-								.styled(.body)
-								.fillLeading()
-						}
+					VStack(spacing: Constants.Spacing.large) {
+						navBar
 						
-						Map(position: .constant(MapCameraPosition.region(MKCoordinateRegion(center: coordinate, latitudinalMeters: 1000, longitudinalMeters: 1000)))) {
-							Marker("", coordinate: coordinate)
-						}
-						.frame(height: 250)
-						.cornerRadius(20)
-						
-						HStack {
-							Button(action: {
-								propertyStore.showOwnedExistingBookingsSheet.toggle()
-							}, label: {
-								HStack(spacing: 0) {
-									VStack {
-										Image(systemName: "calendar.badge.clock")
-											.resizable()
-											.scaledToFit()
-											.frame(width: 40)
-										Text("Bookings")
-											.font(.headline).fontWeight(.medium)
+						VStack(spacing: 50) {
+							VStack(spacing: 4) {
+								Text("ADDRESS")
+									.styled(.bodyBold)
+									.fillLeading()
+									.foregroundStyle(Color.systemGray)
+								Button(action: {
+									if let url = URL(string: "http://maps.apple.com/?address=" + property.location.formattedAddress) {
+										UIApplication.shared.open(url)
 									}
-									.frame(maxWidth: .infinity, maxHeight: .infinity)
-									.foregroundStyle(Color.white)
-									.background(Color.systemBlue.opacity(0.6))
-									
-									VStack(spacing: 0) {
-										ForEach(BookingStatus.allCases, id: \.self) { status in
-											Text(String(property.bookings.current().filter {$0.status == status}.count))
-												.styled(.caption, weight: .semibold)
-												.frame(maxHeight: .infinity)
-												.frame(width: 20)
-												.background(status.colorBG)
-												.foregroundStyle(Color.black)
+								}, label: {
+									HStack {
+										VStack {
+											Text(property.location.addressTitle)
+												.styled(.body)
+												.fillLeading()
+											Text(property.location.addressDescription)
+												.styled(.body)
+												.fillLeading()
 										}
+										
+										Image(systemName: "map.fill")
+											.size(width: 20, height: 20)
 									}
-								}
-								.cornerRadius(5)
-							})
+									.foregroundStyle(.black)
+								})
+							}
 							
-							Button(action: {
-								propertyStore.showOwnedAvailabilitySheet.toggle()
-							}, label: {
-								VStack {
-									Image(systemName: "calendar.badge.plus")
-										.resizable()
-										.scaledToFit()
-										.frame(width: 40)
-									Text("Set Availability")
-										.font(.headline).fontWeight(.medium)
-									
-								}
-								.frame(maxWidth: .infinity, maxHeight: .infinity)
-								.foregroundStyle(Color.white)
-								.background(Color.systemBlue.opacity(0.6))
-								.cornerRadius(5)
-							})
+							PropertyDetailList(property: property, showAll: true)
 						}
-						.frame(height: 100)
-						
-						PropertyDetailList(property: property, showAll: true)
+						.padding(.horizontal, Constants.Spacing.regular)
+						.padding(.bottom, 50)
+						.padding(.top, 25)
 					}
 				}
+				.ignoresSafeArea(.container)
 				
 				// MARK: SHARE BUTTON
-				if let url = url, !property.available.current().isEmpty {
-					ShareLink(item: url, subject: Text(""), message: Text(property.shareMessage)) {
-						HStack {
-							Image(systemName: "square.and.arrow.up")
-								.resizable()
-								.scaledToFit()
-								.frame(width: 20)
-								.offset(y: -2)
-							Text("Share Property")
-								.styled(.bodyBold)
-						}
-						.padding(.vertical, Constants.Spacing.small)
-						.frame(maxWidth: .infinity)
-						.foregroundStyle(Color.white)
-						.background(Color.systemBlue.opacity(0.6))
-						.cornerRadius(5)
-						.padding(.bottom, 4)
-					}
-				} else {
-					Button(action: {
-						notificationStore.pushNotification(message: "Please set availability")
-					}, label: {
-						HStack {
-							Image(systemName: "square.and.arrow.up")
-								.resizable()
-								.scaledToFit()
-								.frame(width: 20)
-								.offset(y: -2)
-							Text("Share")
-								.styled(.bodyBold)
-						}
-						.padding(.vertical, Constants.Spacing.small)
-						.frame(maxWidth: .infinity)
-						.foregroundStyle(Color.white)
-						.background(Color.systemGray3)
-						.cornerRadius(5)
-						.padding(.bottom, 4)
-					})
-				}
+				
+				shareButton
 			}
-			.navigationTitle(property.info.nickname)
-			.padding(.horizontal, Constants.Spacing.regular)
-			.toolbar {
-				ToolbarItem(placement: .primaryAction) {
-					OwnedDetailSettingsView(confirmDelete: $confirmDelete)
-				}
-			}
+			.toolbar(.hidden, for: .navigationBar)
 			.alert(isPresented: $confirmDelete) {
 				Alert(title: Text("Are you sure you want to delete this property?"),
 					  primaryButton: .destructive(Text("Delete")) {
@@ -166,6 +96,196 @@ struct OwnedDetailView: View {
 		} else {
 			NoSelectedPropertyView()
 		}
+	}
+	
+	var navBar: some View {
+		ZStack {
+			let property = propertyStore.getSelectedProperty(.owned)!
+			let coordinate = CLLocationCoordinate2D(latitude: property.location.geo.latitude, longitude: property.location.geo.longitude)
+			let center =  CLLocationCoordinate2D(latitude: property.location.geo.latitude - 250 / 111111, longitude: property.location.geo.longitude)
+			Map(position: .constant(MapCameraPosition.region(MKCoordinateRegion(center: center, latitudinalMeters: 1000, longitudinalMeters: 1000)))) {
+				Marker("", coordinate: coordinate)
+			}
+			.disabled(true)
+			
+			VStack(spacing: 0) {
+				HStack {
+					Button(action: {
+						dismiss()
+					}, label: {
+						VStack {
+							Image(systemName: "arrow.left")
+								.resizable()
+								.scaledToFit()
+								.frame(width: 20, height: 20)
+								.foregroundStyle(.white)
+						}
+						.padding(10)
+						.background(Color.black.opacity(0.4))
+						.cornerRadius(5)
+					})
+					
+					Spacer()
+					
+					OwnedDetailSettingsView(confirmDelete: $confirmDelete, edit: $edit)
+				}
+				.zIndex(4)
+				.padding(.top, safeAreaInsets.top + 10)
+				
+				Spacer()
+									
+				Button(action: {
+					withAnimation {
+						copied = true
+					}
+					UIPasteboard.general.string = property.id
+					
+					DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+						withAnimation {
+							copied = false
+						}
+					}
+				}, label: {
+					VStack(spacing: 0) {
+						Text(property.info.nickname)
+							.styled(.title, weight: .bold)
+							.foregroundStyle(.white)
+						HStack {
+							Text(!copied ? property.id : "Copied")
+								.styled(.caption)
+								.foregroundStyle(Color.systemGray5)
+							Image(systemName: "rectangle.portrait.on.rectangle.portrait.fill")
+								.resizable()
+								.scaledToFit()
+								.frame(height: 15)
+						}
+					}
+					.padding(Constants.Spacing.medium)
+					.background(.black.opacity(0.4))
+					.cornerRadius(5)
+					.padding(.bottom, 20)
+				})
+				
+				HStack(spacing: 16) {
+					Button(action: {
+						propertyStore.showOwnedExistingBookingsSheet.toggle()
+					}, label: {
+						HStack(spacing: 0) {
+							VStack {
+								Image(systemName: "suitcase.fill")
+									.resizable()
+									.scaledToFit()
+									.frame(width: 40)
+								Text("Bookings")
+									.font(.headline).fontWeight(.medium)
+							}
+							.frame(maxWidth: .infinity, maxHeight: .infinity)
+							.foregroundStyle(Color.white)
+							.background(.black.opacity(0.4))
+							
+							VStack(spacing: 0) {
+								ForEach(BookingStatus.allCases, id: \.self) { status in
+									Text(String(property.bookings.current().filter {$0.status == status}.count))
+										.styled(.caption, weight: .semibold)
+										.frame(maxHeight: .infinity)
+										.frame(width: 20)
+										.background(status.color)
+										.foregroundStyle(Color.black)
+								}
+							}
+						}
+						.cornerRadius(5)
+					})
+					
+					Button(action: {
+						propertyStore.showOwnedAvailabilitySheet.toggle()
+					}, label: {
+						HStack(spacing: 0) {
+							VStack {
+								Image(systemName: "calendar.badge.plus")
+									.resizable()
+									.scaledToFit()
+									.frame(width: 40)
+								Text("Set Availability")
+									.font(.headline).fontWeight(.medium)
+								
+							}
+							.frame(maxWidth: .infinity, maxHeight: .infinity)
+							.foregroundStyle(Color.white)
+							.background(.black.opacity(0.4))
+							
+							VStack(spacing: 0) {
+								ForEach(BookingStatus.allCases, id: \.self) { status in
+									Text(String(property.bookings.current().filter {$0.status == status}.count))
+										.styled(.caption, weight: .semibold)
+										.frame(maxHeight: .infinity)
+										.frame(width: 20)
+										.background(status.color)
+										.foregroundStyle(Color.black)
+								}
+							}
+						}
+						.cornerRadius(5)
+					})
+				}
+				.frame(height: 150)
+				.padding(.vertical, 20)
+				.padding(.horizontal, 20)
+			}
+			.padding(Constants.Spacing.large)
+			.frame(maxWidth: .infinity, maxHeight: .infinity)
+			.foregroundStyle(Color.white)
+			.background(Color.black.opacity(0.4))
+		}
+		.frame(height: 550)
+		.background(Color.white)
+	}
+	
+	var shareButton: some View {
+		VStack {
+			Divider()
+			let property = propertyStore.getSelectedProperty(.owned)!
+			if let url = url {
+				ShareLink(item: url, subject: Text(""), message: Text(property.shareMessage)) {
+					HStack {
+						Image(systemName: "square.and.arrow.up")
+							.resizable()
+							.scaledToFit()
+							.frame(width: 20)
+							.offset(y: -2)
+						Text("Share Property")
+							.styled(.bodyBold)
+					}
+					.padding(.vertical, Constants.Spacing.small)
+					.frame(maxWidth: .infinity)
+					.foregroundStyle(Color.white)
+					.background(Color.systemBlue.opacity(0.6))
+					.cornerRadius(5)
+					.padding(.bottom, 4)
+				}
+			} else {
+				Button(action: {
+					notificationStore.pushNotification(message: "Please set availability")
+				}, label: {
+					HStack {
+						Image(systemName: "square.and.arrow.up")
+							.resizable()
+							.scaledToFit()
+							.frame(width: 20)
+							.offset(y: -2)
+						Text("Share")
+							.styled(.bodyBold)
+					}
+					.padding(.vertical, Constants.Spacing.small)
+					.frame(maxWidth: .infinity)
+					.foregroundStyle(Color.white)
+					.background(Color.systemGray3)
+					.cornerRadius(5)
+					.padding(.bottom, 4)
+				})
+			}
+		}
+		.padding(.horizontal, Constants.Spacing.regular)
 	}
 	
 	func generateLink(property: Property) {

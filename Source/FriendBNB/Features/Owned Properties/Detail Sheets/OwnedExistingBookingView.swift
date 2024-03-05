@@ -16,6 +16,7 @@ struct OwnedExistingBookingView: View {
 	
 	@State var bookingNotification: CustomNotification?
 	@State var bookingDetail: Booking?
+	@State var showAddToCalendar: PropertyBookingGroup?
 
 	var body: some View {
 		if let property = propertyStore.ownedSelectedProperty {
@@ -29,21 +30,39 @@ struct OwnedExistingBookingView: View {
 						}, nextText: "Back", nextAction: {
 							dismiss()
 						}, content: {
-							VStack {
-								Text("Bookings")
-									.font(.largeTitle).fontWeight(.medium)
-									.frame(maxWidth: .infinity, alignment: .leading)
-									.padding(.bottom, Constants.Spacing.small)
+							VStack(spacing: 0) {
+								DetailSheetTitle(title: "YOUR BOOKING", showDismiss: true)
+									.padding(.leading, Constants.Spacing.medium)
+									.padding(.vertical, Constants.Spacing.large)
+									.padding(.trailing, Constants.Spacing.medium)
 								
+								let bookings = property.bookings.current().dateSorted()
 								ScrollView(showsIndicators: false) {
 									VStack {
-										ForEach(property.bookings.current().dateSorted()) { booking in
-											Button(action: {
-												bookingDetail = booking
-											}, label: {
-												BookingTileView(booking: booking, showName: true)
-											})
+										List {
+											ForEach(bookings) { booking in
+												Button(action: {
+													bookingDetail = booking
+												}, label: {
+													BookingTileView(booking: booking) {
+														if booking.status == .confirmed {
+															Button(action: {
+																showAddToCalendar = PropertyBookingGroup(property: property, booking: booking)
+															}, label: {
+																Image(systemName: "calendar")
+																	.resizable()
+																	.scaledToFit()
+																	.frame(height: 20)
+															})
+														}
+													}
+												})
+											}
 										}
+										.environment(\.defaultMinListRowHeight, 90)
+										.listStyle(.plain)
+										.frame(height: 90 * CGFloat(bookings.count))
+										.padding(.horizontal, -Constants.Spacing.regular)
 										
 										PairButtonSpacer()
 									}
@@ -51,13 +70,17 @@ struct OwnedExistingBookingView: View {
 							}
 						})
 						.padding(.horizontal, Constants.Spacing.regular)
-						.padding(.top, Constants.Spacing.small)
 						.navigationDestination(item: $bookingDetail) { booking in
 							OwnedBookingConfirmationView(property: property, booking: booking) { message in
 								sendNotification(message: message)
 							}
 							.navigationBarBackButtonHidden()
 						}
+					}
+				}
+				.sheet(item: $showAddToCalendar) { group in
+					EventEditViewController(group: group) {
+						showAddToCalendar = nil
 					}
 				}
 			}

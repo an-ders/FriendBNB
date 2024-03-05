@@ -18,12 +18,17 @@ struct OwnedAvailabilityView: View {
 	}
 	
 	var body: some View {
-		VStack {
+		VStack(spacing: 0) {
+			VStack(spacing: 0) {
+				DetailSheetTitle(title: "AVAILABILITY", showDismiss: true)
+					.padding(.leading, Constants.Spacing.medium)
+					.padding(.vertical, Constants.Spacing.large)
+					.padding(.trailing, Constants.Spacing.large)
+				Divider()
+			}
 			ScrollView(showsIndicators: false) {
 				VStack {
-					DetailSheetTitle(title: "Set Availability")
-					
-					Text(calendarViewModel.mode == .available ? "Select the days that are available:" : "Select the days that are unavailable:")
+					Text(calendarViewModel.mode == .available ? "Select available days:" : "Select unavailable days:")
 						.styled(.body)
 						.fillLeading()
 					
@@ -83,6 +88,7 @@ struct OwnedAvailabilityView: View {
 							.frame(height: 70)
 					}
 				}
+				.padding(.top, Constants.Spacing.large)
 			}
 				
 			HStack {

@@ -27,29 +27,38 @@ struct OwnedBookingConfirmationView: View {
 	@State var securityCode = true
 	
 	var body: some View {
-		VStack {
+		VStack(spacing: 0) {
+			VStack(spacing: 0) {
+				DetailSheetTitle(title: "BOOKING CONFIRMATION", showDismiss: showDismiss)
+					.padding(.leading, Constants.Spacing.medium)
+					.padding(.vertical, Constants.Spacing.large)
+					.padding(.trailing, Constants.Spacing.large)
+				Divider()
+			}
+			
 			ScrollView(showsIndicators: false) {
-				VStack(spacing: Constants.Spacing.medium) {
-					DetailSheetTitle(title: "Booking Confirmation", showDismiss: showDismiss)
-					
+				VStack(spacing: 50) {
 					ErrorView(error: error)
 					
-					HStack {
-						Image(systemName: "person.fill")
-						Text("\(booking.name) (\(booking.email))")
-					}
-					.styled(.body)
-					.fillLeading()
+					BookingStatusIndicatorView(currentStatus: booking.status)
 					
-					Divider()
-					
-					VStack(spacing: 8) {
+					VStack(alignment: .leading, spacing: 8) {
+						Text("FRIEND")
+							.styled(.bodyBold)
+							.foregroundStyle(Color.systemGray)
 						HStack {
-							Image(systemName: "calendar")
-							Text("Booking Dates")
-								.styled(.headline)
-								.fillLeading()
+							Image(systemName: "person.fill")
+							Text("\(booking.name) (\(booking.email))")
 						}
+						.styled(.body)
+						.fillLeading()
+					}
+										
+					VStack(spacing: 8) {
+						Text("BOOKING DATES")
+							.styled(.bodyBold)
+							.fillLeading()
+							.foregroundStyle(Color.systemGray)
 						
 						HStack {
 							VStack {
@@ -68,153 +77,159 @@ struct OwnedBookingConfirmationView: View {
 								.fillLeading()
 							}
 							
-							Button(action: {
-								selectedCalendar = PropertyBookingGroup(property: property, booking: booking)
-							}, label: {
-								Image(systemName: "calendar")
-									.resizable()
-									.scaledToFit()
-									.frame(height: 20)
-							})
+							if booking.status == .confirmed {
+								Button(action: {
+									selectedCalendar = PropertyBookingGroup(property: property, booking: booking)
+								}, label: {
+									Image(systemName: "calendar")
+										.resizable()
+										.scaledToFit()
+										.frame(height: 20)
+								})
+							}
 						}
 					}
-					
-					Divider()
-					
-					BookingStatusIndicatorView(currentStatus: booking.status)
-					
-					Divider()
-					
-					Text("Booking Info")
-						.styled(.headline)
-						.fillLeading()
-					
-					HStack {
-						Image(systemName: "person.2.fill")
-							.resizable()
-							.scaledToFit()
-							.frame(width: 25)
-						Text("Max number of people: ")
-							.styled(.body)
-						Text(String(property.info.people))
-							.font(.headline).fontWeight(.semibold)
-						Spacer()
-					}
-					VStack {
+										
+					VStack(spacing: 0) {
+						Text("BOOKING INFO")
+							.styled(.bodyBold)
+							.fillLeading()
+							.foregroundStyle(Color.systemGray)
+							.padding(.bottom, 8)
+						
 						HStack {
-							Image(systemName: "dollarsign.circle.fill")
+							Image(systemName: "person.2.fill")
 								.resizable()
 								.scaledToFit()
 								.frame(width: 25)
-							Text("Cost per night: ")
+							Text("Max number of people: ")
 								.styled(.body)
-							Text(property.info.payment == .free ? "FREE" : "\(String(format: "%.2f", property.info.cost)) \(property.info.payment.rawValue)")
-								.styled(.bodyBold)
+							Text(String(property.info.people))
+								.font(.headline).fontWeight(.semibold)
 							Spacer()
 						}
-						if !property.info.paymentNotes.isEmpty {
-							Text(property.info.paymentNotes.isEmpty ? "" : property.info.paymentNotes)
-								.styled(.body)
-								.fillLeading()
+						
+						VStack {
+							HStack {
+								Image(systemName: "dollarsign.circle.fill")
+									.resizable()
+									.scaledToFit()
+									.frame(width: 25)
+								Text("Cost per night: ")
+									.styled(.body)
+								Text(property.info.payment == .free ? "FREE" : "\(String(format: "%.2f", property.info.cost)) \(property.info.payment.rawValue)")
+									.styled(.bodyBold)
+								Spacer()
+							}
+							if !property.info.paymentNotes.isEmpty {
+								Text(property.info.paymentNotes.isEmpty ? "" : property.info.paymentNotes)
+									.styled(.body)
+									.fillLeading()
+							}
 						}
 					}
-					
-					Divider()
-					
-					VStack(spacing: Constants.Spacing.regular) {
-						Text("Booking Note")
-							.styled(.headline)
+										
+					VStack(spacing: 8) {
+						Text("BOOKING NOTE")
+							.styled(.bodyBold)
 							.fillLeading()
+							.foregroundStyle(Color.systemGray)
 						BasicTextField(defaultText: "Personalized Message (Optional)", text: $bookingMessage)
 					}
-					.padding(.bottom, Constants.Spacing.regular)
-					
-					Divider()
-					
-					Text("Optional Info")
-						.styled(.headline)
-						.fillLeading()
-					
-					if !property.info.notes.isEmpty {
-						ToggleInfoDetail(toggle: $extraNotes, title: "Include Extra Notes", text: property.info.notes)
+										
+					VStack(spacing: 8) {
+						Text("OPTIONAL INFO")
+							.styled(.bodyBold)
+							.fillLeading()
+							.foregroundStyle(Color.systemGray)
+						
+						VStack(spacing: 12) {
+							if !property.info.notes.isEmpty {
+								ToggleInfoDetail(toggle: $extraNotes, title: "Include Extra Notes", text: property.info.notes)
+							}
+							
+							if !property.info.contactInfo.isEmpty {
+								ToggleInfoDetail(toggle: $contactInfo, title: "Include Contact Info", text: property.info.contactInfo)
+							}
+							
+							if !property.info.cleaningNotes.isEmpty {
+								ToggleInfoDetail(toggle: $cleaningNotes, title: "Include Cleaning Notes", text: property.info.cleaningNotes)
+							}
+							
+							if !property.info.wifiName.isEmpty {
+								ToggleInfoDetail(toggle: $wifi, title: "Include Wifi Info", text: property.info.wifiName)
+							}
+							
+							if !property.info.securityCode.isEmpty {
+								ToggleInfoDetail(toggle: $securityCode, title: "Include Security Info", text: property.info.securityCode)
+							}
+						}
 					}
-					
-					if !property.info.contactInfo.isEmpty {
-						ToggleInfoDetail(toggle: $contactInfo, title: "Include Contact Info", text: property.info.contactInfo)
-					}
-					
-					if !property.info.cleaningNotes.isEmpty {
-						ToggleInfoDetail(toggle: $cleaningNotes, title: "Include Cleaning Notes", text: property.info.cleaningNotes)
-					}
-					
-					if !property.info.wifi.isEmpty {
-						ToggleInfoDetail(toggle: $wifi, title: "Include Wifi Info", text: property.info.wifi)
-					}
-					
-					if !property.info.securityCode.isEmpty {
-						ToggleInfoDetail(toggle: $securityCode, title: "Include Security Info", text: property.info.securityCode)
-					}
-					
-					PairButtonSpacer()
 				}
+				.padding(.bottom, 50)
+				.padding(.top, 16)
 			}
 			.padding(.horizontal, Constants.Spacing.regular)
 			
-			HStack(spacing: Constants.Spacing.small) {
-				Button(action: {
-					// NOTE IF YOU EVER UPDATE THE DECLINE ACTION UPDATE THE SWIPE ACTION ON HOME PAGE PROPERTY TILE ALSO
-					if booking.status == .declined && booking.statusMessage == bookingMessage {
-						return
-					}
-					Task {
-						if let error = await bookingStore.updateBooking(booking: booking, property: property, status: .declined, message: bookingMessage, sensitiveInfo: []) {
-							self.error = error
+			VStack {
+				Divider()
+				HStack {
+					let changed = booking.status == .declined && booking.statusMessage == bookingMessage
+					Button(action: {
+						// NOTE IF YOU E         VER UPDATE THE DECLINE ACTION UPDATE THE SWIPE ACTION ON HOME PAGE PROPERTY TILE ALSO
+						if changed {
+							return
 						}
-						sendNotification("Booking status updated to declined")
-						await propertyStore.fetchProperties(.owned)
-						dismiss()
-					}
-				}, label: {
-					Text("Decline")
-						.styled(.bodyBold)
-						.padding(.horizontal, 20)
-						.padding(.vertical, 8)
-						.foregroundColor(.black)
-						.background(booking.status == .declined && booking.statusMessage == bookingMessage ? Color.systemGray3 : BookingStatus.declined.colorBG)
-						.cornerRadius(20)
-				})
-				
-				Spacer()
-			
-				var didChange = getSensitiveInfoList() != booking.sensitiveInfo || bookingMessage != booking.statusMessage
-				Button(action: {
-					// NOTE IF YOU EVER UPDATE THE APPROVE ACTION UPDATE THE SWIPE ACTION ON HOME PAGE PROPERTY TILE ALSO
-					if !didChange && (booking.status == .confirmed) {
-						return
-					}
+						Task {
+							if let error = await bookingStore.updateBooking(booking: booking, property: property, status: .declined, message: bookingMessage, sensitiveInfo: []) {
+								self.error = error
+							}
+							sendNotification("Booking status updated to declined")
+							await propertyStore.fetchProperties(.owned)
+							dismiss()
+						}
+					}, label: {
+						Text(!changed ? "Update" : "Decline")
+							.styled(.bodyBold)
+							.padding(.horizontal, 20)
+							.padding(.vertical, 8)
+							.foregroundColor(.black)
+							.background(changed ? Color.systemGray3 : BookingStatus.declined.colorBG)
+							.cornerRadius(20)
+					})
 					
-					Task {
-						if let error = await bookingStore.updateBooking(booking: booking, property: property, status: .confirmed, message: bookingMessage, sensitiveInfo: getSensitiveInfoList()) {
-							self.error = error
+					Spacer()
+				
+					let didChange = getSensitiveInfoList() != booking.sensitiveInfo || bookingMessage != booking.statusMessage
+					Button(action: {
+						// NOTE IF YOU EVER UPDATE THE APPROVE ACTION UPDATE THE SWIPE ACTION ON HOME PAGE PROPERTY TILE ALSO
+						if !didChange && (booking.status == .confirmed) {
+							return
 						}
 						
-						sendNotification("Booking status updated")
-						await propertyStore.fetchProperties(.owned)
-						dismiss()
-					}
-				}, label: {
-					Text(didChange && booking.status == .confirmed ? "Update" : "Approve")
-						.styled(.bodyBold)
-						.padding(.horizontal, 20)
-						.padding(.vertical, 8)
-						.foregroundColor(.black)
-						.background((!didChange && booking.status == .confirmed) ? Color.systemGray3 : BookingStatus.confirmed.colorBG)
-						.cornerRadius(20)
-				})
-			}
-			.padding(Constants.Spacing.small)
-			.background {
-				Color.white
+						Task {
+							if let error = await bookingStore.updateBooking(booking: booking, property: property, status: .confirmed, message: bookingMessage, sensitiveInfo: getSensitiveInfoList()) {
+								self.error = error
+							}
+							
+							sendNotification("Booking status updated")
+							await propertyStore.fetchProperties(.owned)
+							dismiss()
+						}
+					}, label: {
+						Text(didChange && booking.status == .confirmed ? "Update" : "Approve")
+							.styled(.bodyBold)
+							.padding(.horizontal, 20)
+							.padding(.vertical, 8)
+							.foregroundColor(.black)
+							.background((!didChange && booking.status == .confirmed) ? Color.systemGray3 : BookingStatus.confirmed.colorBG)
+							.cornerRadius(20)
+					})
+				}
+				.padding(Constants.Spacing.small)
+				.background {
+					Color.white
+				}
 			}
 		}
 		.onTapGesture {

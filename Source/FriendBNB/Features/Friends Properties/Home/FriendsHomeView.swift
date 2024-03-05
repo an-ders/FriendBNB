@@ -36,7 +36,7 @@ struct FriendsHomeView: View {
 						.frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topTrailing)
 						.zIndex(5)
 						
-						ScrollView {
+						ScrollView(showsIndicators: false) {
 							VStack {
 								Rectangle()
 									.frame(height: 45)
@@ -72,7 +72,7 @@ struct FriendsHomeView: View {
 						deleteBooking.toggle()
 					}, nextText: "Done", nextCaption: "", nextAction: {
 						propertyStore.dismissBooking()
-					}, includeShadow: false)
+					})
 					.padding(.horizontal, Constants.Spacing.regular)
 				}
 				.alert(isPresented: $deleteBooking) {

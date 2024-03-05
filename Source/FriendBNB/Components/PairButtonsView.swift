@@ -14,19 +14,9 @@ struct PairButtonsView: View {
     var nextText: String
 	var nextCaption: String
     var nextAction: () -> Void
-	var includeShadow = true
     
     var body: some View {
         VStack(spacing: 0) {
-			if includeShadow {
-				Rectangle()
-					.fill(
-						LinearGradient(gradient: Gradient(colors: [.white, .clear]),
-									   startPoint: .bottom, endPoint: .top)
-					)
-					.frame(maxWidth: .infinity)
-					.frame(height: 35)
-			}
             HStack {
                 Button(action: {
                     prevAction()

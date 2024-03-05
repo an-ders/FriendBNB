@@ -9,6 +9,7 @@ import Foundation
 import SwiftUI
 
 enum FontType {
+	case bigTitle
 	case title
 	case headline
 	case body
@@ -17,6 +18,7 @@ enum FontType {
 	
 	var font: Font {
 		switch self {
+		case .bigTitle: .system(size: 42)
 		case .title: .largeTitle
 		case .headline: .title
 		case .body: .headline
@@ -28,10 +30,11 @@ enum FontType {
 	
 	var weight: Font.Weight {
 		switch self {
+		case .bigTitle: .bold
 		case .title: .medium
 		case .headline: .regular
-		case .body: .light
-		case .bodyBold: .semibold
+		case .body: .regular
+		case .bodyBold: .bold
 		case .caption: .regular
 		}
 	}

@@ -18,12 +18,16 @@ struct FriendDetailSettingsView: View {
 				Label("Remove", systemImage: "trash")
 			})
 		}, label: {
-			Image(systemName: "ellipsis.circle")
-				.resizable()
-				.scaledToFit()
-				.frame(height: 30)
-				.padding(.trailing, 10)
-			
+			VStack {
+				Image(systemName: "ellipsis")
+					.resizable()
+					.scaledToFit()
+					.frame(width: 20, height: 20)
+					.foregroundStyle(.white)
+			}
+			.padding(10)
+			.background(Color.black.opacity(0.4))
+			.cornerRadius(5)
 		})
     }
 }

@@ -14,7 +14,7 @@ import FirebaseAuth
 class BookingStore: ObservableObject {
 	func createBooking(startDate: Date?, endDate: Date?, property: Property, message: String = "", sensitiveInfo: [String] = []) async -> String? {
 		
-		if let error = checkBookingDates(startDate: startDate, endDate: endDate, property: property) {
+		if let error = checkBookingDates(startDate: startDate, endDate: endDate, property: property), error != "Unknown" {
 			return error
 		}
 		
@@ -82,7 +82,7 @@ class BookingStore: ObservableObject {
 			return nil
 		}
 		
-		return "One or more of your dates is not available"
+		return "Unknown"
 	}
 	
 	func deleteBooking(_ booking: Booking, propertyId: String) async {

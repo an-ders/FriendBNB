@@ -97,6 +97,7 @@ struct Property: Identifiable, Hashable {
 		\(self.info.nickname.isEmpty ? self.ownerName + "'s Place" : self.info.nickname) in \(self.location.city) \(self.location.state)
 		Months available:
 		\(availableMonths)
+		    - Request your own dates...
 		Property id: \(self.id)
 		"""
 	}

@@ -14,20 +14,19 @@ struct DetailSheetTitle: View {
 	var showDismiss: Bool = true
 	
     var body: some View {
-		HStack(alignment: .center) {
+		HStack(spacing: Constants.Spacing.medium) {
 			Text(title)
-				.styled(.title)
+				.font(.title2).fontWeight(.bold)
 				.fillLeading()
-				.padding(.vertical, Constants.Spacing.small)
+			
+			Spacer()
 			
 			if showDismiss {
 				Button(action: {
 					dismiss()
 				}, label: {
-					Image(systemName: "x.circle.fill")
-						.resizable()
-						.scaledToFit()
-						.frame(height: 20)
+					Image(systemName: "xmark")
+						.size(height: 20)
 						.foregroundStyle(Color.systemGray3)
 				})
 			}

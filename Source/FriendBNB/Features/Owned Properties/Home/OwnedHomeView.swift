@@ -35,7 +35,7 @@ struct OwnedHomeView: View {
 						.frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topTrailing)
 						.zIndex(5)
 						
-						ScrollView {
+						ScrollView(showsIndicators: false) {
 							VStack(spacing: Constants.Spacing.regular) {
 								Rectangle()
 									.frame(height: 45)

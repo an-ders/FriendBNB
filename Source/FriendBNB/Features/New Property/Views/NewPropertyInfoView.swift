@@ -12,26 +12,33 @@ struct NewPropertyInfoView: View {
 	@ObservedObject var info: NewPropertyInfo
 	
 	var body: some View {
+		VStack(spacing: 0) {
 			ScrollView(.vertical, showsIndicators: false) {
 				VStack(spacing: Constants.Spacing.regular) {
 					Text("Home Details")
 						.styled(.title)
 						.fillLeading()
 					NewPropertyInfoFieldsView(info: info)
-											
-					PairButtonsView(prevText: "Back", prevAction: {
-						back()
-					}, nextText: "Next", nextCaption: "", nextAction: {
-						next()
-					})
 				}
 				.padding(.top, Constants.Spacing.regular)
+				.padding(.bottom, 50)
 			}
 			.padding(.horizontal, Constants.Spacing.regular)
 			.contentShape(Rectangle())
 			.onTapGesture {
 				hideKeyboard()
 			}
+			
+			VStack(spacing: 8) {
+				Divider()
+				PairButtonsView(prevText: "Back", prevAction: {
+					back()
+				}, nextText: "Next", nextCaption: "", nextAction: {
+					next()
+				})
+				.padding(.horizontal, Constants.Spacing.regular)
+			}
+		}
 	}
 	
 	func next() {
@@ -49,6 +56,9 @@ struct NewPropertyInfoView: View {
 
 struct NewPropertyInfoFieldsView: View {
 	@ObservedObject var info: NewPropertyInfo
+	
+	@State var showWifi = false
+	@State var showContact = false
 	
 	var body: some View {
 		StyledFloatingTextField(text: $info.nickname, prompt: "Nickname (optional)")
@@ -107,11 +117,50 @@ struct NewPropertyInfoFieldsView: View {
 			.fillLeading()
 			.padding(.top, 16)
 		
-		OptionalInfoField(infoName: "Contact Information", defaultText: "Cell: (555)-555-5555", text: $info.contactInfo)
+		VStack(spacing: 8) {
+			Toggle(isOn: $showContact) {
+				Text("Contact Information")
+					.styled(.body)
+			}
+			.padding(.trailing, 4)
+			if showContact {
+				BasicTextField(defaultText: "(555)-555-5555", text: $info.contactInfo)
+					.keyboardType(.numberPad)
+					.onChange(of: info.contactInfo) {
+						if !info.contactInfo.isEmpty {
+							info.contactInfo = info.contactInfo.formatPhoneNumber()
+						}
+					}
+			}
+		}
+		.onAppear {
+			DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+				if !info.contactInfo.isEmpty {
+					showContact = true
+				}
+			}
+		}
 		
 		OptionalInfoField(infoName: "Cleaning Instructions", defaultText: "Run dishwasher before leaving...", text: $info.cleaningNotes)
 		
-		OptionalInfoField(infoName: "Wifi Password", defaultText: "TopSecretWifiPassword123", text: $info.wifi)
+		VStack(spacing: 8) {
+			Toggle(isOn: $showWifi) {
+				Text("Wifi Details")
+					.styled(.body)
+			}
+			.padding(.trailing, 4)
+			if showWifi {
+				BasicTextField(defaultText: "Wifi Name", text: $info.wifiName)
+				BasicTextField(defaultText: "Wifi Password", text: $info.wifiPass)
+			}
+		}
+		.onAppear {
+			DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+				if !info.wifiName.isEmpty {
+					showWifi = true
+				}
+			}
+		}
 		
 		OptionalInfoField(infoName: "Security Code", defaultText: "12345", text: $info.securityCode)
 	}
@@ -122,7 +171,7 @@ enum PaymentFee: String, CaseIterable {
 	case cad = "CAD"
 	case usd = "USD"
 }
-					
+
 class NewPropertyInfo: ObservableObject {
 	@Published var nickname: String = ""
 	@Published var rooms: Int = 1
@@ -135,7 +184,8 @@ class NewPropertyInfo: ObservableObject {
 	@Published var paymentNotes: String = ""
 	
 	@Published var cleaningNotes: String = ""
-	@Published var wifi: String = ""
+	@Published var wifiName: String = ""
+	@Published var wifiPass: String = ""
 	@Published var securityCode: String = ""
 	@Published var contactInfo: String = ""
 	
@@ -145,24 +195,25 @@ class NewPropertyInfo: ObservableObject {
 			"rooms": rooms,
 			"people": people,
 			"cleaningNotes": cleaningNotes,
-			"wifi": wifi,
+			"wifiName": wifiName,
+			"wifiPass": wifiPass,
 			"securityCode": securityCode,
 			"contactInfo": contactInfo,
 			"payment": payment.rawValue,
 			"cost": cost ?? 0,
 			"paymentNotes": paymentNotes,
 			"notes": notes
-			]
+		]
 		]
 	}
 	
-//	init() {
-//		self.rooms
-//		self.people
-//		self.fee
-//		self.notes
-//		self.error
-//	}
+	//	init() {
+	//		self.rooms
+	//		self.people
+	//		self.fee
+	//		self.notes
+	//		self.error
+	//	}
 }
 
 //struct NewPropertyInfoView_Previews: PreviewProvider {

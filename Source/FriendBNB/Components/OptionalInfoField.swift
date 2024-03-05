@@ -31,8 +31,10 @@ struct OptionalInfoField: View {
 			}
 		}
 		.onAppear {
-			if !text.isEmpty {
-				showField = true
+			DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+				if !text.isEmpty {
+					showField = true
+				}
 			}
 		}
     }

@@ -21,11 +21,11 @@ struct EventEditViewController: UIViewControllerRepresentable {
 	private let store = EKEventStore()
 	private var event: EKEvent {
 		let event = EKEvent(eventStore: store)
-		event.title = "FriendBNB Booking"
+		event.title = "Booking at: " + group.property.info.nickname
 		event.startDate = group.booking.start
 		event.endDate = group.booking.end
 		event.location = group.property.location.formattedAddress
-		// event.notes = "NOTES"
+		event.notes = group.type == .owned ? "Booking for: " + group.booking.name : ""
 		// event.url = URL(string: "FriendBNB://booking=\(group.booking.id)-\(group.property.id)")!
 		return event
 	}
