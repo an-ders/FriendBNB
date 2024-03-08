@@ -72,12 +72,13 @@ struct OwnedAvailabilityView: View {
 					let availableList = calendarViewModel.property.available.current().dateSorted()
 					let unavailableList = calendarViewModel.property.unavailable.current().dateSorted()
 					VStack {
-						if calendarViewModel.mode == .available {
-							availableList
-							unavailableList
-						} else {
-							unavailableList
-							availableList
+						ForEach(calendarViewModel.mode == .available ? availableList : unavailableList) { availability in
+							AvailabilityTileView(availibility: availability) {
+								Task {
+									await propertyStore.deleteSchedule(availability, propertyId: calendarViewModel.property.id)
+								}
+							}
+							Divider()
 						}
 						
 						ForEach(calendarViewModel.mode != .available ? availableList : unavailableList) { availability in
