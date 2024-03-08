@@ -15,11 +15,7 @@ struct DetailSheetTitle: View {
 	
     var body: some View {
 		HStack(spacing: Constants.Spacing.medium) {
-			Text(title)
-				.styled(.title2)
-				.fillLeading()
-			
-			Spacer()
+			DetailTitle(title: title)
 			
 			if showDismiss {
 				Button(action: {

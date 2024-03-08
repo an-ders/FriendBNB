@@ -26,7 +26,7 @@ struct EventEditViewController: UIViewControllerRepresentable {
 		event.endDate = group.booking.end
 		event.location = group.property.location.formattedAddress
 		event.notes = group.type == .owned ? "Booking for: " + group.booking.name : ""
-		// event.url = URL(string: "FriendBNB://booking=\(group.booking.id)-\(group.property.id)")!
+		event.url = URL(string: "FriendBNB://\(group.type == .owned ? "owned" : "friend")Booking=\(group.property.id)/\(group.booking.id)")!
 		return event
 	}
 	

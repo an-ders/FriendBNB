@@ -31,10 +31,8 @@ struct OwnedDetailView: View {
 						
 						VStack(spacing: 50) {
 							VStack(spacing: 4) {
-								Text("ADDRESS")
-									.styled(.bodyBold)
-									.fillLeading()
-									.foregroundStyle(Color.systemGray)
+								DetailHeading(title: "ADDRESS")
+								
 								Button(action: {
 									if let url = URL(string: "http://maps.apple.com/?address=" + property.location.formattedAddress) {
 										UIApplication.shared.open(url)
@@ -213,7 +211,7 @@ struct OwnedDetailView: View {
 										.styled(.caption, weight: .semibold)
 										.frame(maxHeight: .infinity)
 										.frame(width: 20)
-										.background(status.color)
+										.background(status.color.opacity(0.8))
 										.foregroundStyle(Color.black)
 								}
 							}
@@ -243,13 +241,13 @@ struct OwnedDetailView: View {
 									.styled(.caption, weight: .semibold)
 									.frame(maxHeight: .infinity)
 									.frame(width: 20)
-									.background(Color.systemGreen)
+									.background(Color.systemGreen.opacity(0.8))
 									.foregroundStyle(Color.black)
 								Text(String(property.unavailable.current().daysTotal()))
 									.styled(.caption, weight: .semibold)
 									.frame(maxHeight: .infinity)
 									.frame(width: 20)
-									.background(Color.systemRed)
+									.background(Color.systemRed.opacity(0.8))
 									.foregroundStyle(Color.black)
 							}
 						}

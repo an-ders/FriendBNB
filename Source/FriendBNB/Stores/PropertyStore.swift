@@ -98,7 +98,7 @@ class PropertyStore: ObservableObject {
 	
 	func showBooking(booking: Booking, property: Property, type: PropertyType) {
 		self.selectedTab = type == .owned ? .owned : .friends
-		DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
+		DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
 			switch type {
 			case .owned:
 				self.ownedSelectedBooking = PropertyBookingGroup(property: property, booking: booking)
