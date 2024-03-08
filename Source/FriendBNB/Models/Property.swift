@@ -8,110 +8,84 @@
 import Foundation
 import SwiftUI
 import FirebaseFirestore
-
-struct PropertyTest {
-	var owner: String
-}
+import FirebaseAuth
 
 struct Property: Identifiable, Hashable {
-	let id: String
-	var nickname: String
-	var ownerId: String
-	var ownerName: String
-	var people: Int
+	var id: String = ""
+	var ownerId: String = ""
+	var ownerName: String = ""
 	
-	var notes: String
-	var cleaningNotes: String
-	var wifi: String
-	var securityCode: String
-	var contactInfo: String
+	var info: PropertyInfo = PropertyInfo()
 	
-	var payment: PaymentFee
-	var cost: Int
-	var paymentNotes: String
+	var location: Location = Location()
+	var bookings: [Booking] = []
+	var available: [Availability] = []
+	var unavailable: [Availability] = []
 	
-	var location: Location
-	var bookings: [Booking]
-	var available: [Booking]
-	var unavailable: [Booking]
+	init() {}
 	
-	init(
-		id: String,
-		nickname: String = "",
-		ownerId: String = "",
-		ownerName: String = "",
-		people: Int = 0,
-		cleaningNotes: String = "",
-		wifi: String = "",
-		securityCode: String = "",
-		payment: PaymentFee = .free,
-		cost: Int = 0,
-		paymentNotes: String = "",
-		contactInfo: String = "",
-		notes: String = "",
-		location: Location = Location(),
-		bookings: [Booking] = [],
-		available: [Booking] = [],
-		unavailable: [Booking] = []
-	) {
+	init(id: String, propertyData: [String: Any], bookingDocuments: [QueryDocumentSnapshot]) {
 		self.id = id
-		self.nickname = nickname
-		self.ownerId = ownerId
-		self.ownerName = ownerName
-		self.people = people
+		self.ownerId = propertyData["ownerId"] as? String ?? ""
+		self.ownerName = propertyData["ownerName"] as? String ?? ""
 		
-		self.notes = notes
-		self.cleaningNotes = cleaningNotes
-		self.wifi = wifi
-		self.securityCode = securityCode
-		self.contactInfo = contactInfo
+		self.info = PropertyInfo(data: propertyData["info"] as? [String: Any] ?? [:])
 		
-		self.payment = payment
-		self.cost = cost
-		self.paymentNotes = paymentNotes
+		self.location = Location(data: propertyData["location"] as? [String: Any] ?? [:])
+
+		for document in bookingDocuments {
+			let data = document.data()
+			let newBooking = Booking(id: document.documentID, data: data)
+			self.bookings.append(newBooking)
+		}
 		
-		self.location = location
-		self.bookings = bookings
-		self.available = available
-		self.unavailable = unavailable
+		let availabilityDataArray = propertyData["available"] as? [[String: Any]] ?? []
+		for availabilityData in availabilityDataArray {
+			available.append(Availability(type: .available, data: availabilityData))
+		}
+		
+		let busyDataArray = propertyData["unavailable"] as? [[String: Any]] ?? []
+		for busyData in busyDataArray {
+			unavailable.append(Availability(type: .unavailable, data: busyData))
+		}
 	}
 	
-	init(id: String, data: [String: Any]) {
-		self.id = id
-		self.nickname = data["nickname"] as? String ?? ""
-		self.ownerId = data["ownerId"] as? String ?? ""
-		self.ownerName = data["ownerName"] as? String ?? ""
-		self.people = data["people"] as? Int ?? 0
+	init(property: Property, propertyData: [String: Any]) {
+		self.id = property.id
+		self.ownerId = propertyData["ownerId"] as? String ?? ""
+		self.ownerName = propertyData["ownerName"] as? String ?? ""
 		
-		self.notes = data["notes"] as? String ?? ""
-		self.cleaningNotes = data["cleaningNotes"] as? String ?? ""
-		self.wifi = data["wifi"] as? String ?? ""
-		self.securityCode = data["securityCode"] as? String ?? ""
-		self.contactInfo = data["contactInfo"] as? String ?? ""
+		self.info = PropertyInfo(data: propertyData["info"] as? [String: Any] ?? [:])
 		
-		self.payment = PaymentFee(rawValue: data["payment"] as? String ?? "") ?? .free
-		self.cost = data["cost"] as? Int ?? 0
-		self.paymentNotes = data["paymentNotes"] as? String ?? ""
+		self.location = Location(data: propertyData["location"] as? [String: Any] ?? [:])
+
+		self.bookings = property.bookings
 		
-		self.location = Location(data: data)
+		let availabilityDataArray = propertyData["available"] as? [[String: Any]] ?? []
+		for availabilityData in availabilityDataArray {
+			available.append(Availability(type: .available, data: availabilityData))
+		}
+		
+		let busyDataArray = propertyData["unavailable"] as? [[String: Any]] ?? []
+		for busyData in busyDataArray {
+			unavailable.append(Availability(type: .unavailable, data: busyData))
+		}
+	}
+	
+	init(property: Property, bookingDocuments: [QueryDocumentSnapshot]) {
+		self.id = property.id
+		self.ownerId = property.ownerId
+		self.ownerName = property.ownerName
+		self.info = property.info
+		self.location = property.location
+		self.available = property.available
+		self.unavailable = property.unavailable
 		
 		self.bookings = []
-		self.available = []
-		self.unavailable = []
-
-		let bookingDataArray = data["bookings"] as? [[String: Any]] ?? []
-		for bookingData in bookingDataArray {
-			bookings.append(Booking(data: bookingData))
-		}
-		
-		let availabilityDataArray = data["available"] as? [[String: Any]] ?? []
-		for availabilityData in availabilityDataArray {
-			available.append(Booking(data: availabilityData))
-		}
-		
-		let busyDataArray = data["unavailable"] as? [[String: Any]] ?? []
-		for busyData in busyDataArray {
-			unavailable.append(Booking(data: busyData))
+		for document in bookingDocuments {
+			let data = document.data()
+			let newBooking = Booking(id: document.documentID, data: data)
+			self.bookings.append(newBooking)
 		}
 	}
 	
@@ -120,7 +94,7 @@ struct Property: Identifiable, Hashable {
 		Install FriendBNB on the app store and add my property!
 		I've got a place you can check out.
 		
-		\(self.nickname.isEmpty ? ownerName + "'s Place" : self.nickname) in \(self.location.city) \(self.location.state)
+		\(self.info.nickname.isEmpty ? self.ownerName + "'s Place" : self.info.nickname) in \(self.location.city) \(self.location.state)
 		Months available:
 		\(availableMonths)
 		Property id: \(self.id)
@@ -138,7 +112,7 @@ struct Property: Identifiable, Hashable {
 			}
 			count += 1
 		}
-		return string
+		return string + (count == 0 ? "    - Request your own dates..." : "\n    - Request your own dates...")
 	}
 	
 	var shareLink: URL? {
@@ -150,6 +124,6 @@ struct Property: Identifiable, Hashable {
 	}
 	
 	static func == (lhs: Property, rhs: Property) -> Bool {
-		lhs.id == rhs.id
+		lhs.id == rhs.id && lhs.bookings == rhs.bookings && lhs.info == rhs.info && lhs.location == rhs.location
 	}
 }

@@ -10,12 +10,6 @@ import FirebaseAuth
 import FirebaseFirestore
 
 @MainActor
-enum PropertyType: String {
-	case owned = "ownedProperties"
-	case friend = "friendsProperties"
-}
-
-@MainActor
 class PropertyStore: ObservableObject {
 	@Published var showTabBar = true
 	@Published var selectedTab: RootTabs = .owned
@@ -23,122 +17,187 @@ class PropertyStore: ObservableObject {
 	@Published var ownedProperties: [Property] = []
 	@Published var friendsProperties: [Property] = []
 	
-	@Published var showOwnedAvailability = false
-	@Published var showOwnedBooking = false
-	@Published var selectedOwnedProperty: Property? {
+	// OWNED PAGE
+	@Published var showOwnedAvailabilitySheet = false
+	@Published var showOwnedExistingBookingsSheet = false
+	@Published var ownedSelectedBooking: PropertyBookingGroup?
+	@Published var ownedSelectedProperty: Property? {
 		didSet {
-			showTabBar = selectedOwnedProperty == nil
+			showTabBar = ownedSelectedProperty == nil
 		}
 	}
 	
-	@Published var showFriendExistingBooking: Booking? 
-	@Published var showFriendNewBooking = false
-	@Published var selectedFriendProperty: Property? {
+	// FRIEND PAGE
+	@Published var showFriendNewBookingSheet = false
+	@Published var friendSelectedBookingInDetail: Booking?
+	@Published var friendSelectedBooking: PropertyBookingGroup?
+	@Published var friendSelectedProperty: Property? {
 		didSet {
-			showTabBar = selectedFriendProperty == nil
+			showTabBar = friendSelectedProperty == nil
 		}
 	}
 	
 	@Published var showNewPropertySheet = false
 	@Published var showAddPropertySheet = false
 	
+	@Published var selectedAddToCalendar: PropertyBookingGroup?
+	
+	@Published var addPropertyID: String?
+	
 	@Published var loading = false
 	
-	var listener: ListenerRegistration?
+	var propertyListener: ListenerRegistration?
+	var bookingListener: ListenerRegistration?
 	
-	func showOwnedProperty(_ property: Property, showAvailability: Bool = false) {
-		self.selectedTab = .owned
-		self.selectedOwnedProperty = property
-		//subscribe(type: .owned)
-		//showTabBar = false
-		
-		if showAvailability {
-			DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-				self.showOwnedAvailability = showAvailability
+	var numberPending: Int {
+		var count = 0
+		for properties in ownedProperties {
+			for booking in properties.bookings {
+				if booking.status == .pending {
+					count += 1
+				}
+			}
+		}
+		return count
+	}
+	
+	func showProperty(_ property: Property, type: PropertyType, showAvailability: Bool = false) {
+		self.selectedTab = type == .owned ? .owned : .friends
+		DispatchQueue.main.asyncAfter(deadline: .now()) {
+			switch type {
+			case .owned:
+				self.ownedSelectedProperty = property
+				if showAvailability {
+					DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) {
+						switch type {
+						case .owned:
+							self.showOwnedAvailabilitySheet = showAvailability
+						case .friend: break
+						}
+					}
+				}
+			case .friend:
+				self.friendSelectedProperty = property
 			}
 		}
 	}
 	
-	func showFriendProperty(_ property: Property, delay: Bool = false) {
-		self.selectedTab = .friends
-		//subscribe(type: .friend)
-		//showTabBar = false
-		
-		if delay {
-			DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-				self.selectedFriendProperty = property
+	func dismissProperty() {
+		self.ownedSelectedProperty = nil
+		self.friendSelectedProperty = nil
+	}
+	
+	func getSelectedProperty(_ type: PropertyType) -> Property? {
+		switch type {
+		case .owned:
+			return self.ownedSelectedProperty
+		case .friend: 
+			return self.friendSelectedProperty
+		}
+	}
+	
+	func showBooking(booking: Booking, property: Property, type: PropertyType) {
+		self.selectedTab = type == .owned ? .owned : .friends
+		DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
+			switch type {
+			case .owned:
+				self.ownedSelectedBooking = PropertyBookingGroup(property: property, booking: booking)
+			case .friend:
+				self.friendSelectedBooking = PropertyBookingGroup(property: property, booking: booking)
 			}
-		} else {
-			self.selectedFriendProperty = property
+		}
+	}
+	
+	func dismissBooking() {
+		self.ownedSelectedBooking = nil
+		self.friendSelectedBooking = nil
+	}
+	
+	func getSelectedBooking(_ type: PropertyType) -> Booking? {
+		switch type {
+		case .owned:
+			return self.ownedSelectedBooking?.booking
+		case .friend:
+			return self.friendSelectedBooking?.booking
 		}
 	}
 	
 	func subscribe(type: PropertyType) {
 		print("SUBSCRIBING: \(type.rawValue)")
-		guard let property = type == .owned ? selectedOwnedProperty : selectedFriendProperty else {
+		guard let property = type == .owned ? ownedSelectedProperty : friendSelectedProperty else {
 			return
 		}
 		let db = Firestore.firestore()
-		self.listener = db.collection("Properties").document(property.id)
+		self.propertyListener = db.collection("Properties").document(property.id)
 			.addSnapshotListener { documentSnapshot, error in
 				guard let document = documentSnapshot else {
 					print("Error fetching document: \(error!)")
 					return
 				}
-
+				
 				if let newData = document.data() {
 					switch type {
 					case .friend:
-						self.selectedFriendProperty = Property(id: property.id, data: newData)
+						self.friendSelectedProperty = Property(property: property, propertyData: newData)
 					case .owned:
-						self.selectedOwnedProperty = Property(id: property.id, data: newData)
+						self.ownedSelectedProperty = Property(property: property, propertyData: newData)
 					}
 				} else {
+					self.dismissProperty()
 					switch type {
 					case .friend:
-						self.selectedFriendProperty = nil
 						Task {
 							await self.fetchProperties(.friend)
 						}
 					case .owned:
-						self.selectedOwnedProperty = nil
 						Task {
 							await self.fetchProperties(.owned)
 						}
 					}
 				}
 			}
+		
+		self.bookingListener = db.collection("Properties").document(property.id).collection("Bookings")
+			.addSnapshotListener { documentsSnapshot, error in
+				guard let documents = documentsSnapshot?.documents else {
+					print("Error fetching documents: \(error!)")
+					return
+				}
+				
+				switch type {
+				case .friend:
+					self.friendSelectedProperty = Property(property: property, bookingDocuments: documents)
+				case .owned:
+					self.ownedSelectedProperty = Property(property: property, bookingDocuments: documents)
+				}
+			}
 	}
 	
 	func unsubscribe() {
 		print("Removing listener from DETAIL VIEW")
-		self.listener?.remove()
+		self.propertyListener?.remove()
 	}
-	
-	// MARK: SERVICE FUNCTIONS
 	
 	func getProperty(id: String) async -> Property? {
 		let db = Firestore.firestore()
 		
-		guard Auth.auth().currentUser != nil else {
-			print("User not found")
-			return nil
-		}
-		
 		print("Fetching properties: \(id)")
-
+		
+		guard await self.checkValidId(id) != nil else { return nil }
+		
 		do {
-			let snapshot = try await db.collection("Properties").whereField(FirebaseFirestore.FieldPath.documentID(), isEqualTo: id).getDocuments()
+			let document = try await db.collection("Properties").document(id).getDocument()
 			
-			for document in snapshot.documents {
-				let data = document.data()
-				return Property(id: document.documentID, data: data)
+			guard let data = document.data() else {
+				return nil
 			}
+			
+			let bookingSnapshot = try await db.collection("Properties").document(id).collection("Bookings").getDocuments()
+			return Property(id: document.documentID, propertyData: data, bookingDocuments: bookingSnapshot.documents)
+			
 		} catch {
 			return nil
 		}
-		
-		return nil
 	}
 	
 	func fetchProperties(_ type: PropertyType) async {
@@ -151,6 +210,7 @@ class PropertyStore: ObservableObject {
 			return
 		}
 		
+		// Get list of property Ids
 		var propertyIds = [String]()
 		print("Attempting to fetch property Ids")
 		do {
@@ -165,17 +225,19 @@ class PropertyStore: ObservableObject {
 		
 		print("Fetching properties: \(propertyIds)")
 		var newProperties: [Property] = []
-		//try? await Task.sleep(nanoseconds: 500000000)
 		
 		for propertyId in propertyIds {
 			do {
-				let snapshot = try await db.collection("Properties").whereField(FirebaseFirestore.FieldPath.documentID(), isEqualTo: propertyId).getDocuments()
+				let document = try await db.collection("Properties").document(propertyId).getDocument()
 				
-				for document in snapshot.documents {
-					let data = document.data()
-					newProperties.append(Property(id: document.documentID, data: data))
+				guard let data = document.data() else {
+					continue
 				}
-			} catch {
+				
+				let bookingSnapshot = try await db.collection("Properties").document(propertyId).collection("Bookings").getDocuments()
+				
+				newProperties.append(Property(id: document.documentID, propertyData: data, bookingDocuments: bookingSnapshot.documents))
+			} catch {				
 				self.loading = false
 				return
 			}
@@ -200,7 +262,7 @@ class PropertyStore: ObservableObject {
 		self.loading = false
 	}
 	
-	func addProperty(_ id: String, type: PropertyType) async {
+	func addPropertyToUser(_ id: String, type: PropertyType) async {
 		let db = Firestore.firestore()
 		let ref = db.collection("Accounts")
 		
@@ -225,7 +287,7 @@ class PropertyStore: ObservableObject {
 		}
 	}
 	
-	func removeProperty(_ id: String, type: PropertyType) async {
+	func removePropertyFromUser(_ id: String, type: PropertyType) async {
 		let db = Firestore.firestore()
 		let ref = db.collection("Accounts")
 		
@@ -250,12 +312,15 @@ class PropertyStore: ObservableObject {
 	}
 	
 	func createProperty(location: Location, info: NewPropertyInfo) async -> String {
+		if info.nickname == "", let name = Auth.auth().currentUser?.displayName {
+			info.nickname = name + "'s Property"
+		}
 		var newDict = location.dictonary.merging(info.dictonary) { (_, new) in new }
 		if let user = Auth.auth().currentUser {
 			newDict = newDict.merging([
 				"ownerId": user.uid,
 				"ownerName": user.displayName ?? ""
- 			]) { (_, new) in new }
+			]) { (_, new) in new }
 		}
 		
 		let db = Firestore.firestore()
@@ -270,11 +335,11 @@ class PropertyStore: ObservableObject {
 		return id
 	}
 	
-	func deleteProperty(id: String, type: PropertyType) async {
+	func deleteProperty(id: String) async {
 		let db = Firestore.firestore()
 		do {
 			try await db.collection("Properties").document(id).delete()
-			print("Document successfully removed \(id) from \(type.rawValue)!")
+			print("Document successfully removed \(id)!")
 		} catch {
 			print("Error removing document: \(error)")
 		}
@@ -319,5 +384,65 @@ class PropertyStore: ObservableObject {
 		}
 		
 		return id
+	}
+	
+	func addSchedule(startDate: Date?, endDate: Date?, type: ScheduleType, property: Property) async -> String? {
+		guard let startDate = startDate else {
+			return "Please choose a start date."
+		}
+		
+		let db = Firestore.firestore()
+		do {
+			try await db.collection("Properties").document(property.id).updateData([
+				type.rawValue: FieldValue.arrayUnion([["start": startDate as Any,
+													   "end": endDate ?? startDate as Any]])
+			])
+			print("Booking from \(String(describing: startDate)) to \(String(describing: endDate))")
+		} catch {
+			print("Error booking: \(error)")
+			return error.localizedDescription
+		}
+		
+		return nil
+	}
+	
+	func deleteSchedule(_ schedule: Availability, propertyId: String) async {
+		print("Attempting to delete booking")
+		let db = Firestore.firestore()
+		do {
+			try await db.collection("Properties").document(propertyId).updateData([
+				schedule.type.rawValue: FieldValue.arrayRemove([["start": schedule.start as Any, "end": schedule.end as Any]])
+			])
+			print("Deleting booking from \(String(describing: schedule.start)) to \(String(describing: schedule.end))")
+		} catch {
+			print("Error deleting booking: \(error)")
+		}
+	}
+	
+	func readNotification(_ data: [AnyHashable: Any]) {
+		guard let bookingId = data["bookingId"] as? String else { return }
+		guard let propertyId = data["propertyId"] as? String else { return }
+		guard let userId = Auth.auth().currentUser?.uid else { return }
+		
+		if let type = data["type"] as? String, type == "owned" {
+			Task { @MainActor in
+				if let property = await self.getProperty(id: propertyId), property.ownerId == userId, let booking = property.bookings.filter({ $0.id == bookingId }).first {
+					self.dismissProperty()
+					self.dismissBooking()
+					await self.fetchProperties(.owned)
+					self.showBooking(booking: booking, property: property, type: .owned)
+				}
+			}
+		} else if let type = data["type"] as? String, type == "friend" {
+			Task { @MainActor in
+				if let property = await self.getProperty(id: propertyId), let booking = property.bookings.filter({ $0.id == bookingId }).first, booking.userId == userId {
+					self.dismissProperty()
+					self.dismissBooking()
+					await self.fetchProperties(.friend)
+					self.showBooking(booking: booking, property: property, type: .friend)
+				}
+			}
+		}
+		
 	}
 }

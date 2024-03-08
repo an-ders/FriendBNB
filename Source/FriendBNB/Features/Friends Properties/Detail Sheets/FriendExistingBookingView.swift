@@ -15,7 +15,7 @@ struct FriendExistingBookingView: View {
 	
 	let id = Auth.auth().currentUser?.uid ?? ""
 	var body: some View {
-		let bookings = propertyStore.selectedFriendProperty!.bookings.withId(id: id).current()
+		let bookings = propertyStore.friendSelectedProperty!.bookings.withId(id: id).current()
 		if bookings.isEmpty {
 			VStack {
 				Image(systemName: "house")
@@ -55,7 +55,7 @@ struct FriendExistingBookingView: View {
 						
 						ScrollView {
 							VStack {
-								ForEach(propertyStore.selectedFriendProperty!.bookings.withId(id: id).current()) { booking in
+								ForEach(propertyStore.friendSelectedProperty!.bookings.withId(id: id).current()) { booking in
 //									BookingTileView(booking: booking, delete: {
 //										Task {
 //											await bookingStore.deleteBooking(booking, type: .booking, property: propertyStore.selectedFriendProperty!)
@@ -68,9 +68,8 @@ struct FriendExistingBookingView: View {
 						}
 					}
 				})
-				.interactiveDismissDisabled()
-				.padding(.horizontal, Constants.Padding.regular)
-				.padding(.top, Constants.Padding.small)
+				.padding(.horizontal, Constants.Spacing.regular)
+				.padding(.top, Constants.Spacing.small)
 			}
 		}
 	}

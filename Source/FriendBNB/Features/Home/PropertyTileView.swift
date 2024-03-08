@@ -15,93 +15,121 @@ struct AnnotatedItem: Identifiable {
 }
 
 struct PropertyTileView: View {
-    var property: Property
-    //var action: () -> Void
-	var coordinate: CLLocationCoordinate2D
+	@EnvironmentObject var propertyStore: PropertyStore
+	@EnvironmentObject var notificationStore: NotificationStore
+	@EnvironmentObject var bookingStore: BookingStore
+	@EnvironmentObject var authStore: AuthenticationStore
+	var property: Property
+	var type: PropertyType
+	var bookingAction: (Booking) -> Void
 	
 	let decimals = 3
 	
-	init(property: Property) {
-		self.property = property
-		self.coordinate = CLLocationCoordinate2D(latitude: property.location.geo.latitude, longitude: property.location.geo.longitude)
-	}
-    
-    var body: some View {
+	var body: some View {
+		let coordinate = CLLocationCoordinate2D(latitude: property.location.geo.latitude, longitude: property.location.geo.longitude)
+		let center =  CLLocationCoordinate2D(latitude: property.location.geo.latitude - 100 / 111111, longitude: property.location.geo.longitude)
 		VStack(spacing: 0) {
-			VStack {
-				Map(position: .constant(MapCameraPosition.region(MKCoordinateRegion(center: coordinate, latitudinalMeters: 1000, longitudinalMeters: 1000)))) {
-					Marker("", coordinate: coordinate)
+			Button(action: {
+				propertyStore.showProperty(property, type: type)
+			}, label: {
+				ZStack {
+					Map(position: .constant(MapCameraPosition.region(MKCoordinateRegion(center: center, latitudinalMeters: 1000, longitudinalMeters: 1000)))) {
+						Marker("", coordinate: coordinate)
+					}
+					.disabled(true)
+					
+					VStack {
+						VStack(spacing: 0) {
+							Text(property.info.nickname)
+								.styled(.title, weight: .bold)
+							if type == .owned {
+								Text(property.id)
+									.styled(.caption)
+									.foregroundStyle(Color.systemGray5)
+							} else {
+								Text("People: \(property.info.people) | Cost: \(property.info.payment == .free ? "Free" : "$" + String(format: "%.2f", property.info.cost))")
+									.styled(.caption)
+									.foregroundStyle(Color.systemGray5)
+							}
+						}
+						.padding(Constants.Spacing.medium)
+						.darkWindow()
+						.cornerRadius(5)
+						.foregroundStyle(Color.white)
+						.padding(.top, 50)
+						.shadow(radius: 5)
+					}
+					.frame(maxWidth: .infinity, maxHeight: .infinity)
+					.background(.black.opacity(0.4))
 				}
-				.frame(height: 150)
-				.disabled(true)
-			}
-			.frame(height: 150)
+				.frame(height: 175)
+			})
 			
-			VStack(spacing: 0) {
-				if property.nickname.isEmpty {
-					Text(property.location.addressTitle)
-						.font(.title).fontWeight(.medium)
-						.frame(maxWidth: .infinity, alignment: .leading)
-					Text(property.location.addressDescription)
-						.font(.caption).fontWeight(.light)
-						.frame(maxWidth: .infinity, alignment: .leading)
-				} else {
-					Text(property.nickname)
-						.font(.title).fontWeight(.medium)
-						.frame(maxWidth: .infinity, alignment: .leading)
-					Text(property.location.addressTitle + " " + property.location.addressDescription)
-						.font(.caption).fontWeight(.light)
-						.frame(maxWidth: .infinity, alignment: .leading)
+			let bookings = type == .owned ? property.bookings.current().dateSorted() : property.bookings.withId(id: authStore.user?.uid ?? "").current().dateSorted()
+			List {
+				ForEach(bookings, id: \.id) { booking in
+					Button(action: {
+						bookingAction(booking)
+					}, label: {
+						BookingTileView(booking: booking, showName: type == .owned) {
+							if booking.status == .confirmed {
+								Button(action: {
+									propertyStore.selectedAddToCalendar = PropertyBookingGroup(type: type, property: property, booking: booking)
+								}, label: {
+									Image(systemName: "calendar")
+										.resizable()
+										.scaledToFit()
+										.frame(height: 20)
+								})
+							}
+						}
+					})
+					.swipeActions(edge: .trailing, allowsFullSwipe: false) {
+						if type == .owned && booking.status == .pending {
+							Button(action: {
+								Task {
+									if let error = await bookingStore.updateBooking(booking: booking, property: property, status: .confirmed, message: "", sensitiveInfo: [SensitiveInfoType.notes.rawValue, SensitiveInfoType.contactInfo.rawValue, SensitiveInfoType.cleaningNotes.rawValue, SensitiveInfoType.wifi.rawValue, SensitiveInfoType.securityCode.rawValue, SensitiveInfoType.paymentNotes.rawValue]) {
+										return
+									}
+									
+									notificationStore.pushNotification(message: "Booking approved!")
+									await propertyStore.fetchProperties(.owned)
+									//propertyStore.dismissProperty()
+								}
+							}, label: {
+								Label("Approve", systemImage: "checkmark")
+									.contentShape(Rectangle())
+							})
+							.tint(Color.systemGreen)
+							
+							Button(action: {
+								Task {
+									if let error = await bookingStore.updateBooking(booking: booking, property: property, status: .declined, message: "", sensitiveInfo: []) {
+										return
+									}
+									notificationStore.pushNotification(message: "Booking declined.")
+									await propertyStore.fetchProperties(.owned)
+									//propertyStore.dismissProperty()
+								}
+							}, label: {
+								Label("Decline", systemImage: "xmark")
+									.contentShape(Rectangle())
+							})
+							.tint(Color.systemRed)
+						}
+					}
 				}
-				
 			}
-			.padding(Constants.Padding.small)
-			.foregroundColor(.black.opacity(0.8))
-			.background {
-				Color.systemGray6
-			}
+			.environment(\.defaultMinListRowHeight, 90)
+			.listStyle(.plain)
+			.frame(height: 90 * CGFloat(bookings.count))
+			.zIndex(4)
+			//.padding(.bottom, Constants.Spacing.medium)
 		}
 		.clipShape(RoundedRectangle(cornerRadius: 10))
-		.padding(.horizontal, Constants.Padding.regular)
-			
-//		Map(coordinateRegion: $region, annotationItems: [AnnotatedItem(name: property.nickname, coordinate: coordinate)]) { location in
-//					MapAnnotation(coordinate: location.coordinate) {
-//						Circle()
-//							.stroke(.red, lineWidth: 3)
-//							.frame(width: 44, height: 44)
-//					}
-//				}
-//        Button(action: {
-//            action()
-//        }, label: {
-//            VStack(alignment: .leading) {
-//                Spacer()
-//                VStack(spacing: 0) {
-//                    Text(property.location.addressTitle)
-//                        .font(.title).fontWeight(.medium)
-//                        .frame(maxWidth: .infinity, alignment: .leading)
-//                    Text(property.location.addressDescription)
-//                        .font(.caption).fontWeight(.light)
-//                        .frame(maxWidth: .infinity, alignment: .leading)
-//                }
-//                .foregroundColor(.white)
-//                .padding(Constants.Padding.small)
-//            }
-//            .frame(height: 150)
-//            .frame(maxWidth: .infinity)
-//            .background {
-//                RoundedRectangle(cornerRadius: 15)
-//                    .foregroundColor(.systemGray2)
-//            }
-//            .padding(.horizontal, 10)
-//        })
-    }
-}
-
-extension PropertyTileView {
-    class ViewModel: ObservableObject {
-
-    }
+		.shadow(radius: 5)
+		.padding(.horizontal, Constants.Spacing.regular)
+	}
 }
 
 //struct HomeTileView_Previews: PreviewProvider {

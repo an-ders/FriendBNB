@@ -14,45 +14,73 @@ struct OwnedExistingBookingView: View {
 	@EnvironmentObject var bookingStore: BookingStore
 	@Environment(\.dismiss) private var dismiss
 	
+	@State var bookingNotification: CustomNotification?
 	@State var bookingDetail: Booking?
+	@State var showAddToCalendar: PropertyBookingGroup?
 
 	var body: some View {
-		if let property = propertyStore.selectedOwnedProperty {
+		if let property = propertyStore.ownedSelectedProperty {
 			if property.bookings.current().isEmpty {
 				emptyView
 			} else {
 				NavigationStack {
-					PairButtonWrapper(prevText: "", prevAction: {
-						
-					}, nextText: "Back", nextAction: {
-						dismiss()
-					}, content: {
-						VStack {
-							Text("Bookings")
-								.font(.largeTitle).fontWeight(.medium)
-								.frame(maxWidth: .infinity, alignment: .leading)
-								.padding(.bottom, Constants.Spacing.small)
+					NotificationView(notification: $bookingNotification) {
+						PairButtonWrapper(prevText: "", prevAction: {
 							
-							ScrollView {
-								VStack {
-									ForEach(property.bookings.current().dateSorted()) { booking in
-										Button(action: {
-											bookingDetail = booking
-										}, label: {
-											BookingTileView(booking: booking, showName: true)
-										})
+						}, nextText: "Back", nextAction: {
+							dismiss()
+						}, content: {
+							VStack(spacing: 0) {
+								DetailSheetTitle(title: "YOUR BOOKING", showDismiss: true)
+									.padding(.leading, Constants.Spacing.medium)
+									.padding(.vertical, Constants.Spacing.large)
+									.padding(.trailing, Constants.Spacing.medium)
+								
+								let bookings = property.bookings.current().dateSorted()
+								ScrollView(showsIndicators: false) {
+									VStack {
+										List {
+											ForEach(bookings) { booking in
+												Button(action: {
+													bookingDetail = booking
+												}, label: {
+													BookingTileView(booking: booking) {
+														if booking.status == .confirmed {
+															Button(action: {
+																showAddToCalendar = PropertyBookingGroup(property: property, booking: booking)
+															}, label: {
+																Image(systemName: "calendar")
+																	.resizable()
+																	.scaledToFit()
+																	.frame(height: 20)
+															})
+														}
+													}
+												})
+											}
+										}
+										.environment(\.defaultMinListRowHeight, 90)
+										.listStyle(.plain)
+										.frame(height: 90 * CGFloat(bookings.count))
+										.padding(.horizontal, -Constants.Spacing.regular)
+										
+										PairButtonSpacer()
 									}
-									
-									PairButtonSpacer()
 								}
 							}
+						})
+						.padding(.horizontal, Constants.Spacing.regular)
+						.navigationDestination(item: $bookingDetail) { booking in
+							OwnedBookingConfirmationView(property: property, booking: booking) { message in
+								sendNotification(message: message)
+							}
+							.navigationBarBackButtonHidden()
 						}
-					})
-					.interactiveDismissDisabled()
-					.padding(.horizontal, Constants.Padding.regular)
-					.padding(.top, Constants.Padding.small)
-					.navigationDestination(item: $bookingDetail) { booking in
-						OwnerBookingConfirmationView(property: property, booking: booking)
+					}
+				}
+				.sheet(item: $showAddToCalendar) { group in
+					EventEditViewController(group: group) {
+						showAddToCalendar = nil
 					}
 				}
 			}
@@ -88,37 +116,19 @@ struct OwnedExistingBookingView: View {
 			})
 		}
 	}
+	
+	func sendNotification(message: String) {
+		withAnimation {
+			self.bookingNotification = CustomNotification(message: message, dismissable: true)
+		}
+		
+		DispatchQueue.main.asyncAfter(deadline: .now() + 10) {
+			withAnimation {
+				self.bookingNotification = nil
+			}
+		}
+	}
 }
-
-//extension OwnedExistingBookingView {
-//	class ViewModel: ObservableObject {
-//		@Published var property: Property
-//		
-//		func subscribe() {
-//			print("Adding listener in BOOKING MANAGER")
-//			
-//			let db = Firestore.firestore()
-//			self.listener = db.collection("Properties").document(property.id)
-//				.addSnapshotListener { documentSnapshot, error in
-//					guard let document = documentSnapshot else {
-//						print("Error fetching document: \(error!)")
-//						return
-//					}
-//					
-//					if let newData = document.data() {
-//						print("Updating data BOOKING MANAGER")
-//						self.property = Property(id: self.property.id, data: newData)
-//					} else {
-//					}
-//				}
-//		}
-//		
-//		func unsubscribe() {
-//			print("Removing listener from BOOKING MANAGER")
-//			self.listener?.remove()
-//		}
-//	}
-//}
 
 //#Preview {
 //	OwnedExistingBookingView()

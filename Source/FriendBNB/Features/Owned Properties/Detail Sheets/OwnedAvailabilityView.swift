@@ -18,121 +18,101 @@ struct OwnedAvailabilityView: View {
 	}
 	
 	var body: some View {
-		VStack {
-			VStack {
-				HStack(alignment: .center) {
-					Text("Set Availability")
-						.title()
+		VStack(spacing: 0) {
+			VStack(spacing: 0) {
+				DetailSheetTitle(title: "AVAILABILITY", showDismiss: true)
+					.padding(.leading, Constants.Spacing.medium)
+					.padding(.vertical, Constants.Spacing.large)
+					.padding(.trailing, Constants.Spacing.large)
+				Divider()
+			}
+			ScrollView(showsIndicators: false) {
+				VStack {
+					Text(calendarViewModel.mode == .available ? "Select available days:" : "Select unavailable days:")
+						.styled(.body)
 						.fillLeading()
-						.padding(.bottom, Constants.Spacing.small)
 					
-					Button(action: {
-						dismiss()
-					}, label: {
-						Text("Done")
-							.font(.headline).fontWeight(.semibold)
-							.underline()
-					})
-				}
-				
-				CalendarView(type: .owned)
-					.environmentObject(calendarViewModel)
-					.padding(.horizontal, Constants.Padding.regular)
-					.frame(maxHeight: 300)
-				
-				Text(calendarViewModel.error)
-					.font(.headline).fontWeight(.light)
-					.frame(maxWidth: .infinity, alignment: .leading)
-					.foregroundColor(Color.systemRed)
-				
-				HStack {
-					Spacer()
-					Button(action: {
-						calendarViewModel.isAvailableMode = true
-					}, label: {
-						Text("Available")
-							.body()
-							.padding(.horizontal, 20)
-							.padding(.vertical, 8)
-							.foregroundStyle(Color.black)
-							.background(calendarViewModel.isAvailableMode ? Color.systemGreen.opacity(0.6) : Color.systemGray3)
-							.cornerRadius(20)
-					})
-					Spacer()
-					Button(action: {
-						calendarViewModel.isAvailableMode = false
-					}, label: {
-						Text("Unavailable")
-							.body()
-							.padding(.horizontal, 20)
-							.padding(.vertical, 8)
-							.foregroundStyle(Color.black)
-							.background(!calendarViewModel.isAvailableMode ? Color.systemRed.opacity(0.6) : Color.systemGray4)
-							.cornerRadius(20)
-					})
-					Spacer()
-				}
-				
-				ScrollView(showsIndicators: false) {
+					CalendarView(type: .owned)
+						.environmentObject(calendarViewModel)
+						.padding(.horizontal, Constants.Spacing.regular)
+						.frame(maxHeight: 300)
+					
+					Text(calendarViewModel.error)
+						.font(.headline).fontWeight(.light)
+						.frame(maxWidth: .infinity, alignment: .leading)
+						.foregroundColor(Color.systemRed)
+					
+					HStack {
+						Spacer()
+						Button(action: {
+							calendarViewModel.mode = .available
+						}, label: {
+							Text("Available")
+								.styled(.bodyBold)
+								.padding(.horizontal, 20)
+								.padding(.vertical, 8)
+								.foregroundStyle(Color.black)
+								.background(calendarViewModel.mode == .available ? calendarViewModel.mode.colorBG : Color.systemGray6)
+								.cornerRadius(20)
+						})
+						Spacer()
+						Button(action: {
+							calendarViewModel.mode = .unavailable
+						}, label: {
+							Text("Unavailable")
+								.styled(.bodyBold)
+								.padding(.horizontal, 20)
+								.padding(.vertical, 8)
+								.foregroundStyle(Color.black)
+								.background(calendarViewModel.mode == .unavailable ? calendarViewModel.mode.colorBG : Color.systemGray6)
+								.cornerRadius(20)
+						})
+						Spacer()
+					}
+					let availableList = calendarViewModel.property.available.current().dateSorted()
+					let unavailableList = calendarViewModel.property.unavailable.current().dateSorted()
 					VStack {
-						if calendarViewModel.isAvailableMode {
-							ForEach(calendarViewModel.property.available.current().dateSorted()) { availability in
-								AvailabilityTileView(availibility: availability, type: .available, bgColor: Color.systemGray3) {
-									Task {
-										await bookingStore.deleteBooking(availability, type: .available, property: calendarViewModel.property)
-									}
-								}
-							}
+						if calendarViewModel.mode == .available {
+							availableList
+							unavailableList
 						} else {
-							ForEach(calendarViewModel.property.unavailable.current().dateSorted()) { availability in
-								AvailabilityTileView(availibility: availability, type: .unavailable, bgColor: Color.systemGray3) {
-									Task {
-										await bookingStore.deleteBooking(availability, type: .unavailable, property: calendarViewModel.property)
-									}
-								}
-							}
+							unavailableList
+							availableList
 						}
 						
-						Rectangle()
-							.fill(
-								.white
-							)
-							.frame(maxWidth: .infinity)
-							.frame(height: 70)
+						ForEach(calendarViewModel.mode != .available ? availableList : unavailableList) { availability in
+							AvailabilityTileView(availibility: availability) {
+								Task {
+									await propertyStore.deleteSchedule(availability, propertyId: calendarViewModel.property.id)
+								}
+							}
+							Divider()
+						}
 					}
 				}
+				.padding(.top, Constants.Spacing.large)
 			}
-			
+				
 			HStack {
-				if let start = calendarViewModel.startDate, let end = calendarViewModel.endDate {
-					Text(start.formattedDate())
-						.bodyBold()
+				if let start = calendarViewModel.startDate {
+					Text(start.dayMonthString())
+						.styled(.bodyBold)
 						.frame(maxWidth: .infinity, alignment: .center)
+				}
+				if let end = calendarViewModel.endDate {
 					Image(systemName: "arrow.right")
 						.resizable()
 						.scaledToFit()
 						.frame(width: 15)
-					Text(end.formattedDate())
-						.bodyBold()
+					Text(end.dayMonthString())
+						.styled(.bodyBold)
 						.frame(maxWidth: .infinity, alignment: .center)
-					doneButton
-				} else if let date = calendarViewModel.startDate {
-					Text(date.formattedDate())
-						.bodyBold()
-						.frame(maxWidth: .infinity, alignment: .center)
-					doneButton
-				} else if let date = calendarViewModel.endDate {
-					Text(date.formattedDate())
-						.bodyBold()
-						.frame(maxWidth: .infinity, alignment: .center)
-					doneButton
-				} else {
-					doneButton
 				}
+				doneButton
 			}
 		}
-		.padding(.horizontal, Constants.Padding.regular)
-		.padding(.top, Constants.Padding.small)
+		.padding(.horizontal, Constants.Spacing.regular)
+		.padding(.top, Constants.Spacing.small)
 		.onTapGesture {
 			calendarViewModel.resetDates()
 		}
@@ -146,28 +126,28 @@ struct OwnedAvailabilityView: View {
 	
 	var doneButton: some View {
 		Button(action: {
-			if (calendarViewModel.startDate != nil || calendarViewModel.endDate != nil) {
+			if (calendarViewModel.startDate != nil) {
 				Task {
-					if let error = await bookingStore.addSchedule(
+					if let error = await propertyStore.addSchedule(
 						startDate: calendarViewModel.startDate,
 						endDate: calendarViewModel.endDate,
-						property: calendarViewModel.property,
-						type: calendarViewModel.isAvailableMode ? .available : .unavailable) {
+						type: calendarViewModel.mode,
+						property: calendarViewModel.property) {
 						calendarViewModel.error = error
 					} else {
 						calendarViewModel.resetDates()
 					}
 				}
 			} else {
-				propertyStore.showOwnedAvailability.toggle()
+				propertyStore.showOwnedAvailabilitySheet.toggle()
 			}
 		}, label: {
-			Text(calendarViewModel.startDate != nil || calendarViewModel.endDate != nil ? "Set" : "Done")
+			Text(calendarViewModel.startDate != nil ? "Set" : "Done")
 				.font(.headline).fontWeight(.semibold)
 				.frame(maxWidth: .infinity)
 				.padding(.vertical, 12)
 				.foregroundColor(.white)
-				.background((calendarViewModel.startDate != nil && calendarViewModel.endDate != nil) || (calendarViewModel.startDate == nil && calendarViewModel.endDate == nil) ? Color.systemBlue.opacity(0.6) : Color.systemGray3)
+				.background((calendarViewModel.startDate != nil) || (calendarViewModel.startDate == nil && calendarViewModel.endDate == nil) ? Color.systemBlue.opacity(0.6) : Color.systemGray3)
 				.cornerRadius(5)
 		})
 	}

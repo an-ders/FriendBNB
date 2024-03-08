@@ -8,25 +8,27 @@
 import SwiftUI
 
 struct NotificationView<Content: View>: View {
+	@Binding var notification: CustomNotification?
 	@ViewBuilder let content: Content
-	@EnvironmentObject var notificationStore: NotificationStore
 	
 	var body: some View {
 		ZStack(alignment: .top) {
 			content
 			
-			if let notification = notificationStore.notification {
+			if let notification = notification {
 				HStack(alignment: .top) {
 					Text(notification.message)
-						.caption()
+						.styled(.caption)
 						.frame(maxWidth: .infinity, alignment: .leading)
 						.foregroundStyle(Color.black)
-						.padding(.leading, Constants.Padding.regular)
-						.padding(.vertical, Constants.Padding.regular)
+						.padding(.leading, Constants.Spacing.regular)
+						.padding(.vertical, Constants.Spacing.regular)
 					
 					if notification.dismissable {
 						Button(action: {
-							notificationStore.dismissNotification()
+							withAnimation {
+								self.notification = nil
+							}
 						}, label: {
 							Image(systemName: "x.circle")
 								.resizable()
@@ -34,8 +36,8 @@ struct NotificationView<Content: View>: View {
 								.frame(width: 16)
 								.foregroundStyle(Color.black)
 						})
-						.padding(.horizontal, Constants.Padding.regular)
-						.padding(.vertical, Constants.Padding.regular)
+						.padding(.horizontal, Constants.Spacing.regular)
+						.padding(.vertical, Constants.Spacing.regular)
 						.contentShape(Rectangle())
 					}
 				}
@@ -45,13 +47,18 @@ struct NotificationView<Content: View>: View {
 					insertion: .move(edge: .leading),
 					removal: .move(edge: .trailing)
 				))
+				.onTapGesture {
+					withAnimation {
+						self.notification = nil
+					}
+				}
 			}
 		}
 	}
 }
 	
-#Preview {
-	NotificationView {
-		Color.white
-	}
-}
+//#Preview {
+//	NotificationView {
+//		Color.white
+//	}
+//}

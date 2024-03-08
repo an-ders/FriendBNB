@@ -14,7 +14,7 @@ class CalendarViewModel: ObservableObject {
 	@Published var date = Date()
 	@Published var startDate: Date?
 	@Published var endDate: Date?
-	@Published var isAvailableMode = true
+	@Published var mode: ScheduleType = .available
 	@Published var manualUpdate = true
 	@Published var error = ""
 	
@@ -39,7 +39,7 @@ class CalendarViewModel: ObservableObject {
 				
 				if let newData = document.data() {
 					print("Updating data BOOKING MANAGER")
-					self.property = Property(id: self.property.id, data: newData)
+					self.property = Property(property: self.property, propertyData: newData)
 				} else {
 				}
 			}

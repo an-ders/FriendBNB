@@ -8,20 +8,27 @@
 import SwiftUI
 
 struct BasicTextField: View {
+	var title: String = ""
 	var defaultText: String
 	@Binding var text: String
-	var color: Color = Color.systemGray3
 	
     var body: some View {
-		TextField(defaultText, text: $text, axis: .vertical)
-			.padding(.vertical, 8)
-			.padding(.horizontal, 8)
-			.overlay(
-				RoundedRectangle(cornerRadius: 5)
-					.stroke(lineWidth: 1.0)
-					.foregroundStyle(color)
-			)
-			.contentShape(Rectangle())
+		VStack(spacing: 0) {
+			if !title.isEmpty {
+				Text(title)
+					.styled(.bodyBold)
+					.fillLeading()
+			}
+			TextField(defaultText, text: $text, axis: .vertical)
+				.padding(.vertical, 8)
+				.padding(.horizontal, 8)
+				.overlay(
+					RoundedRectangle(cornerRadius: 5)
+						.stroke(lineWidth: 1.0)
+						.foregroundStyle(Color.systemGray3)
+				)
+				.contentShape(Rectangle())
+		}
     }
 }
 

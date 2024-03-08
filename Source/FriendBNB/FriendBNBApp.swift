@@ -10,26 +10,20 @@ import FirebaseCore
 
 @main
 struct FriendBNBApp: App {
-	@ObservedObject var propertyStore: PropertyStore
-	@ObservedObject var authStore: AuthenticationStore
-	@ObservedObject var notificationStore: NotificationStore
-	@ObservedObject var bookingStore: BookingStore
+	@UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
 	
 	init() {
 		FirebaseApp.configure()
-		self.propertyStore = PropertyStore()
-		self.authStore = AuthenticationStore()
-		self.notificationStore = NotificationStore()
-		self.bookingStore = BookingStore()
 	}
 	
 	var body: some Scene {
 		WindowGroup {
 			RootView()
-				.environmentObject(propertyStore)
-				.environmentObject(authStore)
-				.environmentObject(notificationStore)
-				.environmentObject(bookingStore)
+				.environmentObject(appDelegate.propertyStore)
+				.environmentObject(appDelegate.authStore)
+				.environmentObject(appDelegate.notificationStore)
+				.environmentObject(appDelegate.bookingStore)
+				.environmentObject(appDelegate.permissionStore)
 		}
 	}
 }

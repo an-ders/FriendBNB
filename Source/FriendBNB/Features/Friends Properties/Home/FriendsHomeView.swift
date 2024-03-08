@@ -11,12 +11,15 @@ import FirebaseFirestore
 
 struct FriendsHomeView: View {
 	@EnvironmentObject var propertyStore: PropertyStore
+	@EnvironmentObject var bookingStore: BookingStore
+	@Environment(\.dismiss) private var dismiss
+	@State var deleteBooking = false
 	
 	var body: some View {
 		NavigationStack {
 			Group {
 				if propertyStore.loading {
-					EmptyView()
+					LoadingView()
 				} else if !propertyStore.friendsProperties.isEmpty {
 					ZStack {
 						Button(action: {
@@ -28,26 +31,20 @@ struct FriendsHomeView: View {
 								.frame(height: 35)
 								.background(.white)
 								.clipShape(Circle())
-								.padding(.trailing, Constants.Padding.regular)
+								.padding(.trailing, Constants.Spacing.regular)
 						})
 						.frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topTrailing)
 						.zIndex(5)
 						
-						ScrollView {
+						ScrollView(showsIndicators: false) {
 							VStack {
-								Rectangle()
-									.frame(height: 45)
-									.foregroundStyle(Color.clear)
-								
 								ForEach(propertyStore.friendsProperties) { property in
-									Button(action: {
-										propertyStore.showFriendProperty(property)
-									}, label: {
-										PropertyTileView(property: property)
-									})
+									PropertyTileView(property: property, type: .friend) { booking in
+										propertyStore.showBooking(booking: booking, property: property, type: .friend)
+									}
 								}
 							}
-							.padding(.top, 2)
+							.padding(.vertical, 50)
 						}
 						.refreshable {
 							await propertyStore.fetchProperties(.friend)
@@ -57,9 +54,30 @@ struct FriendsHomeView: View {
 					FriendHomeEmptyView()
 				}
 			}
-			.navigationDestination(item: $propertyStore.selectedFriendProperty) { _ in
+			.navigationDestination(item: $propertyStore.friendSelectedProperty) { _ in
 				FriendDetailView()
 					.navigationBarTitleDisplayMode(.inline)
+			}
+			.sheet(item: $propertyStore.friendSelectedBooking) { group in
+				BookingConfirmationView(property: group.property, booking: group.booking) {
+					PairButtonsView(prevText: "Delete", prevAction: {
+						deleteBooking.toggle()
+					}, nextText: "Done", nextCaption: "", nextAction: {
+						propertyStore.dismissBooking()
+					})
+					.padding(.horizontal, Constants.Spacing.regular)
+				}
+				.alert(isPresented: $deleteBooking) {
+					Alert(title: Text("Are you sure you want to delete this booking?"),
+						  primaryButton: .destructive(Text("Delete")) {
+						Task {
+							await bookingStore.deleteBooking(group.booking, propertyId: group.property.id)
+							propertyStore.dismissBooking()
+							await propertyStore.fetchProperties(.friend)
+						}
+					},
+						  secondaryButton: .default(Text("Cancel")))
+				}
 			}
 		}
 	}

@@ -18,10 +18,13 @@ struct NewPropertyAddressView: View {
 			next()
 		}, content: {
 			VStack {
-				Text("Confirm the address")
-					.title()
-					.fillLeading()
-					.padding(.bottom, Constants.Spacing.regular)
+				VStack(spacing: 0) {
+					DetailSheetTitle(title: "CONFIRM ADDRESS", showDismiss: false)
+						.padding(.leading, Constants.Spacing.medium)
+						.padding(.vertical, Constants.Spacing.large)
+						.padding(.trailing, Constants.Spacing.large)
+					Divider()
+				}
 				
 				ScrollView(showsIndicators: false) {
 					VStack(spacing: 4) {
@@ -32,7 +35,7 @@ struct NewPropertyAddressView: View {
 						StyledFloatingTextField(text: $location.zipCode, prompt: "Zip Code")
 						StyledFloatingTextField(text: $location.country, prompt: "Country")
 						
-						ErrorView(error: $location.error)
+						ErrorView(error: location.error)
 						
 						Spacer()
 						
@@ -45,8 +48,8 @@ struct NewPropertyAddressView: View {
 				hideKeyboard()
 			}
 		})
-		.padding(.horizontal, Constants.Padding.regular)
-		.padding(.top, Constants.Padding.regular)
+		.padding(.horizontal, Constants.Spacing.regular)
+		.padding(.top, Constants.Spacing.regular)
 	}
 	
 	func back() {

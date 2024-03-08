@@ -31,12 +31,12 @@ struct CalendarView: View {
 					calendarViewModel.previousMonth()
 				}, label: {
 					Image(systemName: "arrow.left")
-						.imageScale(.medium)
+						.size(height: 20)
 						.font(Font.title.weight(.bold))
 				})
 				
-				Text(calendarViewModel.date.monthYearString())
-					.heading()
+				Text(calendarViewModel.date.monthYearString().uppercased())
+					.styled(.title2)
 					.animation(.none)
 					.frame(maxWidth: .infinity)
 				
@@ -44,8 +44,7 @@ struct CalendarView: View {
 					calendarViewModel.nextMonth()
 				}, label: {
 					Image(systemName: "arrow.right")
-						.imageScale(.medium)
-						.font(Font.title.weight(.bold))
+						.size(height: 20)
 				})
 				Spacer()
 			}
@@ -60,7 +59,7 @@ struct CalendarView: View {
 		HStack(spacing: 1) {
 			ForEach(["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"], id: \.self) { day in
 				Text(day)
-					.body()
+					.styled(.body)
 					.frame(maxWidth: .infinity)
 					.padding(.top, 1)
 					.lineLimit(1)

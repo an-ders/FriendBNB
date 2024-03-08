@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct PairButtonWrapper<Content: View>: View {
-	var buttonPadding: CGFloat = 0
+	var buttonSpacing: CGFloat = 0
 	var prevText: String
 	var prevAction: () -> Void
 	var nextText: String
@@ -28,7 +28,7 @@ struct PairButtonWrapper<Content: View>: View {
 					nextAction()
 				})
 			}
-			.padding(.horizontal, buttonPadding)
+			.padding(.horizontal, buttonSpacing)
 		}
     }
 }

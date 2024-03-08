@@ -19,7 +19,7 @@ struct NewPropertySearchView: View {
     @FocusState private var isFocusedTextField: Bool
     
     var body: some View {
-		PairButtonWrapper(buttonPadding: Constants.Padding.regular, prevText: "Cancel", prevAction: {
+		PairButtonWrapper(buttonSpacing: Constants.Spacing.regular, prevText: "Cancel", prevAction: {
 			back()
 		}, nextText: "", nextAction: {
 			
@@ -43,11 +43,11 @@ struct NewPropertySearchView: View {
 						.onAppear {
 							isFocusedTextField = true
 						}
-						.padding(.leading, Constants.Padding.regular)
-						.padding(.trailing, Constants.Padding.small)
+						.padding(.leading, Constants.Spacing.regular)
+						.padding(.trailing, Constants.Spacing.small)
 					
 					ClearButton(text: $viewModel.searchableText)
-						.padding(.trailing, Constants.Padding.regular)
+						.padding(.trailing, Constants.Spacing.regular)
 				}
 				.background(Color.init(uiColor: .systemGray6))
 
@@ -96,7 +96,7 @@ struct AddressRow: View {
                 Text(address.subtitle)
                     .font(.caption)
             }
-			.padding(.horizontal, Constants.Padding.regular)
+			.padding(.horizontal, Constants.Spacing.regular)
         }
         .padding(.bottom, 2)
     }

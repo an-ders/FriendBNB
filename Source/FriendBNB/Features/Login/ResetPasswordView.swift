@@ -31,13 +31,13 @@ struct ResetPasswordView: View {
 				
 				StyledFloatingTextField(text: $resetEmail, prompt: "Email")
 				
-				ErrorView(error: $error)
+				ErrorView(error: error)
 				
 				Spacer()
 			}
 		})
-        .padding(.top, Constants.Padding.regular)
-        .padding(.horizontal, Constants.Padding.regular)
+        .padding(.top, Constants.Spacing.regular)
+        .padding(.horizontal, Constants.Spacing.regular)
     }
 	
 	func resetPassword(_ email: String) {

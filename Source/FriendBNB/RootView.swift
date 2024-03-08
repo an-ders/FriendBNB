@@ -7,11 +7,13 @@
 
 import SwiftUI
 import FirebaseAuth
+import FirebaseDynamicLinks
+import FirebaseMessaging
 
 enum RootTabs: String, Hashable, Equatable, CaseIterable {
-    case owned
-    case friends
-    case settings
+	case owned
+	case friends
+	case settings
 	
 	var image: String {
 		switch self {
@@ -39,102 +41,210 @@ enum RootTabs: String, Hashable, Equatable, CaseIterable {
 struct RootView: View {
 	@EnvironmentObject var propertyStore: PropertyStore
 	@EnvironmentObject var authStore: AuthenticationStore
+	@EnvironmentObject var notificationStore: NotificationStore
 	@Environment(\.dismiss) private var dismiss
 	
-    @State var loggedIn = false
-    @State var showNewPropertySheet = false
-    @State var showAddPropertySheet = false
+	@State var onboarded = UserDefaults.standard.bool(forKey: "Onboarded")
 	@State var selectedTab: RootTabs = .owned
-    
-    var body: some View {
-        NotificationView {
-			if authStore.loggedIn {
-				VStack(spacing: 0) {
-					switch propertyStore.selectedTab {
-					case .owned:
-						OwnedPropertiesView()
-					case .friends:
-						FriendsHomeView()
-					case .settings:
-						SettingsView()
-					}
-					
-					if propertyStore.showTabBar {
-						HStack {
-							ForEach(RootTabs.allCases, id: \.self) { tab in
-								Button(action: {
-									propertyStore.selectedTab = tab
-								}, label: {
-									VStack {
-										Image(systemName: tab.image)
-											.resizable()
-											.scaledToFit()
-											.frame(height: 20)
-										Text(tab.name)
-											.caption()
+	
+	var body: some View {
+		NotificationView(notification: $notificationStore.notification) {
+			if onboarded {
+				if authStore.isLoggedIn, authStore.isAuthenticated {
+					VStack(spacing: 0) {
+						switch propertyStore.selectedTab {
+						case .owned:
+							OwnedHomeView()
+						case .friends:
+							FriendsHomeView()
+						case .settings:
+							SettingsView()
+						}
+						
+						if propertyStore.showTabBar {
+							VStack(spacing: Constants.Spacing.small) {
+								Divider()
+								HStack {
+									ForEach(RootTabs.allCases, id: \.self) { tab in
+										Button(action: {
+											propertyStore.selectedTab = tab
+										}, label: {
+											VStack {
+												Image(systemName: tab.image)
+													.resizable()
+													.scaledToFit()
+													.frame(height: 20)
+													.overlay(
+														NotificationCountView(
+															value: propertyStore.numberPending
+														)
+														.opacity(tab == .owned && propertyStore.numberPending != 0 ? 1 : 0)
+														.offset(y: 2)
+													)
+												Text(tab.name)
+													.styled(.caption)
+											}
+											.frame(maxWidth: .infinity)
+											.contentShape(Rectangle())
+											.foregroundStyle(propertyStore.selectedTab == tab ? Color.systemBlue : Color.systemGray2)
+										})
 									}
-									.frame(maxWidth: .infinity)
-									.contentShape(Rectangle())
-									.foregroundStyle(propertyStore.selectedTab == tab ? Color.systemBlue : Color.systemGray2)
-								})
+								}
 							}
 						}
-						.padding(.top, Constants.Padding.small)
+					}
+					.overlay {
+						if !UserDefaults.standard.bool(forKey: "Biometrics Onboared") {
+							BiometricsOnboarding()
+								.ignoresSafeArea()
+						}
+					}
+					.onAppear {
+						if let propertyID = propertyStore.addPropertyID {
+							Task { @MainActor in
+								if let id = await propertyStore.checkValidId(propertyID) {
+									await propertyStore.addPropertyToUser(id, type: .friend)
+									if let property = await propertyStore.getProperty(id: id) {
+										propertyStore.showProperty(property, type: .friend)
+									} else {
+										//ERROR
+									}
+								} else {
+									//self.error = "No property with that ID was found."
+								}
+								propertyStore.addPropertyID = nil
+							}
+						}
+						
+						Task {
+							await propertyStore.fetchProperties(.owned)
+							await propertyStore.fetchProperties(.friend)
+						}
+					}
+				} else {
+					LoginView()
+				}
+			} else {
+				OnboardingView(onboarded: $onboarded)
+			}
+		}
+		.sheet(isPresented: $propertyStore.showNewPropertySheet) {
+			NewPropertyView()
+		}
+		.sheet(isPresented: $propertyStore.showAddPropertySheet) {
+			AddPropertyView()
+		}
+		.sheet(item: $propertyStore.selectedAddToCalendar) { group in
+			EventEditViewController(group: group) {
+				propertyStore.selectedAddToCalendar = nil
+			}
+		}
+		.onOpenURL { url in
+			print("Incomming url: \(url.absoluteString)")
+			propertyStore.loading = true
+			
+			if !(authStore.isLoggedIn && authStore.isAuthenticated), authStore.isSignInLink(url) {
+				Task {
+					if let error = await authStore.linkAuthenticate(url: url) {
+						print("CANT LOG IN")
+						authStore.error = "Link sign in unsuccessfull. Please try again"
+						return
 					}
 				}
-            } else {
-                LoginView()
-            }
-        }
-		.sheet(isPresented: $propertyStore.showNewPropertySheet) {
-            NewPropertyView()
-                .interactiveDismissDisabled()
-        }
-		.sheet(isPresented: $propertyStore.showAddPropertySheet) {
-            AddPropertyView()
-                .interactiveDismissDisabled()
-        }
-        .onChange(of: authStore.loggedIn) { _ in
-            Task {
-                await propertyStore.fetchProperties(.owned)
-                await propertyStore.fetchProperties(.friend)
-            }
-        }
-		.onOpenURL { url in
-			let string = url.absoluteString.replacingOccurrences(of: "friendbnb://", with: "")
-			print(string)
-			let components = string.components(separatedBy: "?")
+			}
 			
-			for component in components {
-				if component.contains("id=") {
-					let idRequest = component.replacingOccurrences(of: "id=", with: "")
-					Task { @MainActor in
-						if let id = await propertyStore.checkValidId(idRequest) {
-							await propertyStore.addProperty(id, type: .friend)
-							propertyStore.showAddPropertySheet = false
-							dismiss()
-							if let property = await propertyStore.getProperty(id: id) {
-								propertyStore.showFriendProperty(property, delay: true)
+			let linkHandled = DynamicLinks.dynamicLinks().handleUniversalLink(url) { dynamicLink, error in
+				guard error == nil else {
+					print("Error with dynamic link: \(error?.localizedDescription)")
+					propertyStore.loading = false
+					return
+				}
+				
+				handleDynamicLink(dynamicLink)
+			}
+			
+			if let dynamicLink = DynamicLinks.dynamicLinks().dynamicLink(fromCustomSchemeURL: url) {
+				handleDynamicLink(dynamicLink)
+			} else {
+				propertyStore.loading = false
+			}
+		}
+	}
+	
+	func handleDynamicLink(_ dynamicLink: DynamicLink?) {
+		if let dynamicLink = dynamicLink {
+			if let url = dynamicLink.url {
+				print("Actual deeplink from dynamic link is: \(url)")
+				print("Match Type: \(dynamicLink.matchType)")
+				
+				let string = url.absoluteString.replacingOccurrences(of: "https://friendbnb.com/", with: "")
+				print(string)
+				let components = string.components(separatedBy: "?")
+				
+				for component in components {
+					if component.contains("friendID=") {
+						let idRequest = component.replacingOccurrences(of: "friendID=", with: "")
+						Task { @MainActor in
+							propertyStore.loading = true
+							if let id = await propertyStore.checkValidId(idRequest) {
+								await propertyStore.addPropertyToUser(id, type: .friend)
+								dismiss()
+								if let property = await propertyStore.getProperty(id: id) {
+									propertyStore.loading = false
+									propertyStore.selectedTab = .friends
+									DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) {
+										propertyStore.showProperty(property, type: .friend)
+									}
+								} else {
+									propertyStore.addPropertyID = idRequest
+								}
 							} else {
-								//ERROR
+								propertyStore.addPropertyID = idRequest
 							}
-						} else {
-							//self.error = "No property with that ID was found."
+							propertyStore.loading = false
+						}
+					} else if component.contains("ownedID=") {
+						let idRequest = component.replacingOccurrences(of: "ownedID=", with: "")
+						Task { @MainActor in
+							propertyStore.loading = true
+							if let id = await propertyStore.checkValidId(idRequest) {
+								if let property = await propertyStore.getProperty(id: id) {
+									if property.ownerId == authStore.user?.uid {
+										await propertyStore.addPropertyToUser(id, type: .owned)
+										propertyStore.loading = false
+										propertyStore.selectedTab = .owned
+										DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) {
+											propertyStore.showProperty(property, type: .owned)
+										}
+									}
+								}
+							}
+							propertyStore.loading = false
+						}
+					} else if component.contains("booking=") {
+						let idRequest = component.replacingOccurrences(of: "booking=", with: "")
+						let ids = idRequest.components(separatedBy: "-")
+						let propertyId = ids[1]
+						let bookingId = ids[0]
+						Task { @MainActor in
+							if let id = await propertyStore.checkValidId(propertyId) {
+								if let property = await propertyStore.getProperty(id: id) {
+									if property.ownerId == authStore.user?.uid {
+										await propertyStore.addPropertyToUser(id, type: .owned)
+										propertyStore.showProperty(property, type: .owned)
+									}
+								}
+							}
 						}
 					}
 				}
 			}
 		}
-    }
+	}
 }
 
-extension RootView {
-    class ViewModel: ObservableObject {
-    }
-}
-
-struct RootView_Previews: PreviewProvider {
-    static var previews: some View {
-        RootView()
-    }
-}
+//struct RootView_Previews: PreviewProvider {
+//	static var previews: some View {
+//		RootView()
+//	}
+//}

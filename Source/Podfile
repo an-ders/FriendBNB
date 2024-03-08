@@ -2,16 +2,16 @@
 platform :ios, '16.0'
 
 target 'FriendBNB' do
-  # Comment the next line if you don't want to use dynamic frameworks
-  use_frameworks!
-  inhibit_all_warnings!
+# Comment the next line if you don't want to use dynamic frameworks
+use_frameworks!
+inhibit_all_warnings!
 
-  # Pods for FriendBNB
-  pod 'FirebaseAuth'
-  pod 'FirebaseCore'
-  pod 'FirebaseFirestore'
-  
-  pod 'SwiftLint'
+# Pods for FriendBNB
+pod 'FirebaseAuth'
+pod 'FirebaseFirestore' , '~> 10.0'
+pod 'FirebaseDynamicLinks'
+pod 'FirebaseMessaging'
+pod 'SwiftLint'
 
 #  target 'FriendBNBTests' do
 #    inherit! :search_paths
