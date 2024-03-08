@@ -93,6 +93,7 @@ struct RootView: View {
 							}
 						}
 					}
+					.blur(radius: !UserDefaults.standard.bool(forKey: "Biometrics Onboared") ? 5 : 0)
 					.overlay {
 						if !UserDefaults.standard.bool(forKey: "Biometrics Onboared") {
 							BiometricsOnboarding()
