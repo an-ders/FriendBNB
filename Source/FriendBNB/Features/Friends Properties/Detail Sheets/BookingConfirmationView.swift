@@ -23,11 +23,14 @@ struct BookingConfirmationView<Content: View>: View {
 	@ViewBuilder var bottomBar: Content
 	
 	var body: some View {
-		VStack {
-			DetailSheetTitle(title: "YOUR BOOKING", showDismiss: showDismiss)
-				.padding(.leading, Constants.Spacing.medium)
-				.padding(.vertical, Constants.Spacing.large)
-				.padding(.trailing, Constants.Spacing.large)
+		VStack(spacing: 0) {
+			VStack(spacing: 0) {
+				DetailSheetTitle(title: "Your Booking", showDismiss: showDismiss)
+					.padding(.leading, Constants.Spacing.medium)
+					.padding(.vertical, Constants.Spacing.medium)
+					.padding(.trailing, Constants.Spacing.large)
+				Divider()
+			}
 
 			ScrollView(showsIndicators: false) {
 				VStack(spacing: 50) {
@@ -35,6 +38,7 @@ struct BookingConfirmationView<Content: View>: View {
 						Text("Please note that one or more of these dates are not set the availability!")
 							.styled(.caption)
 							.foregroundStyle(Color.systemOrange)
+							.padding(.bottom, -25)
 					}
 					
 					BookingStatusIndicatorView(currentStatus: booking.status)
@@ -45,11 +49,7 @@ struct BookingConfirmationView<Content: View>: View {
 						}
 					}, label: {
 						VStack(spacing: 8) {
-							Text("BOOKING DATES")
-								.styled(.bodyBold)
-								.fillLeading()
-								.foregroundStyle(Color.systemGray)
-							
+							DetailHeading(title: "BOOKING DARES")
 							HStack {
 								VStack {
 									HStack {
@@ -80,10 +80,7 @@ struct BookingConfirmationView<Content: View>: View {
 					
 					if !booking.statusMessage.isEmpty {
 						VStack(spacing: Constants.Spacing.regular) {
-							Text("BOOKING CONFIRMATION NOTE")
-								.styled(.bodyBold)
-								.fillLeading()
-								.foregroundStyle(Color.systemGray)
+							DetailHeading(title: "BOOKING CONFIRMATION NOTE")
 							Text(booking.statusMessage)
 								.styled(.body)
 								.fillLeading()
@@ -93,10 +90,7 @@ struct BookingConfirmationView<Content: View>: View {
 					
 					if booking.status == .confirmed {
 						VStack(spacing: 4) {
-							Text("ADDRESS")
-								.styled(.bodyBold)
-								.fillLeading()
-								.foregroundStyle(Color.systemGray)
+							DetailHeading(title: "ADDRESS")
 							Button(action: {
 								if let url = URL(string: "http://maps.apple.com/?address=" + property.location.formattedAddress) {
 									UIApplication.shared.open(url)
@@ -129,6 +123,7 @@ struct BookingConfirmationView<Content: View>: View {
 					}
 				}
 				.padding(.bottom, 50)
+				.padding(.top, 25)
 			}
 			.padding(.horizontal, Constants.Spacing.regular)
 

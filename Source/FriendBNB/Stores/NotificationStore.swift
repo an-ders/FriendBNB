@@ -27,7 +27,7 @@ class NotificationStore: ObservableObject {
 			}
 		}
 		
-		DispatchQueue.main.asyncAfter(deadline: .now() + 10) {
+		DispatchQueue.main.asyncAfter(deadline: .now() + 6) {
 			self.dismissNotification()
 		}
 	}

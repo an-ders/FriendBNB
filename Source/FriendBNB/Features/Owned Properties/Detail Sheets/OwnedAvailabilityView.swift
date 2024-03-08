@@ -28,7 +28,7 @@ struct OwnedAvailabilityView: View {
 			}
 			ScrollView(showsIndicators: false) {
 				VStack {
-					Text(calendarViewModel.mode == .available ? "Select available days:" : "Select unavailable days:")
+					Text("Set a schedule to show your friends.")
 						.styled(.body)
 						.fillLeading()
 					

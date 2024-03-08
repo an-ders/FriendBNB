@@ -100,7 +100,7 @@ struct PropertyTileView: View {
 								Label("Approve", systemImage: "checkmark")
 									.contentShape(Rectangle())
 							})
-							.tint(Color.systemGreen)
+							.tint(Color.systemGreen.opacity(0.6))
 							
 							Button(action: {
 								Task {

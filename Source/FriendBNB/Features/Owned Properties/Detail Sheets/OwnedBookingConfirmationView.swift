@@ -26,12 +26,14 @@ struct OwnedBookingConfirmationView: View {
 	@State var wifi = true
 	@State var securityCode = true
 	
+	@State var bookingAction: BookingStatus?
+	
 	var body: some View {
 		VStack(spacing: 0) {
 			VStack(spacing: 0) {
-				DetailSheetTitle(title: "BOOKING CONFIRMATION", showDismiss: showDismiss)
+				DetailSheetTitle(title: "Booking Confirmation", showDismiss: showDismiss)
 					.padding(.leading, Constants.Spacing.medium)
-					.padding(.vertical, Constants.Spacing.large)
+					.padding(.vertical, Constants.Spacing.medium)
 					.padding(.trailing, Constants.Spacing.large)
 				Divider()
 			}
@@ -44,14 +46,13 @@ struct OwnedBookingConfirmationView: View {
 						Text("Please note that one or more of these dates are not set the availability!")
 							.styled(.caption)
 							.foregroundStyle(Color.systemOrange)
+							.padding(.bottom, -25)
 					}
 					
 					BookingStatusIndicatorView(currentStatus: booking.status)
 					
 					VStack(alignment: .leading, spacing: 8) {
-						Text("FRIEND")
-							.styled(.bodyBold)
-							.foregroundStyle(Color.systemGray)
+						DetailHeading(title: "FRIEND")
 						HStack {
 							Image(systemName: "person.fill")
 							Text("\(booking.name) (\(booking.email))")
@@ -61,10 +62,7 @@ struct OwnedBookingConfirmationView: View {
 					}
 										
 					VStack(spacing: 8) {
-						Text("BOOKING DATES")
-							.styled(.bodyBold)
-							.fillLeading()
-							.foregroundStyle(Color.systemGray)
+						DetailHeading(title: "BOOKING DATES")
 						
 						HStack {
 							VStack {
@@ -96,12 +94,8 @@ struct OwnedBookingConfirmationView: View {
 						}
 					}
 										
-					VStack(spacing: 0) {
-						Text("BOOKING INFO")
-							.styled(.bodyBold)
-							.fillLeading()
-							.foregroundStyle(Color.systemGray)
-							.padding(.bottom, 8)
+					VStack(spacing: 8) {
+						DetailHeading(title: "BOOKING INFO")
 						
 						HStack {
 							Image(systemName: "person.2.fill")
@@ -136,18 +130,12 @@ struct OwnedBookingConfirmationView: View {
 					}
 										
 					VStack(spacing: 8) {
-						Text("BOOKING NOTE")
-							.styled(.bodyBold)
-							.fillLeading()
-							.foregroundStyle(Color.systemGray)
+						DetailHeading(title: "BOOKING NOTE")
 						BasicTextField(defaultText: "Personalized Message (Optional)", text: $bookingMessage)
 					}
 										
 					VStack(spacing: 8) {
-						Text("OPTIONAL INFO")
-							.styled(.bodyBold)
-							.fillLeading()
-							.foregroundStyle(Color.systemGray)
+						DetailHeading(title: "OPTIONAL INFO")
 						
 						VStack(spacing: 12) {
 							if !property.info.notes.isEmpty {
@@ -177,66 +165,7 @@ struct OwnedBookingConfirmationView: View {
 			}
 			.padding(.horizontal, Constants.Spacing.regular)
 			
-			VStack {
-				Divider()
-				HStack {
-					let changed = booking.status == .declined && booking.statusMessage == bookingMessage
-					Button(action: {
-						// NOTE IF YOU E         VER UPDATE THE DECLINE ACTION UPDATE THE SWIPE ACTION ON HOME PAGE PROPERTY TILE ALSO
-						if changed {
-							return
-						}
-						Task {
-							if let error = await bookingStore.updateBooking(booking: booking, property: property, status: .declined, message: bookingMessage, sensitiveInfo: []) {
-								self.error = error
-							}
-							sendNotification("Booking status updated to declined")
-							await propertyStore.fetchProperties(.owned)
-							dismiss()
-						}
-					}, label: {
-						Text(!changed ? "Update" : "Cancel booking")
-							.styled(.bodyBold)
-							.padding(.horizontal, 20)
-							.padding(.vertical, 8)
-							.foregroundColor(.black)
-							.background(changed ? Color.systemGray3 : BookingStatus.declined.colorBG)
-							.cornerRadius(20)
-					})
-					
-					Spacer()
-				
-					let didChange = getSensitiveInfoList() != booking.sensitiveInfo || bookingMessage != booking.statusMessage
-					Button(action: {
-						// NOTE IF YOU EVER UPDATE THE APPROVE ACTION UPDATE THE SWIPE ACTION ON HOME PAGE PROPERTY TILE ALSO
-						if !didChange && (booking.status == .confirmed) {
-							return
-						}
-						
-						Task {
-							if let error = await bookingStore.updateBooking(booking: booking, property: property, status: .confirmed, message: bookingMessage, sensitiveInfo: getSensitiveInfoList()) {
-								self.error = error
-							}
-							
-							sendNotification("Booking status updated")
-							await propertyStore.fetchProperties(.owned)
-							dismiss()
-						}
-					}, label: {
-						Text(didChange && booking.status == .confirmed ? "Update" : "Approve")
-							.styled(.bodyBold)
-							.padding(.horizontal, 20)
-							.padding(.vertical, 8)
-							.foregroundColor(.black)
-							.background((!didChange && booking.status == .confirmed) ? Color.systemGray3 : BookingStatus.confirmed.colorBG)
-							.cornerRadius(20)
-					})
-				}
-				.padding(Constants.Spacing.small)
-				.background {
-					Color.white
-				}
-			}
+			cta
 		}
 		.onTapGesture {
 			hideKeyboard()
@@ -254,6 +183,124 @@ struct OwnedBookingConfirmationView: View {
 		.sheet(item: $selectedCalendar) { group in
 			EventEditViewController(group: group) {
 				selectedCalendar = nil
+			}
+		}
+	}
+	
+	var cta: some View {
+		VStack {
+			Divider()
+			if let status = bookingAction {
+				let changed = booking.status == .declined && booking.statusMessage == bookingMessage
+				let didChange = getSensitiveInfoList() != booking.sensitiveInfo || bookingMessage != booking.statusMessage
+				
+				HStack {
+					Button(action: {
+						withAnimation {
+							bookingAction = nil
+						}
+					}, label: {
+						Text("Cancel")
+							.styled(.bodyBold)
+							.padding(.horizontal, 20)
+							.padding(.vertical, 8)
+							.foregroundColor(.black)
+							.background(Color.systemGray3)
+							.cornerRadius(20)
+					})
+					
+					Spacer()
+					
+					Button(action: {
+						// NOTE IF YOU EVER UPDATE THE APPROVE ACTION UPDATE THE SWIPE ACTION ON HOME PAGE PROPERTY TILE ALSO
+						if status == .declined {
+							Task {
+								if let error = await bookingStore.updateBooking(booking: booking, property: property, status: .declined, message: bookingMessage, sensitiveInfo: []) {
+									self.error = error
+								}
+								sendNotification("Booking status updated to declined")
+								await propertyStore.fetchProperties(.owned)
+								dismiss()
+							}
+						} else {
+							Task {
+								if let error = await bookingStore.updateBooking(booking: booking, property: property, status: .confirmed, message: bookingMessage, sensitiveInfo: getSensitiveInfoList()) {
+									self.error = error
+								}
+								
+								sendNotification("Booking status updated")
+								await propertyStore.fetchProperties(.owned)
+								dismiss()
+							}
+						}
+					}, label: {
+						Text("Confirm")
+							.styled(.bodyBold)
+							.padding(.horizontal, 20)
+							.padding(.vertical, 8)
+							.foregroundColor(.black)
+							.background(status.colorBG)
+							.cornerRadius(20)
+					})
+				}
+				.padding(Constants.Spacing.small)
+				.background {
+					Color.white
+				}
+				.transition(.asymmetric(
+					insertion: .move(edge: .leading),
+					removal: .move(edge: .trailing)
+				))
+			} else {
+				HStack {
+					let changed = booking.status == .declined && booking.statusMessage == bookingMessage
+					let didChange = getSensitiveInfoList() != booking.sensitiveInfo || bookingMessage != booking.statusMessage
+					
+					Button(action: {
+						if changed {
+							return
+						}
+						withAnimation {
+							bookingAction = .declined
+						}
+					}, label: {
+						Text(!changed && booking.status == .declined ? "Update" : "Cancel booking")
+							.styled(.bodyBold)
+							.padding(.horizontal, 20)
+							.padding(.vertical, 8)
+							.foregroundColor(.black)
+							.background(changed ? Color.systemGray3 : BookingStatus.declined.colorBG)
+							.cornerRadius(20)
+					})
+					
+					Spacer()
+				
+					Button(action: {
+						if !didChange && (booking.status == .confirmed) {
+							return
+						}
+						
+						withAnimation {
+							bookingAction = .confirmed
+						}
+					}, label: {
+						Text(didChange && booking.status == .confirmed ? "Update" : "Approve")
+							.styled(.bodyBold)
+							.padding(.horizontal, 20)
+							.padding(.vertical, 8)
+							.foregroundColor(.black)
+							.background((!didChange && booking.status == .confirmed) ? Color.systemGray3 : BookingStatus.confirmed.colorBG)
+							.cornerRadius(20)
+					})
+				}
+				.padding(Constants.Spacing.small)
+				.background {
+					Color.white
+				}
+				.transition(.asymmetric(
+					insertion: .move(edge: .leading),
+					removal: .move(edge: .trailing)
+				))
 			}
 		}
 	}

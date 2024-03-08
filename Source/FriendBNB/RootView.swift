@@ -50,7 +50,9 @@ struct RootView: View {
 	var body: some View {
 		NotificationView(notification: $notificationStore.notification) {
 			if onboarded {
-				if authStore.isLoggedIn, authStore.isAuthenticated {
+				if propertyStore.loading {
+					LoadingView()
+				} else if authStore.isLoggedIn, authStore.isAuthenticated {
 					VStack(spacing: 0) {
 						switch propertyStore.selectedTab {
 						case .owned:
@@ -116,14 +118,15 @@ struct RootView: View {
 								propertyStore.addPropertyID = nil
 							}
 						}
-						
-						Task {
-							await propertyStore.fetchProperties(.owned)
-							await propertyStore.fetchProperties(.friend)
-						}
 					}
 				} else {
 					LoginView()
+						.onDisappear {
+							Task {
+								await propertyStore.fetchProperties(.owned)
+								await propertyStore.fetchProperties(.friend)
+							}
+						}
 				}
 			} else {
 				OnboardingView(onboarded: $onboarded)
@@ -142,7 +145,6 @@ struct RootView: View {
 		}
 		.onOpenURL { url in
 			print("Incomming url: \(url.absoluteString)")
-			propertyStore.loading = true
 			
 			if !(authStore.isLoggedIn && authStore.isAuthenticated), authStore.isSignInLink(url) {
 				Task {
@@ -154,92 +156,107 @@ struct RootView: View {
 				}
 			}
 			
+			if let dynamicLink = DynamicLinks.dynamicLinks().dynamicLink(fromCustomSchemeURL: url) {
+				handleLink(dynamicLink.url)
+			}
+			
+			if url.absoluteString.contains("FriendBNB://") {
+				handleLink(url)
+			}
+			
 			let linkHandled = DynamicLinks.dynamicLinks().handleUniversalLink(url) { dynamicLink, error in
 				guard error == nil else {
 					print("Error with dynamic link: \(error?.localizedDescription)")
-					propertyStore.loading = false
 					return
 				}
 				
-				handleDynamicLink(dynamicLink)
-			}
-			
-			if let dynamicLink = DynamicLinks.dynamicLinks().dynamicLink(fromCustomSchemeURL: url) {
-				handleDynamicLink(dynamicLink)
-			} else {
-				propertyStore.loading = false
+				handleLink(dynamicLink?.url)
 			}
 		}
 	}
 	
-	func handleDynamicLink(_ dynamicLink: DynamicLink?) {
-		if let dynamicLink = dynamicLink {
-			if let url = dynamicLink.url {
-				print("Actual deeplink from dynamic link is: \(url)")
-				print("Match Type: \(dynamicLink.matchType)")
-				
-				let string = url.absoluteString.replacingOccurrences(of: "https://friendbnb.com/", with: "")
-				print(string)
-				let components = string.components(separatedBy: "?")
-				
-				for component in components {
-					if component.contains("friendID=") {
-						let idRequest = component.replacingOccurrences(of: "friendID=", with: "")
-						Task { @MainActor in
-							propertyStore.loading = true
-							if let id = await propertyStore.checkValidId(idRequest) {
-								await propertyStore.addPropertyToUser(id, type: .friend)
-								dismiss()
-								if let property = await propertyStore.getProperty(id: id) {
-									propertyStore.loading = false
-									propertyStore.selectedTab = .friends
-									DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) {
-										propertyStore.showProperty(property, type: .friend)
-									}
-								} else {
-									propertyStore.addPropertyID = idRequest
+	@MainActor
+	func handleLink(_ url: URL?) {
+		if let url = url {
+			print("Actual deeplink from dynamic link is: \(url)")
+			// print("Match Type: \(dynamicLink.matchType)")
+			
+			var string = url.absoluteString.replacingOccurrences(of: "https://friendbnb.com/", with: "")
+			string = url.absoluteString.replacingOccurrences(of: "FriendBNB://", with: "")
+			print(string)
+			let components = string.components(separatedBy: "?")
+			for component in components {
+				if component.contains("friendID=") {
+					let idRequest = component.replacingOccurrences(of: "friendID=", with: "")
+					Task { @MainActor in
+						propertyStore.loading = true
+						if let id = await propertyStore.checkValidId(idRequest) {
+							await propertyStore.addPropertyToUser(id, type: .friend)
+							dismiss()
+							if let property = await propertyStore.getProperty(id: id) {
+								propertyStore.loading = false
+								propertyStore.selectedTab = .friends
+								DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) {
+									propertyStore.showProperty(property, type: .friend)
 								}
 							} else {
 								propertyStore.addPropertyID = idRequest
 							}
-							propertyStore.loading = false
+						} else {
+							propertyStore.addPropertyID = idRequest
 						}
-					} else if component.contains("ownedID=") {
-						let idRequest = component.replacingOccurrences(of: "ownedID=", with: "")
-						Task { @MainActor in
-							propertyStore.loading = true
-							if let id = await propertyStore.checkValidId(idRequest) {
-								if let property = await propertyStore.getProperty(id: id) {
-									if property.ownerId == authStore.user?.uid {
-										await propertyStore.addPropertyToUser(id, type: .owned)
-										propertyStore.loading = false
-										propertyStore.selectedTab = .owned
-										DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) {
-											propertyStore.showProperty(property, type: .owned)
-										}
-									}
-								}
-							}
-							propertyStore.loading = false
-						}
-					} else if component.contains("booking=") {
-						let idRequest = component.replacingOccurrences(of: "booking=", with: "")
-						let ids = idRequest.components(separatedBy: "-")
-						let propertyId = ids[1]
-						let bookingId = ids[0]
-						Task { @MainActor in
-							if let id = await propertyStore.checkValidId(propertyId) {
-								if let property = await propertyStore.getProperty(id: id) {
-									if property.ownerId == authStore.user?.uid {
-										await propertyStore.addPropertyToUser(id, type: .owned)
+						propertyStore.loading = false
+					}
+				} else if component.contains("ownedID=") {
+					let idRequest = component.replacingOccurrences(of: "ownedID=", with: "")
+					Task { @MainActor in
+						propertyStore.loading = true
+						if let id = await propertyStore.checkValidId(idRequest) {
+							if let property = await propertyStore.getProperty(id: id) {
+								if property.ownerId == authStore.user?.uid {
+									await propertyStore.addPropertyToUser(id, type: .owned)
+									propertyStore.loading = false
+									propertyStore.selectedTab = .owned
+									DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) {
 										propertyStore.showProperty(property, type: .owned)
 									}
 								}
 							}
 						}
+						propertyStore.loading = false
+					}
+				} else if component.contains("ownedBooking=") {
+					let idRequest = component.replacingOccurrences(of: "ownedBooking=", with: "")
+					let ids = idRequest.components(separatedBy: "/")
+					let propertyId = ids[0]
+					let bookingId = ids[1]
+					Task { @MainActor in
+						propertyStore.loading = true
+						if let id = await propertyStore.checkValidId(propertyId), let property = await propertyStore.getProperty(id: id), property.ownerId == authStore.user?.uid {
+							if let booking = property.bookings.filter({$0.id == bookingId}).first {
+								propertyStore.showBooking(booking: booking, property: property, type: .owned)
+							}
+							
+						}
+						propertyStore.loading = false
+					}
+				} else if component.contains("friendBooking=") {
+					let idRequest = component.replacingOccurrences(of: "friendBooking=", with: "")
+					let ids = idRequest.components(separatedBy: "/")
+					let propertyId = ids[0]
+					let bookingId = ids[1]
+					Task {
+						propertyStore.loading = true
+						if let id = await propertyStore.checkValidId(propertyId), let property = await propertyStore.getProperty(id: id) {
+							if let booking = property.bookings.filter({$0.id == bookingId}).first, booking.userId == authStore.user?.uid {
+								propertyStore.showBooking(booking: booking, property: property, type: .friend)
+							}
+						}
+						propertyStore.loading = false
 					}
 				}
 			}
+			propertyStore.loading = false
 		}
 	}
 }

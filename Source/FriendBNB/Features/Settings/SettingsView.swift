@@ -17,68 +17,22 @@ struct SettingsView: View {
     var body: some View {
 		VStack(spacing: 0) {
 			VStack {
-				Text("SETTINGS")
-					.styled(.title2)
-					.fillLeading()
+				DetailTitle(title: "SETTINGS")
 				Divider()
 			}
 			
 			ScrollView(showsIndicators: false) {
 				VStack(spacing: 50) {
 					if let user = authStore.user {
-						VStack(alignment: .leading) {
-							Text("NAME")
-								.styled(.bodyBold)
-								.fillLeading()
-								.foregroundStyle(Color.systemGray)
-							
-							HStack {
-								Image(systemName: "person.fill")
-									.resizable()
-									.scaledToFit()
-									.frame(width: 25)
-								Text("\(user.displayName ?? "MISSING DISPLAY NAME")")
-									.styled(.body)
-							}
-						}
-						VStack(alignment: .leading) {
-							Text("EMAIL")
-								.styled(.bodyBold)
-								.fillLeading()
-								.foregroundStyle(Color.systemGray)
-							
-							HStack {
-								Image(systemName: "envelope.fill")
-									.resizable()
-									.scaledToFit()
-									.frame(width: 25)
-								Text(user.email ?? "NO EMAIL")
-									.styled(.body)
-							}
-						}
+						DetailParagraph(title: "NAME", image: "person.fill", description: "\(user.displayName ?? "MISSING DISPLAY NAME")")
 						
-						VStack(alignment: .leading) {
-							Text("USER ID")
-								.styled(.bodyBold)
-								.fillLeading()
-								.foregroundStyle(Color.systemGray)
-							
-							HStack {
-								Image(systemName: "envelope.fill")
-									.resizable()
-									.scaledToFit()
-									.frame(width: 25)
-								Text(user.uid)
-									.styled(.body)
-							}
-						}
+						DetailParagraph(title: "EMAIL", image: "envelope.fill", description: user.email ?? "NO EMAIL")
+						
+						DetailParagraph(title: "USER ID", image: "person.circle.fill", description: user.uid)
 					}
 					
 					VStack(alignment: .leading) {
-						Text("BIOMETRIC UNLOCK")
-							.styled(.bodyBold)
-							.fillLeading()
-							.foregroundStyle(Color.systemGray)
+						DetailHeading(title: "BIOMETRIC UNLOCK")
 						
 						HStack(spacing: Constants.Spacing.large) {
 							Button(action: {
