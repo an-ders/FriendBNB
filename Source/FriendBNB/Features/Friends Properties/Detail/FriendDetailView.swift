@@ -135,13 +135,28 @@ struct FriendDetailView: View {
 								.foregroundStyle(.white)
 						}
 						.padding(10)
-						.background(Color.black.opacity(0.4))
+						.darkWindow()
 						.cornerRadius(5)
 					})
 					
 					Spacer()
 					
-					FriendDetailSettingsView(confirmDelete: $deleteProperty)
+					Menu(content: {
+						Button(role: .destructive, action: {
+							deleteProperty = true
+						}, label: {
+							Label("Remove", systemImage: "trash")
+						})
+					}, label: {
+						VStack {
+							Image(systemName: "ellipsis")
+								.size(width: 20, height: 20)
+								.foregroundStyle(.white)
+						}
+						.padding(10)
+						.darkWindow()
+						.cornerRadius(5)
+					})
 				}
 				.zIndex(4)
 				.padding(.top, safeAreaInsets.top + 10)
@@ -152,9 +167,12 @@ struct FriendDetailView: View {
 					Text(property.info.nickname)
 						.styled(.title, weight: .bold)
 						.foregroundStyle(.white)
+					Text("People: \(property.info.people) | Cost: \(property.info.payment == .free ? "Free" : "$" + String(format: "%.2f", property.info.cost))")
+						.styled(.caption)
+						.foregroundStyle(Color.systemGray5)
 				}
 				.padding(Constants.Spacing.medium)
-				.background(.black.opacity(0.4))
+				.darkWindow()
 				.cornerRadius(5)
 				.padding(.bottom, 20)
 			}
@@ -200,8 +218,8 @@ struct FriendDetailView: View {
 							})
 						}
 					}
-					.environment(\.defaultMinListRowHeight, 90)
 					.listStyle(.plain)
+					.environment(\.defaultMinListRowHeight, 90)
 					.frame(height: 90 * CGFloat(bookings.count))
 					.padding(.horizontal, -Constants.Spacing.regular)
 				}

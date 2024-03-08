@@ -15,59 +15,135 @@ struct SettingsView: View {
 	@EnvironmentObject var permissionStore: PermissionStore
     
     var body: some View {
-        VStack {
-			Spacer()
-			if let user = authStore.user {
-				HStack {
-					Image(systemName: "person.fill")
-						.resizable()
-						.scaledToFit()
-						.frame(width: 25)
-					Text("\(user.displayName ?? "MISSING DISPLAY NAME")")
-						.styled(.body)
-				}
-				HStack {
-					Image(systemName: "envelope.fill")
-						.resizable()
-						.scaledToFit()
-						.frame(width: 25)
-					Text(user.email ?? "NO EMAIL")
-						.styled(.body)
-				}
-				Text(user.uid)
-					.styled(.body)
+		VStack(spacing: 0) {
+			VStack {
+				Text("SETTINGS")
+					.styled(.title2)
+					.fillLeading()
+				Divider()
 			}
-			Spacer()
 			
-            Button(action: {
-				Task {
-					await authStore.signOut()
+			ScrollView(showsIndicators: false) {
+				VStack(spacing: 50) {
+					if let user = authStore.user {
+						VStack(alignment: .leading) {
+							Text("NAME")
+								.styled(.bodyBold)
+								.fillLeading()
+								.foregroundStyle(Color.systemGray)
+							
+							HStack {
+								Image(systemName: "person.fill")
+									.resizable()
+									.scaledToFit()
+									.frame(width: 25)
+								Text("\(user.displayName ?? "MISSING DISPLAY NAME")")
+									.styled(.body)
+							}
+						}
+						VStack(alignment: .leading) {
+							Text("EMAIL")
+								.styled(.bodyBold)
+								.fillLeading()
+								.foregroundStyle(Color.systemGray)
+							
+							HStack {
+								Image(systemName: "envelope.fill")
+									.resizable()
+									.scaledToFit()
+									.frame(width: 25)
+								Text(user.email ?? "NO EMAIL")
+									.styled(.body)
+							}
+						}
+						
+						VStack(alignment: .leading) {
+							Text("USER ID")
+								.styled(.bodyBold)
+								.fillLeading()
+								.foregroundStyle(Color.systemGray)
+							
+							HStack {
+								Image(systemName: "envelope.fill")
+									.resizable()
+									.scaledToFit()
+									.frame(width: 25)
+								Text(user.uid)
+									.styled(.body)
+							}
+						}
+					}
+					
+					VStack(alignment: .leading) {
+						Text("BIOMETRIC UNLOCK")
+							.styled(.bodyBold)
+							.fillLeading()
+							.foregroundStyle(Color.systemGray)
+						
+						HStack(spacing: Constants.Spacing.large) {
+							Button(action: {
+								UserDefaults.standard.set(false, forKey: "Biometrics")
+								notificationStore.pushNotification(message: "Biometrics disabled!")
+							}, label: {
+								Text("Disable")
+									.styled(.bodyBold)
+									.foregroundStyle(Color.white)
+									.padding(.horizontal, Constants.Spacing.medium)
+									.padding(.vertical, Constants.Spacing.small)
+									.darkWindow()
+									.cornerRadius(10)
+							})
+							.disabled(!UserDefaults.standard.bool(forKey: "Biometrics"))
+							.overlay {
+								Color.white.opacity(!UserDefaults.standard.bool(forKey: "Biometrics") ? 0.6 : 0)
+							}
+							Button(action: {
+								Task {
+									if await authStore.bioAuthenticate() {
+										UserDefaults.standard.set(true, forKey: "Biometrics")
+										notificationStore.pushNotification(message: "Biometrics enabled!")
+									} else {
+										notificationStore.pushNotification(message: "Error enabling biometrics")
+									}
+								}
+							}, label: {
+								Text("Enable")
+									.styled(.bodyBold)
+									.foregroundStyle(Color.white)
+									.padding(.horizontal, Constants.Spacing.medium)
+									.padding(.vertical, Constants.Spacing.small)
+									.darkWindow()
+									.cornerRadius(10)
+							})
+							.disabled(UserDefaults.standard.bool(forKey: "Biometrics"))
+							.overlay {
+								Color.white.opacity(UserDefaults.standard.bool(forKey: "Biometrics") ? 0.6 : 0)
+							}
+							Spacer()
+						}
+					}
+					
+					Divider()
+					
+					Button(action: {
+						Task {
+							await authStore.signOut()
+						}
+					}, label: {
+						Text("SIGN OUT")
+							.styled(.bodyBold)
+							.foregroundStyle(Color.white)
+							.padding(.horizontal, Constants.Spacing.medium)
+							.padding(.vertical, Constants.Spacing.small)
+							.darkWindow()
+							.cornerRadius(10)
+					})
 				}
-			}, label: {
-				Text("Sign Out")
-					.styled(.body)
-					.padding()
-					.background(Color.systemGray3)
-					.cornerRadius(5)
-			})
-//            Text("Clear properties")
-//                .onTapGesture {
-//                    Task {
-//                        await propertyStore.resetProperty(.friend)
-//                        await propertyStore.resetProperty(.owned)
-//                    }
-//                }
-			
-//			Text("Test Notification")
-//				.styled(.body)
-//				.onTapGesture {
-//					notificationStore.pushNotification(message: "test123")
-//				}
-			
-			
-
-			Spacer()
-        }
+				.padding(.top, 25)
+			}
+		}
+		.padding(Constants.Spacing.large)
+		
     }
 }
 

@@ -27,7 +27,10 @@ struct SecureStyledFloatingTextField: View {
 							.padding(.horizontal, 4)
 							.background(.white)
 							.foregroundColor(textColor)
+							.cornerRadius(3)
 					})
+					.disableAutocorrection(true)
+					.autocapitalization(.none)
 				} else {
 					FloatingPromptTextField(text: $text, prompt: {
 						Text(prompt)
@@ -35,10 +38,10 @@ struct SecureStyledFloatingTextField: View {
 							.background(.white)
 							.foregroundColor(textColor)
 					})
+					.disableAutocorrection(true)
+					.autocapitalization(.none)
 				}
 			}
-			.disableAutocorrection(true)
-			.autocapitalization(.none)
 			.padding(.horizontal, 8)
 			.padding(.vertical, 4)
 			.background {
@@ -54,10 +57,9 @@ struct SecureStyledFloatingTextField: View {
 				hidePassword.toggle()
 			}, label: {
 				Image(systemName: hidePassword ? "eye.slash.fill" : "eye.fill")
-					.resizable()
-					.scaledToFit()
-					.frame(width: 25)
-					.offset(y: 8)
+					.size(width: 25)
+					.foregroundStyle(Color.white)
+					.offset(y: 12)
 			})
 		}
 		

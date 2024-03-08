@@ -69,7 +69,8 @@ struct OwnedAvailabilityView: View {
 						})
 						Spacer()
 					}
-					
+					let availableList = calendarViewModel.property.available.current().dateSorted()
+					let unavailableList = calendarViewModel.property.unavailable.current().dateSorted()
 					VStack {
 						if calendarViewModel.mode == .available {
 							availableList
@@ -77,15 +78,16 @@ struct OwnedAvailabilityView: View {
 						} else {
 							unavailableList
 							availableList
-
 						}
 						
-						Rectangle()
-							.fill(
-								.white
-							)
-							.frame(maxWidth: .infinity)
-							.frame(height: 70)
+						ForEach(calendarViewModel.mode != .available ? availableList : unavailableList) { availability in
+							AvailabilityTileView(availibility: availability) {
+								Task {
+									await propertyStore.deleteSchedule(availability, propertyId: calendarViewModel.property.id)
+								}
+							}
+							Divider()
+						}
 					}
 				}
 				.padding(.top, Constants.Spacing.large)
@@ -119,26 +121,6 @@ struct OwnedAvailabilityView: View {
 		}
 		.onDisappear {
 			calendarViewModel.unsubscribe()
-		}
-	}
-	
-	var unavailableList: some View {
-		ForEach(calendarViewModel.property.unavailable.current().dateSorted()) { availability in
-			AvailabilityTileView(availibility: availability, bgColor: Color.systemGray3) {
-				Task {
-					await propertyStore.deleteSchedule(availability, propertyId: calendarViewModel.property.id)
-				}
-			}
-		}
-	}
-	
-	var availableList: some View {
-		ForEach(calendarViewModel.property.available.current().dateSorted()) { availability in
-			AvailabilityTileView(availibility: availability, bgColor: Color.systemGray3) {
-				Task {
-					await propertyStore.deleteSchedule(availability, propertyId: calendarViewModel.property.id)
-				}
-			}
 		}
 	}
 	

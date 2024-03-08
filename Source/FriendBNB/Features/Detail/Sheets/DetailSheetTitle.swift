@@ -16,7 +16,7 @@ struct DetailSheetTitle: View {
     var body: some View {
 		HStack(spacing: Constants.Spacing.medium) {
 			Text(title)
-				.font(.title2).fontWeight(.bold)
+				.styled(.title2)
 				.fillLeading()
 			
 			Spacer()

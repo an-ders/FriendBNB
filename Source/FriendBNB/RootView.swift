@@ -44,16 +44,13 @@ struct RootView: View {
 	@EnvironmentObject var notificationStore: NotificationStore
 	@Environment(\.dismiss) private var dismiss
 	
-	@State var loggedIn = false
 	@State var onboarded = UserDefaults.standard.bool(forKey: "Onboarded")
-	@State var showNewPropertySheet = false
-	@State var showAddPropertySheet = false
 	@State var selectedTab: RootTabs = .owned
 	
 	var body: some View {
 		NotificationView(notification: $notificationStore.notification) {
 			if onboarded {
-				if authStore.loggedIn {
+				if authStore.isLoggedIn, authStore.isAuthenticated {
 					VStack(spacing: 0) {
 						switch propertyStore.selectedTab {
 						case .owned:
@@ -96,14 +93,18 @@ struct RootView: View {
 							}
 						}
 					}
+					.overlay {
+						if !UserDefaults.standard.bool(forKey: "Biometrics Onboared") {
+							BiometricsOnboarding()
+								.ignoresSafeArea()
+						}
+					}
 					.onAppear {
 						if let propertyID = propertyStore.addPropertyID {
 							Task { @MainActor in
 								if let id = await propertyStore.checkValidId(propertyID) {
 									await propertyStore.addPropertyToUser(id, type: .friend)
-									await propertyStore.fetchProperties(.friend)
 									if let property = await propertyStore.getProperty(id: id) {
-										await propertyStore.fetchProperties(.friend)
 										propertyStore.showProperty(property, type: .friend)
 									} else {
 										//ERROR
@@ -113,6 +114,11 @@ struct RootView: View {
 								}
 								propertyStore.addPropertyID = nil
 							}
+						}
+						
+						Task {
+							await propertyStore.fetchProperties(.owned)
+							await propertyStore.fetchProperties(.friend)
 						}
 					}
 				} else {
@@ -133,15 +139,19 @@ struct RootView: View {
 				propertyStore.selectedAddToCalendar = nil
 			}
 		}
-		.onChange(of: authStore.loggedIn) { _ in
-			Task {
-				await propertyStore.fetchProperties(.owned)
-				await propertyStore.fetchProperties(.friend)
-			}
-		}
 		.onOpenURL { url in
 			print("Incomming url: \(url.absoluteString)")
 			propertyStore.loading = true
+			
+			if !(authStore.isLoggedIn && authStore.isAuthenticated), authStore.isSignInLink(url) {
+				Task {
+					if let error = await authStore.linkAuthenticate(url: url) {
+						print("CANT LOG IN")
+						authStore.error = "Link sign in unsuccessfull. Please try again"
+						return
+					}
+				}
+			}
 			
 			let linkHandled = DynamicLinks.dynamicLinks().handleUniversalLink(url) { dynamicLink, error in
 				guard error == nil else {
@@ -175,29 +185,41 @@ struct RootView: View {
 					if component.contains("friendID=") {
 						let idRequest = component.replacingOccurrences(of: "friendID=", with: "")
 						Task { @MainActor in
+							propertyStore.loading = true
 							if let id = await propertyStore.checkValidId(idRequest) {
 								await propertyStore.addPropertyToUser(id, type: .friend)
 								dismiss()
 								if let property = await propertyStore.getProperty(id: id) {
-									propertyStore.showProperty(property, type: .friend)
+									propertyStore.loading = false
+									propertyStore.selectedTab = .friends
+									DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) {
+										propertyStore.showProperty(property, type: .friend)
+									}
 								} else {
 									propertyStore.addPropertyID = idRequest
 								}
 							} else {
 								propertyStore.addPropertyID = idRequest
 							}
+							propertyStore.loading = false
 						}
 					} else if component.contains("ownedID=") {
 						let idRequest = component.replacingOccurrences(of: "ownedID=", with: "")
 						Task { @MainActor in
+							propertyStore.loading = true
 							if let id = await propertyStore.checkValidId(idRequest) {
 								if let property = await propertyStore.getProperty(id: id) {
 									if property.ownerId == authStore.user?.uid {
 										await propertyStore.addPropertyToUser(id, type: .owned)
-										propertyStore.showProperty(property, type: .owned)
+										propertyStore.loading = false
+										propertyStore.selectedTab = .owned
+										DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) {
+											propertyStore.showProperty(property, type: .owned)
+										}
 									}
 								}
 							}
+							propertyStore.loading = false
 						}
 					} else if component.contains("booking=") {
 						let idRequest = component.replacingOccurrences(of: "booking=", with: "")

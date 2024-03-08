@@ -84,16 +84,19 @@ struct PropertyDetailList: View {
 						.size(width: 20, height: 20)
 					Text("Cost per night: ")
 						.styled(.body)
-					Text(property.info.payment == .free ? "FREE" : "\(String(format: "%.2f", property.info.cost)) \(property.info.payment.rawValue)")
+					Text(property.info.payment == .free ? "FREE" : "$\(String(format: "%.2f", property.info.cost)) \(property.info.payment.rawValue)")
 						.styled(.bodyBold)
 					Spacer()
 				}
 				.foregroundStyle(color)
 				
 				if !property.info.paymentNotes.isEmpty && (sensitiveInfo.contains(SensitiveInfoType.paymentNotes.rawValue) || showAll) {
-					Text(property.info.paymentNotes.isEmpty ? "" : property.info.paymentNotes)
-						.styled(.body)
-						.fillLeading()
+					HStack {
+						Image(systemName: "note.text")
+						Text(property.info.paymentNotes.isEmpty ? "" : property.info.paymentNotes)
+							.styled(.body)
+							.fillLeading()
+					}
 				}
 			}
 			.foregroundStyle(color)

@@ -7,34 +7,33 @@
 
 import SwiftUI
 
-struct OptionalInfoField: View {
+struct OptionalInfoField<Content: View>: View {
 	@State var showField: Bool = false
-	@Binding var text: String
 	var infoName: String
-	var defaultText: String
-	
-	init(infoName: String, defaultText: String, text: Binding<String>) {
-		self.infoName = infoName
-		self.defaultText = defaultText
-		self._text = text
-	}
+	@ViewBuilder var enabledField: Content
 	
     var body: some View {
 		VStack(spacing: 8) {
-			Toggle(isOn: $showField) {
+			if !showField {
+				Button(action: {
+					withAnimation {
+						showField = true
+					}
+				}, label: {
+					HStack {
+						Image(systemName: "plus")
+							.size(height: 20)
+						Text(infoName)
+							.styled(.bodyBold)
+							.fillLeading()
+					}
+				})
+			}
+			if showField {
 				Text(infoName)
 					.styled(.body)
-			}
-			.padding(.trailing, 4)
-			if showField {
-				BasicTextField(defaultText: defaultText, text: $text)
-			}
-		}
-		.onAppear {
-			DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-				if !text.isEmpty {
-					showField = true
-				}
+					.fillLeading()
+				enabledField
 			}
 		}
     }

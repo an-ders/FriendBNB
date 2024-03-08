@@ -22,6 +22,7 @@ struct StyledFloatingTextField: View {
 				.padding(.horizontal, 4)
 				.background(.white)
 				.foregroundColor(textColor)
+				.cornerRadius(3)
 		})
 		.disableAutocorrection(true)
 		.autocapitalization(.none)

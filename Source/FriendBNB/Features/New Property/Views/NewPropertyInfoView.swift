@@ -15,9 +15,15 @@ struct NewPropertyInfoView: View {
 		VStack(spacing: 0) {
 			ScrollView(.vertical, showsIndicators: false) {
 				VStack(spacing: Constants.Spacing.regular) {
-					Text("Home Details")
-						.styled(.title)
-						.fillLeading()
+					VStack(spacing: 0) {
+						DetailSheetTitle(title: "HOME DETAILS", showDismiss: false)
+							.padding(.leading, Constants.Spacing.medium)
+							.padding(.vertical, Constants.Spacing.large)
+							.padding(.trailing, Constants.Spacing.large)
+						Divider()
+							.padding(.horizontal, -Constants.Spacing.large)
+					}
+					
 					NewPropertyInfoFieldsView(info: info)
 				}
 				.padding(.top, Constants.Spacing.regular)
@@ -59,161 +65,81 @@ struct NewPropertyInfoFieldsView: View {
 	
 	@State var showWifi = false
 	@State var showContact = false
+	@State var showPaymentPicker = false
 	
 	var body: some View {
-		StyledFloatingTextField(text: $info.nickname, prompt: "Nickname (optional)")
-			.padding(.bottom, Constants.Spacing.small)
-		CustomStepperView(text: "Max People", value: $info.people, min: 1)
-		Divider()
-		HStack {
-			if info.payment == .free {
-				Text("Rate Per Night")
-					.styled(.body)
-					.frame(maxWidth: .infinity, alignment: .leading)
+		VStack(spacing: 50) {
+			VStack {
+				Text("BASIC INFO")
+					.styled(.bodyBold)
+					.fillLeading()
+					.foregroundStyle(Color.systemGray)
+				StyledFloatingTextField(text: $info.nickname, prompt: "Property Nickname")
+					.padding(.bottom, Constants.Spacing.medium)
+					.padding(.top, -Constants.Spacing.medium)
+
+				CustomStepperView(text: "Maximum guests", value: $info.people, min: 1)
 			}
 			
-			ForEach(PaymentFee.allCases, id: \.rawValue) { payment in
+			VStack {
+				Text("PAYMENT")
+					.styled(.bodyBold)
+					.fillLeading()
+					.foregroundStyle(Color.systemGray)
+				
 				Button(action: {
-					withAnimation {
-						info.payment = payment
-					}
+					showPaymentPicker.toggle()
 				}, label: {
-					Text(payment.rawValue)
-						.foregroundStyle(Color.white)
-						.styled(.caption)
-						.padding(.horizontal, Constants.Spacing.small)
-						.padding(.vertical, Constants.Spacing.xsmall)
-						.background(info.payment == payment ? Color.systemBlue.opacity(0.6) : Color.systemGray3)
-						.cornerRadius(5)
+					PaymentTileView(type: info.payment)
 				})
 			}
 			
-			if info.payment != .free {
-				CurrencyTextField("Rate Per Night", value: $info.cost)
-					.styled(.bodyBold)
-					.padding(.horizontal, Constants.Spacing.small)
-					.padding(.vertical, Constants.Spacing.xsmall)
-					.overlay(
-						RoundedRectangle(cornerRadius: 5)
-							.stroke(lineWidth: 1.0)
-							.foregroundStyle(Color.systemGray3)
-					)
-					.frame(maxWidth: .infinity, alignment: .trailing)
-			}
-		}
-		
-		if info.payment != .free {
-			VStack(spacing: 2) {
-				BasicTextField(defaultText: "Payment Details...", text: $info.paymentNotes)
-				Text("Add your EMT, Venmo, or cash instructions above. Please note we do not handle payments")
-					.styled(.caption)
-					.fillLeading()
-					.foregroundStyle(Color.systemGray3)
-			}
-		}
-		
-		Text("Information below only shared upon approval")
-			.styled(.headline)
-			.fillLeading()
-			.padding(.top, 16)
-		
-		VStack(spacing: 8) {
-			Toggle(isOn: $showContact) {
-				Text("Contact Information")
-					.styled(.body)
-			}
-			.padding(.trailing, 4)
-			if showContact {
-				BasicTextField(defaultText: "(555)-555-5555", text: $info.contactInfo)
-					.keyboardType(.numberPad)
-					.onChange(of: info.contactInfo) {
-						if !info.contactInfo.isEmpty {
-							info.contactInfo = info.contactInfo.formatPhoneNumber()
-						}
+			VStack {
+				VStack(spacing: 0) {
+					Text("ADDITIONAL INFORMATION")
+						.styled(.bodyBold)
+						.fillLeading()
+						.foregroundStyle(Color.systemGray)
+					HStack(spacing: 4) {
+						Image(systemName: "eye")
+							.size(height: 12)
+						Text("Shared only upon confirmation")
+							.styled(.caption)
+							.fillLeading()
 					}
-			}
-		}
-		.onAppear {
-			DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-				if !info.contactInfo.isEmpty {
-					showContact = true
+					.foregroundStyle(Color.systemGray3)
+				}
+				
+				VStack(spacing: 20) {
+					OptionalInfoField(infoName: "Contact Information") {
+						BasicTextField(defaultText: "(555)-555-5555", text: $info.contactInfo)
+							.keyboardType(.numberPad)
+							.onChange(of: info.contactInfo) {
+								if !info.contactInfo.isEmpty {
+									info.contactInfo = info.contactInfo.formatPhoneNumber()
+								}
+							}
+					}
+					
+					OptionalInfoField(infoName: "Cleaning Instructions") {
+						BasicTextField(defaultText: "Run dishwasher before leaving...", text: $info.cleaningNotes)
+					}
+					
+					OptionalInfoField(infoName: "Wifi Details") {
+						BasicTextField(defaultText: "Wifi Name", text: $info.wifiName)
+						BasicTextField(defaultText: "Wifi Password", text: $info.wifiPass)
+					}
+					
+					OptionalInfoField(infoName: "Security Code") {
+						BasicTextField(defaultText: "12345", text: $info.securityCode)
+					}
 				}
 			}
 		}
-		
-		OptionalInfoField(infoName: "Cleaning Instructions", defaultText: "Run dishwasher before leaving...", text: $info.cleaningNotes)
-		
-		VStack(spacing: 8) {
-			Toggle(isOn: $showWifi) {
-				Text("Wifi Details")
-					.styled(.body)
-			}
-			.padding(.trailing, 4)
-			if showWifi {
-				BasicTextField(defaultText: "Wifi Name", text: $info.wifiName)
-				BasicTextField(defaultText: "Wifi Password", text: $info.wifiPass)
-			}
+		.sheet(isPresented: $showPaymentPicker) {
+			PaymentPickerView(info: info, showPicker: $showPaymentPicker)
 		}
-		.onAppear {
-			DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-				if !info.wifiName.isEmpty {
-					showWifi = true
-				}
-			}
-		}
-		
-		OptionalInfoField(infoName: "Security Code", defaultText: "12345", text: $info.securityCode)
 	}
-}
-
-enum PaymentFee: String, CaseIterable {
-	case free = "FREE"
-	case cad = "CAD"
-	case usd = "USD"
-}
-
-class NewPropertyInfo: ObservableObject {
-	@Published var nickname: String = ""
-	@Published var rooms: Int = 1
-	@Published var people: Int = 4
-	@Published var notes: String = ""
-	@Published var error: String = ""
-	
-	@Published var payment: PaymentFee = .free
-	@Published var cost: Double?
-	@Published var paymentNotes: String = ""
-	
-	@Published var cleaningNotes: String = ""
-	@Published var wifiName: String = ""
-	@Published var wifiPass: String = ""
-	@Published var securityCode: String = ""
-	@Published var contactInfo: String = ""
-	
-	var dictonary: [String: Any] {
-		["info": [
-			"nickname": nickname,
-			"rooms": rooms,
-			"people": people,
-			"cleaningNotes": cleaningNotes,
-			"wifiName": wifiName,
-			"wifiPass": wifiPass,
-			"securityCode": securityCode,
-			"contactInfo": contactInfo,
-			"payment": payment.rawValue,
-			"cost": cost ?? 0,
-			"paymentNotes": paymentNotes,
-			"notes": notes
-		]
-		]
-	}
-	
-	//	init() {
-	//		self.rooms
-	//		self.people
-	//		self.fee
-	//		self.notes
-	//		self.error
-	//	}
 }
 
 //struct NewPropertyInfoView_Previews: PreviewProvider {

@@ -34,13 +34,17 @@ struct AddPropertyView: View {
 			}
 		}, content: {
 			VStack {
-				Text("Add a property")
-					.styled(.title)
-					.frame(maxWidth: .infinity, alignment: .leading)
-					.padding(.bottom, Constants.Spacing.small)
+				VStack(spacing: 0) {
+					DetailSheetTitle(title: "ADD PROPERTY", showDismiss: true)
+						.padding(.leading, Constants.Spacing.medium)
+						.padding(.vertical, Constants.Spacing.large)
+						.padding(.trailing, Constants.Spacing.large)
+					Divider()
+				}
 				Text("Enter the property code below:")
 					.styled(.body)
 					.frame(maxWidth: .infinity, alignment: .leading)
+					.padding(.top, Constants.Spacing.large)
 				
 				StyledFloatingTextField(text: $propertyId, prompt: "Property Code")
 				

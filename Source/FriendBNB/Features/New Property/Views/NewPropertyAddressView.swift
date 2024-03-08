@@ -18,10 +18,13 @@ struct NewPropertyAddressView: View {
 			next()
 		}, content: {
 			VStack {
-				Text("Confirm the address")
-					.styled(.title)
-					.fillLeading()
-					.padding(.bottom, Constants.Spacing.regular)
+				VStack(spacing: 0) {
+					DetailSheetTitle(title: "CONFIRM ADDRESS", showDismiss: false)
+						.padding(.leading, Constants.Spacing.medium)
+						.padding(.vertical, Constants.Spacing.large)
+						.padding(.trailing, Constants.Spacing.large)
+					Divider()
+				}
 				
 				ScrollView(showsIndicators: false) {
 					VStack(spacing: 4) {

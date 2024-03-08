@@ -12,9 +12,10 @@ import FirebaseAuth
 
 @MainActor
 class BookingStore: ObservableObject {
-	func createBooking(startDate: Date?, endDate: Date?, property: Property, message: String = "", sensitiveInfo: [String] = []) async -> String? {
+	func createBooking(startDate: Date?, endDate: Date?, property: Property, message: String = "", sensitiveInfo: [String] = [], isRequested: Bool = false) async -> String? {
 		
-		if let error = checkBookingDates(startDate: startDate, endDate: endDate, property: property), error != "Unknown" {
+		let error = checkBookingDates(startDate: startDate, endDate: endDate, property: property)
+		if error != nil, error != "Requested" {
 			return error
 		}
 		
@@ -34,7 +35,8 @@ class BookingStore: ObservableObject {
 				 "name": user.displayName ?? "",
 				 "status": BookingStatus.pending.rawValue,
 				 "statusMessage": message,
-				 "sensitiveInfo": sensitiveInfo])
+				 "sensitiveInfo": sensitiveInfo,
+				 "isRequested": error == "Requested"])
 			print("Booking from \(String(describing: startDate)) to \(String(describing: endDate))")
 		} catch {
 			print("Error booking: \(error)")
@@ -82,7 +84,7 @@ class BookingStore: ObservableObject {
 			return nil
 		}
 		
-		return "Unknown"
+		return "Requested"
 	}
 	
 	func deleteBooking(_ booking: Booking, propertyId: String) async {

@@ -31,12 +31,12 @@ struct CalendarView: View {
 					calendarViewModel.previousMonth()
 				}, label: {
 					Image(systemName: "arrow.left")
-						.imageScale(.medium)
+						.size(height: 20)
 						.font(Font.title.weight(.bold))
 				})
 				
-				Text(calendarViewModel.date.monthYearString())
-					.styled(.headline)
+				Text(calendarViewModel.date.monthYearString().uppercased())
+					.styled(.title2)
 					.animation(.none)
 					.frame(maxWidth: .infinity)
 				
@@ -44,8 +44,7 @@ struct CalendarView: View {
 					calendarViewModel.nextMonth()
 				}, label: {
 					Image(systemName: "arrow.right")
-						.imageScale(.medium)
-						.font(Font.title.weight(.bold))
+						.size(height: 20)
 				})
 				Spacer()
 			}

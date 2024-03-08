@@ -97,7 +97,6 @@ struct Property: Identifiable, Hashable {
 		\(self.info.nickname.isEmpty ? self.ownerName + "'s Place" : self.info.nickname) in \(self.location.city) \(self.location.state)
 		Months available:
 		\(availableMonths)
-		    - Request your own dates...
 		Property id: \(self.id)
 		"""
 	}
@@ -113,7 +112,7 @@ struct Property: Identifiable, Hashable {
 			}
 			count += 1
 		}
-		return string
+		return string + (count == 0 ? "    - Request your own dates..." : "\n    - Request your own dates...")
 	}
 	
 	var shareLink: URL? {

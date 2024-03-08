@@ -29,6 +29,7 @@ struct BookingTileView<Content: View>: View {
 				Text("\(booking.start.dayMonthString()) to \(booking.end.dayMonthString())")
 			}
 			.styled(.body)
+			.shimmering(active: booking.status == .pending && showName)
 			
 			Spacer()
 			

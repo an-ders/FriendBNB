@@ -26,6 +26,7 @@
 		56041BF32B65F955005BD4D8 /* OptionalInfoField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56041BF22B65F955005BD4D8 /* OptionalInfoField.swift */; };
 		56041BF52B66075D005BD4D8 /* NewPropertyConfirmView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56041BF42B66075D005BD4D8 /* NewPropertyConfirmView.swift */; };
 		56041BFA2B661F1B005BD4D8 /* NoSelectedPropertyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56041BF92B661F1B005BD4D8 /* NoSelectedPropertyView.swift */; };
+		5627F6C12B9AB2A6008AD7C9 /* BiometricsOnboarding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5627F6C02B9AB2A6008AD7C9 /* BiometricsOnboarding.swift */; };
 		5642FA8F2B93D7BE0029F4F9 /* EventView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5642FA8E2B93D7BE0029F4F9 /* EventView.swift */; };
 		5642FA912B93E5D40029F4F9 /* NotificationCountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5642FA902B93E5D40029F4F9 /* NotificationCountView.swift */; };
 		5642FA942B94317F0029F4F9 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5642FA932B94317F0029F4F9 /* OnboardingView.swift */; };
@@ -38,6 +39,10 @@
 		565198512AA7DCF200866F0B /* FriendBNBTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 565198502AA7DCF200866F0B /* FriendBNBTests.swift */; };
 		5651985B2AA7DCF200866F0B /* FriendBNBUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5651985A2AA7DCF200866F0B /* FriendBNBUITests.swift */; };
 		5651985D2AA7DCF200866F0B /* FriendBNBUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5651985C2AA7DCF200866F0B /* FriendBNBUITestsLaunchTests.swift */; };
+		565450802B978119005308D0 /* PaymentTileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5654507F2B978119005308D0 /* PaymentTileView.swift */; };
+		565450832B97822C005308D0 /* NewPropertyDataStructs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 565450822B97822C005308D0 /* NewPropertyDataStructs.swift */; };
+		565450852B9785F2005308D0 /* PaymentPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 565450842B9785F2005308D0 /* PaymentPickerView.swift */; };
+		565450872B978760005308D0 /* PaymentDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 565450862B978760005308D0 /* PaymentDetailView.swift */; };
 		565492A62B82CBBE006BF8B8 /* Podfile in Resources */ = {isa = PBXBuildFile; fileRef = 565492A52B82CBBE006BF8B8 /* Podfile */; };
 		565A46572AFF454400D67A03 /* AddPropertyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 565A46562AFF454400D67A03 /* AddPropertyView.swift */; };
 		565A465C2AFF571800D67A03 /* StyledFloatingTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 565A465B2AFF571800D67A03 /* StyledFloatingTextField.swift */; };
@@ -49,7 +54,6 @@
 		565A466B2B00B88700D67A03 /* Booking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 565A466A2B00B88700D67A03 /* Booking.swift */; };
 		565A466D2B00C70600D67A03 /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 565A466C2B00C70600D67A03 /* Date.swift */; };
 		565A466F2B02D4D100D67A03 /* PropertyStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 565A466E2B02D4D100D67A03 /* PropertyStore.swift */; };
-		565A46742B02E55700D67A03 /* OwnedDetailSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 565A46732B02E55700D67A03 /* OwnedDetailSettingsView.swift */; };
 		565A46762B0355C500D67A03 /* View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 565A46752B0355C500D67A03 /* View.swift */; };
 		565A467B2B0363C200D67A03 /* FriendNewBookingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 565A467A2B0363C200D67A03 /* FriendNewBookingView.swift */; };
 		565B7E732B847BB9009A5EDD /* CurrencyInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 565B7E722B847BB9009A5EDD /* CurrencyInputView.swift */; };
@@ -64,10 +68,10 @@
 		56944F9E2B8B0FD300B36175 /* ToggleInfoDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56944F9D2B8B0FD300B36175 /* ToggleInfoDetail.swift */; };
 		56944FA02B8D9C7300B36175 /* Coordinate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56944F9F2B8D9C7300B36175 /* Coordinate.swift */; };
 		56B34D402B72E359008F831A /* TabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56B34D3F2B72E359008F831A /* TabBar.swift */; };
-		56B34D422B7F3A8C008F831A /* FriendDetailSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56B34D412B7F3A8C008F831A /* FriendDetailSettingsView.swift */; };
 		56B34D462B81FACF008F831A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 56B34D452B81FACF008F831A /* Assets.xcassets */; };
 		56B34D482B8214E7008F831A /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56B34D472B8214E7008F831A /* LoadingView.swift */; };
 		56C218502B967F4D00E1AE7C /* Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56C2184F2B967F4D00E1AE7C /* Image.swift */; };
+		56C347862B976E980026532A /* Shimmering.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56C347852B976E980026532A /* Shimmering.swift */; };
 		56D7B0C42AF2F630002B65DD /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = 56D7B0C32AF2F630002B65DD /* .swiftlint.yml */; };
 		56D7B0C82AF2FB95002B65DD /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D7B0C72AF2FB95002B65DD /* RootView.swift */; };
 		56D7B0CB2AF358BF002B65DD /* OwnedHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D7B0CA2AF358BF002B65DD /* OwnedHomeView.swift */; };
@@ -109,6 +113,8 @@
 		56F0FA612B965DF40058FD29 /* UINavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56F0FA602B965DF40058FD29 /* UINavigationController.swift */; };
 		56F0FA652B96744E0058FD29 /* SafeAreaInsets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56F0FA642B96744E0058FD29 /* SafeAreaInsets.swift */; };
 		56F4BA582B8AE04900FE41E7 /* PropertyDetailList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56F4BA572B8AE04900FE41E7 /* PropertyDetailList.swift */; };
+		56F98B8D2B97BE2F008EF212 /* Background + Modifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56F98B8C2B97BE2F008EF212 /* Background + Modifiers.swift */; };
+		56F98B8F2B97C5FC008EF212 /* UIScreen + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56F98B8E2B97C5FC008EF212 /* UIScreen + Extension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -147,6 +153,7 @@
 		56041BF22B65F955005BD4D8 /* OptionalInfoField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionalInfoField.swift; sourceTree = "<group>"; };
 		56041BF42B66075D005BD4D8 /* NewPropertyConfirmView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPropertyConfirmView.swift; sourceTree = "<group>"; };
 		56041BF92B661F1B005BD4D8 /* NoSelectedPropertyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoSelectedPropertyView.swift; sourceTree = "<group>"; };
+		5627F6C02B9AB2A6008AD7C9 /* BiometricsOnboarding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BiometricsOnboarding.swift; sourceTree = "<group>"; };
 		5642FA8E2B93D7BE0029F4F9 /* EventView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventView.swift; sourceTree = "<group>"; };
 		5642FA902B93E5D40029F4F9 /* NotificationCountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationCountView.swift; sourceTree = "<group>"; };
 		5642FA932B94317F0029F4F9 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
@@ -162,6 +169,10 @@
 		565198562AA7DCF200866F0B /* FriendBNBUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FriendBNBUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		5651985A2AA7DCF200866F0B /* FriendBNBUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendBNBUITests.swift; sourceTree = "<group>"; };
 		5651985C2AA7DCF200866F0B /* FriendBNBUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendBNBUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		5654507F2B978119005308D0 /* PaymentTileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentTileView.swift; sourceTree = "<group>"; };
+		565450822B97822C005308D0 /* NewPropertyDataStructs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPropertyDataStructs.swift; sourceTree = "<group>"; };
+		565450842B9785F2005308D0 /* PaymentPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentPickerView.swift; sourceTree = "<group>"; };
+		565450862B978760005308D0 /* PaymentDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentDetailView.swift; sourceTree = "<group>"; };
 		565492A42B82C7A3006BF8B8 /* FriendBNB.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = FriendBNB.entitlements; sourceTree = "<group>"; };
 		565492A52B82CBBE006BF8B8 /* Podfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Podfile; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		565A46562AFF454400D67A03 /* AddPropertyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPropertyView.swift; sourceTree = "<group>"; };
@@ -174,7 +185,6 @@
 		565A466A2B00B88700D67A03 /* Booking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Booking.swift; sourceTree = "<group>"; };
 		565A466C2B00C70600D67A03 /* Date.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Date.swift; sourceTree = "<group>"; };
 		565A466E2B02D4D100D67A03 /* PropertyStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PropertyStore.swift; sourceTree = "<group>"; };
-		565A46732B02E55700D67A03 /* OwnedDetailSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OwnedDetailSettingsView.swift; sourceTree = "<group>"; };
 		565A46752B0355C500D67A03 /* View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = View.swift; sourceTree = "<group>"; };
 		565A467A2B0363C200D67A03 /* FriendNewBookingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendNewBookingView.swift; sourceTree = "<group>"; };
 		565B7E722B847BB9009A5EDD /* CurrencyInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyInputView.swift; sourceTree = "<group>"; };
@@ -190,10 +200,10 @@
 		56944F9F2B8D9C7300B36175 /* Coordinate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinate.swift; sourceTree = "<group>"; };
 		569A8FEB2AA82DCD003B3A44 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		56B34D3F2B72E359008F831A /* TabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBar.swift; sourceTree = "<group>"; };
-		56B34D412B7F3A8C008F831A /* FriendDetailSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendDetailSettingsView.swift; sourceTree = "<group>"; };
 		56B34D452B81FACF008F831A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		56B34D472B8214E7008F831A /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
 		56C2184F2B967F4D00E1AE7C /* Image.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Image.swift; sourceTree = "<group>"; };
+		56C347852B976E980026532A /* Shimmering.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shimmering.swift; sourceTree = "<group>"; };
 		56D7B0C32AF2F630002B65DD /* .swiftlint.yml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = SOURCE_ROOT; };
 		56D7B0C72AF2FB95002B65DD /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
 		56D7B0CA2AF358BF002B65DD /* OwnedHomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OwnedHomeView.swift; sourceTree = "<group>"; };
@@ -233,6 +243,8 @@
 		56F0FA602B965DF40058FD29 /* UINavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UINavigationController.swift; sourceTree = "<group>"; };
 		56F0FA642B96744E0058FD29 /* SafeAreaInsets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafeAreaInsets.swift; sourceTree = "<group>"; };
 		56F4BA572B8AE04900FE41E7 /* PropertyDetailList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PropertyDetailList.swift; sourceTree = "<group>"; };
+		56F98B8C2B97BE2F008EF212 /* Background + Modifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Background + Modifiers.swift"; sourceTree = "<group>"; };
+		56F98B8E2B97C5FC008EF212 /* UIScreen + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIScreen + Extension.swift"; sourceTree = "<group>"; };
 		89B92C97B306D5AD425B48AB /* Pods-FriendBNB.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FriendBNB.release.xcconfig"; path = "Target Support Files/Pods-FriendBNB/Pods-FriendBNB.release.xcconfig"; sourceTree = "<group>"; };
 		A88517334A19E262D7241542 /* Pods-FriendBNB.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FriendBNB.debug.xcconfig"; path = "Target Support Files/Pods-FriendBNB/Pods-FriendBNB.debug.xcconfig"; sourceTree = "<group>"; };
 		E19B548CCA72EEB2AD42091C /* Pods_FriendBNB.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FriendBNB.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -340,6 +352,7 @@
 			children = (
 				56041BE92B65C898005BD4D8 /* Font.swift */,
 				56C2184F2B967F4D00E1AE7C /* Image.swift */,
+				56F98B8C2B97BE2F008EF212 /* Background + Modifiers.swift */,
 			);
 			path = Modifiers;
 			sourceTree = "<group>";
@@ -364,6 +377,7 @@
 			isa = PBXGroup;
 			children = (
 				5642FA932B94317F0029F4F9 /* OnboardingView.swift */,
+				5627F6C02B9AB2A6008AD7C9 /* BiometricsOnboarding.swift */,
 			);
 			path = Onboarding;
 			sourceTree = "<group>";
@@ -460,6 +474,16 @@
 			path = FriendBNBUITests;
 			sourceTree = "<group>";
 		};
+		565450812B978128005308D0 /* Payment */ = {
+			isa = PBXGroup;
+			children = (
+				5654507F2B978119005308D0 /* PaymentTileView.swift */,
+				565450842B9785F2005308D0 /* PaymentPickerView.swift */,
+				565450862B978760005308D0 /* PaymentDetailView.swift */,
+			);
+			path = Payment;
+			sourceTree = "<group>";
+		};
 		565A46552AFF453500D67A03 /* Add Property */ = {
 			isa = PBXGroup;
 			children = (
@@ -472,7 +496,6 @@
 			isa = PBXGroup;
 			children = (
 				565A46602B00145400D67A03 /* OwnedDetailView.swift */,
-				565A46732B02E55700D67A03 /* OwnedDetailSettingsView.swift */,
 			);
 			path = Detail;
 			sourceTree = "<group>";
@@ -527,9 +550,11 @@
 		56D7B0DC2AF9B012002B65DD /* New Property */ = {
 			isa = PBXGroup;
 			children = (
+				565450812B978128005308D0 /* Payment */,
 				56EC54472B0CA64300AE12DC /* Views */,
 				56D7B0E32AFC9CA1002B65DD /* Models */,
 				56D7B0E62AFC9DB3002B65DD /* NewPropertySearchViewModel.swift */,
+				565450822B97822C005308D0 /* NewPropertyDataStructs.swift */,
 			);
 			path = "New Property";
 			sourceTree = "<group>";
@@ -593,6 +618,7 @@
 				560020AA2B6449AC00244058 /* Array.swift */,
 				56F0FA602B965DF40058FD29 /* UINavigationController.swift */,
 				56F0FA642B96744E0058FD29 /* SafeAreaInsets.swift */,
+				56F98B8E2B97C5FC008EF212 /* UIScreen + Extension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -614,6 +640,7 @@
 			children = (
 				56EC542E2B09D85600AE12DC /* Floating Prompt */,
 				565B7E722B847BB9009A5EDD /* CurrencyInputView.swift */,
+				56C347852B976E980026532A /* Shimmering.swift */,
 			);
 			path = Packages;
 			sourceTree = "<group>";
@@ -692,7 +719,6 @@
 			isa = PBXGroup;
 			children = (
 				56EC54552B11F83100AE12DC /* FriendDetailView.swift */,
-				56B34D412B7F3A8C008F831A /* FriendDetailSettingsView.swift */,
 			);
 			path = Detail;
 			sourceTree = "<group>";
@@ -907,7 +933,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				560020A42B635F5E00244058 /* NotificationStore.swift in Sources */,
-				565A46742B02E55700D67A03 /* OwnedDetailSettingsView.swift in Sources */,
 				56D7B0DB2AF99F25002B65DD /* NewPropertyView.swift in Sources */,
 				565A466F2B02D4D100D67A03 /* PropertyStore.swift in Sources */,
 				56041BDC2B6493B5005BD4D8 /* CalendarCellViewModel.swift in Sources */,
@@ -925,7 +950,6 @@
 				56D7B0D02AF4BE97002B65DD /* Property.swift in Sources */,
 				56041BE02B64B8AB005BD4D8 /* OwnedBookingConfirmationView.swift in Sources */,
 				56C218502B967F4D00E1AE7C /* Image.swift in Sources */,
-				56B34D422B7F3A8C008F831A /* FriendDetailSettingsView.swift in Sources */,
 				56EC544E2B0CAF4200AE12DC /* OwnedAvailabilityView.swift in Sources */,
 				56D7B0C82AF2FB95002B65DD /* RootView.swift in Sources */,
 				56EC54362B09DDB400AE12DC /* SecureFloatingPromptTextField.swift in Sources */,
@@ -963,6 +987,7 @@
 				56041BEC2B65D694005BD4D8 /* CurrencyField.swift in Sources */,
 				56D7B0CE2AF4BD92002B65DD /* PropertyTileView.swift in Sources */,
 				5642FA8F2B93D7BE0029F4F9 /* EventView.swift in Sources */,
+				56F98B8F2B97C5FC008EF212 /* UIScreen + Extension.swift in Sources */,
 				56D7B0D22AF74E09002B65DD /* Colors.swift in Sources */,
 				56EC54322B09D8AE00AE12DC /* FloatingPrompyEnvironmentValues.swift in Sources */,
 				56EC543D2B09FFC300AE12DC /* SecureStyledFloatingTextField.swift in Sources */,
@@ -973,15 +998,21 @@
 				567B74FE2B0607DB00639540 /* BookingStore.swift in Sources */,
 				56EC54542B11F81B00AE12DC /* FriendHomeEmptyView.swift in Sources */,
 				56D7B0E02AFC9C03002B65DD /* NewPropertyInfoView.swift in Sources */,
+				56F98B8D2B97BE2F008EF212 /* Background + Modifiers.swift in Sources */,
 				56D7B0CB2AF358BF002B65DD /* OwnedHomeView.swift in Sources */,
 				565198402AA7DCF200866F0B /* FriendBNBApp.swift in Sources */,
 				5642FA942B94317F0029F4F9 /* OnboardingView.swift in Sources */,
+				565450852B9785F2005308D0 /* PaymentPickerView.swift in Sources */,
 				56D7B0F02AFE1E5F002B65DD /* Constants.swift in Sources */,
 				56D7B0E92AFC9E19002B65DD /* AddressSearchResult.swift in Sources */,
+				565450832B97822C005308D0 /* NewPropertyDataStructs.swift in Sources */,
 				56EC54582B11FAB000AE12DC /* FriendExistingBookingView.swift in Sources */,
 				565A46672B00A69E00D67A03 /* CalendarHelper.swift in Sources */,
+				56C347862B976E980026532A /* Shimmering.swift in Sources */,
 				56EC54342B09D8E400AE12DC /* FloatingPromptViewExtensions.swift in Sources */,
+				565450872B978760005308D0 /* PaymentDetailView.swift in Sources */,
 				560020A22B635E3500244058 /* NotificationView.swift in Sources */,
+				5627F6C12B9AB2A6008AD7C9 /* BiometricsOnboarding.swift in Sources */,
 				56B34D482B8214E7008F831A /* LoadingView.swift in Sources */,
 				56041BE82B65B6E7005BD4D8 /* PairButtonSpacer.swift in Sources */,
 				565A466B2B00B88700D67A03 /* Booking.swift in Sources */,
@@ -994,6 +1025,7 @@
 				569409FF2B8FF8AD009CF998 /* PropertyType.swift in Sources */,
 				56041BDA2B647657005BD4D8 /* CalendarViewModel.swift in Sources */,
 				56041BF12B65F3B5005BD4D8 /* BasicTextField.swift in Sources */,
+				565450802B978119005308D0 /* PaymentTileView.swift in Sources */,
 				56EC54442B0BF3D900AE12DC /* FriendsHomeView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1152,6 +1184,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = FriendBNB/FriendBNB.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"FriendBNB/Preview Content\"";
@@ -1162,15 +1195,17 @@
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.0.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.baboo.FriendBNB;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
@@ -1187,6 +1222,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = FriendBNB/FriendBNB.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"FriendBNB/Preview Content\"";
@@ -1197,15 +1233,17 @@
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.0.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.baboo.FriendBNB;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;

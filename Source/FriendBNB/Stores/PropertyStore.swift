@@ -63,22 +63,21 @@ class PropertyStore: ObservableObject {
 	
 	func showProperty(_ property: Property, type: PropertyType, showAvailability: Bool = false) {
 		self.selectedTab = type == .owned ? .owned : .friends
-		DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+		DispatchQueue.main.asyncAfter(deadline: .now()) {
 			switch type {
 			case .owned:
 				self.ownedSelectedProperty = property
+				if showAvailability {
+					DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) {
+						switch type {
+						case .owned:
+							self.showOwnedAvailabilitySheet = showAvailability
+						case .friend: break
+						}
+					}
+				}
 			case .friend:
 				self.friendSelectedProperty = property
-			}
-		}
-		
-		if showAvailability {
-			DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
-				switch type {
-				case .owned:
-					self.showOwnedAvailabilitySheet = showAvailability
-				case .friend: break
-				}
 			}
 		}
 	}
@@ -99,7 +98,7 @@ class PropertyStore: ObservableObject {
 	
 	func showBooking(booking: Booking, property: Property, type: PropertyType) {
 		self.selectedTab = type == .owned ? .owned : .friends
-		DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+		DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
 			switch type {
 			case .owned:
 				self.ownedSelectedBooking = PropertyBookingGroup(property: property, booking: booking)

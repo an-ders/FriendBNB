@@ -38,21 +38,13 @@ struct FriendsHomeView: View {
 						
 						ScrollView(showsIndicators: false) {
 							VStack {
-								Rectangle()
-									.frame(height: 45)
-									.foregroundStyle(Color.clear)
-								
 								ForEach(propertyStore.friendsProperties) { property in
 									PropertyTileView(property: property, type: .friend) { booking in
 										propertyStore.showBooking(booking: booking, property: property, type: .friend)
 									}
 								}
-								
-								Rectangle()
-									.frame(height: 45)
-									.foregroundStyle(Color.clear)
 							}
-							.padding(.top, 2)
+							.padding(.vertical, 50)
 						}
 						.refreshable {
 							await propertyStore.fetchProperties(.friend)

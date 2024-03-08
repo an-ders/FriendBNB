@@ -17,6 +17,10 @@ struct LoadingView: View {
 				.scaledToFit()
 				.frame(height: 40)
 				.rotationEffect(.degrees(degreesRotating))
+				.padding(Constants.Spacing.medium)
+				.darkWindow()
+				.cornerRadius(5)
+				.foregroundStyle(Color.white)
 		}
 		.frame(maxWidth: .infinity, maxHeight: .infinity)
 		.onAppear {

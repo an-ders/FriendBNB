@@ -19,6 +19,7 @@ struct Booking: DateRange, Identifiable, Hashable {
 	var status: BookingStatus
 	var statusMessage: String
 	var sensitiveInfo: [String]
+	var isRequested: Bool = false
     
 	init(id: String, data: [String: Any]) {
 		self.id = id
@@ -36,6 +37,7 @@ struct Booking: DateRange, Identifiable, Hashable {
 		self.name = data["name"] as? String ?? ""
 		self.status = BookingStatus(rawValue: data["status"] as? String ?? "PENDING") ?? .pending
 		self.statusMessage = data["statusMessage"] as? String ?? ""
+		self.isRequested = data["isRequested"] as? Bool ?? false
 		
 		self.sensitiveInfo = []
 		let infoArray = data["sensitiveInfo"] as? [String] ?? []
@@ -44,7 +46,7 @@ struct Booking: DateRange, Identifiable, Hashable {
 		}
     }
     
-	init(id: String, start: Date, end: Date, userId: String, email: String?, name: String?, status: BookingStatus, statusMessage: String, sensitiveInfo: [String]) {
+	init(id: String, start: Date, end: Date, userId: String, email: String?, name: String?, status: BookingStatus, statusMessage: String, sensitiveInfo: [String], isRequested: Bool) {
 		self.id = id
         self.start = start
         self.end = end
@@ -54,6 +56,7 @@ struct Booking: DateRange, Identifiable, Hashable {
 		self.status = status
 		self.statusMessage = statusMessage
 		self.sensitiveInfo = sensitiveInfo
+		self.isRequested = isRequested
     }
     
     var range: (ClosedRange<Date>) {

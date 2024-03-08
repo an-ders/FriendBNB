@@ -36,21 +36,14 @@ struct OwnedHomeView: View {
 						.zIndex(5)
 						
 						ScrollView(showsIndicators: false) {
-							VStack(spacing: Constants.Spacing.regular) {
-								Rectangle()
-									.frame(height: 45)
-									.foregroundStyle(Color.clear)
-								
+							VStack {
 								ForEach(propertyStore.ownedProperties) { property in
 									PropertyTileView(property: property, type: .owned) { booking in
 										propertyStore.ownedSelectedBooking = PropertyBookingGroup(property: property, booking: booking)
 									}
 								}
-								
-								Rectangle()
-									.frame(height: 45)
-									.foregroundStyle(Color.clear)
 							}
+							.padding(.vertical, 50)
 						}
 						.refreshable {
 							await propertyStore.fetchProperties(.owned)

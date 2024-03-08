@@ -121,5 +121,15 @@ extension Array where Element == Availability {
 	func dateSorted() -> [Availability] {
 		self.sorted { $0.start < $1.end }
 	}
+	
+	func daysTotal() -> Int {
+		var total = 0
+		
+		for avail in self {
+			total += avail.daysBetween()
+		}
+		
+		return total
+	}
 }
 

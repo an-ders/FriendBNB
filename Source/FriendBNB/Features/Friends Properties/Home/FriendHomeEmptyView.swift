@@ -33,6 +33,7 @@ struct FriendHomeEmptyView: View {
                     .foregroundColor(.white)
                     .background(Color.systemGray3)
                     .cornerRadius(10)
+					.shimmering()
             })
         }
     }

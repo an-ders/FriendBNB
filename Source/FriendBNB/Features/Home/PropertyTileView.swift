@@ -42,12 +42,22 @@ struct PropertyTileView: View {
 						VStack(spacing: 0) {
 							Text(property.info.nickname)
 								.styled(.title, weight: .bold)
+							if type == .owned {
+								Text(property.id)
+									.styled(.caption)
+									.foregroundStyle(Color.systemGray5)
+							} else {
+								Text("People: \(property.info.people) | Cost: \(property.info.payment == .free ? "Free" : "$" + String(format: "%.2f", property.info.cost))")
+									.styled(.caption)
+									.foregroundStyle(Color.systemGray5)
+							}
 						}
 						.padding(Constants.Spacing.medium)
-						.background(.black.opacity(0.4))
+						.darkWindow()
 						.cornerRadius(5)
 						.foregroundStyle(Color.white)
 						.padding(.top, 50)
+						.shadow(radius: 5)
 					}
 					.frame(maxWidth: .infinity, maxHeight: .infinity)
 					.background(.black.opacity(0.4))

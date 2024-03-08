@@ -48,6 +48,7 @@ struct PairButtonsView: View {
 						.foregroundColor(.white)
 						.background(Color.label)
 						.cornerRadius(20)
+						.shimmering()
 					})
 				}
             }

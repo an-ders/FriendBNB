@@ -121,19 +121,43 @@ struct OwnedDetailView: View {
 								.foregroundStyle(.white)
 						}
 						.padding(10)
-						.background(Color.black.opacity(0.4))
+						.darkWindow()
 						.cornerRadius(5)
 					})
 					
 					Spacer()
 					
-					OwnedDetailSettingsView(confirmDelete: $confirmDelete, edit: $edit)
+					Menu(content: {
+						Button(action: {
+							edit = true
+							notificationStore.pushNotification(message: "Editing coming soon!")
+						}, label: {
+							Label("Edit", systemImage: "pencil")
+						})
+						
+						Button(role: .destructive, action: {
+							confirmDelete = true
+						}, label: {
+							Label("Delete", systemImage: "trash")
+						})
+					}, label: {
+						VStack {
+							Image(systemName: "ellipsis")
+								.resizable()
+								.scaledToFit()
+								.frame(width: 20, height: 20)
+								.foregroundStyle(.white)
+						}
+						.padding(10)
+						.darkWindow()
+						.cornerRadius(5)
+					})
 				}
 				.zIndex(4)
 				.padding(.top, safeAreaInsets.top + 10)
 				
 				Spacer()
-									
+				
 				Button(action: {
 					withAnimation {
 						copied = true
@@ -161,7 +185,7 @@ struct OwnedDetailView: View {
 						}
 					}
 					.padding(Constants.Spacing.medium)
-					.background(.black.opacity(0.4))
+					.darkWindow()
 					.cornerRadius(5)
 					.padding(.bottom, 20)
 				})
@@ -181,7 +205,7 @@ struct OwnedDetailView: View {
 							}
 							.frame(maxWidth: .infinity, maxHeight: .infinity)
 							.foregroundStyle(Color.white)
-							.background(.black.opacity(0.4))
+							.darkWindow()
 							
 							VStack(spacing: 0) {
 								ForEach(BookingStatus.allCases, id: \.self) { status in
@@ -206,23 +230,27 @@ struct OwnedDetailView: View {
 									.resizable()
 									.scaledToFit()
 									.frame(width: 40)
-								Text("Set Availability")
+								Text("Availability")
 									.font(.headline).fontWeight(.medium)
 								
 							}
 							.frame(maxWidth: .infinity, maxHeight: .infinity)
 							.foregroundStyle(Color.white)
-							.background(.black.opacity(0.4))
+							.darkWindow()
 							
 							VStack(spacing: 0) {
-								ForEach(BookingStatus.allCases, id: \.self) { status in
-									Text(String(property.bookings.current().filter {$0.status == status}.count))
-										.styled(.caption, weight: .semibold)
-										.frame(maxHeight: .infinity)
-										.frame(width: 20)
-										.background(status.color)
-										.foregroundStyle(Color.black)
-								}
+								Text(String(property.available.current().daysTotal()))
+									.styled(.caption, weight: .semibold)
+									.frame(maxHeight: .infinity)
+									.frame(width: 20)
+									.background(Color.systemGreen)
+									.foregroundStyle(Color.black)
+								Text(String(property.unavailable.current().daysTotal()))
+									.styled(.caption, weight: .semibold)
+									.frame(maxHeight: .infinity)
+									.frame(width: 20)
+									.background(Color.systemRed)
+									.foregroundStyle(Color.black)
 							}
 						}
 						.cornerRadius(5)
@@ -246,7 +274,7 @@ struct OwnedDetailView: View {
 			Divider()
 			let property = propertyStore.getSelectedProperty(.owned)!
 			if let url = url {
-				ShareLink(item: url, subject: Text(""), message: Text(property.shareMessage)) {
+				ShareLink(item: url, subject: Text("Book my place on FriendBNB!"), message: Text(property.shareMessage)) {
 					HStack {
 						Image(systemName: "square.and.arrow.up")
 							.resizable()
@@ -262,6 +290,11 @@ struct OwnedDetailView: View {
 					.background(Color.systemBlue.opacity(0.6))
 					.cornerRadius(5)
 					.padding(.bottom, 4)
+					.shimmering(gradient: Gradient(colors: [
+						Color.systemBlue, // translucent
+						Color.systemBlue.opacity(0.3), // opaque
+						Color.systemBlue // translucent
+					]))
 				}
 			} else {
 				Button(action: {

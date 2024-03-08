@@ -31,6 +31,12 @@ struct BookingConfirmationView<Content: View>: View {
 
 			ScrollView(showsIndicators: false) {
 				VStack(spacing: 50) {
+					if booking.isRequested {
+						Text("Please note that one or more of these dates are not set the availability!")
+							.styled(.caption)
+							.foregroundStyle(Color.systemOrange)
+					}
+					
 					BookingStatusIndicatorView(currentStatus: booking.status)
 
 					Button(action: {

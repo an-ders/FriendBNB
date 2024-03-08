@@ -34,7 +34,7 @@ struct FriendNewBookingView: View {
 							.padding(.horizontal, -Constants.Spacing.regular)
 					}
 
-					ScrollView {
+					ScrollView(showsIndicators: false) {
 						VStack(spacing: Constants.Spacing.small) {
 							CalendarView(type: .friend)
 								.environmentObject(calendarViewModel)
@@ -142,8 +142,9 @@ struct FriendNewBookingView: View {
 			
 			guard let property = propertyStore.friendSelectedProperty else {  return }
 			
-			if let error = bookingStore.checkBookingDates(startDate: calendarViewModel.startDate, endDate: calendarViewModel.endDate, property: property), error != "Unknown" {
-				self.calendarViewModel.error = error
+			let error = bookingStore.checkBookingDates(startDate: calendarViewModel.startDate, endDate: calendarViewModel.endDate, property: property)
+			if error != nil, error != "Requested" {
+				self.calendarViewModel.error = error ?? "UNKNOWN ERROR"
 				return
 			}
 			
@@ -152,7 +153,7 @@ struct FriendNewBookingView: View {
 				return
 			}
 			
-			self.confirmBooking = Booking(id: "", start: start, end: end, userId: user.uid, email: user.email, name: user.displayName, status: .pending, statusMessage: "", sensitiveInfo: [])
+			self.confirmBooking = Booking(id: "", start: start, end: end, userId: user.uid, email: user.email, name: user.displayName, status: .pending, statusMessage: "", sensitiveInfo: [], isRequested: error == "Requested")
 			
 		}, label: {
 			Text(calendarViewModel.startDate != nil || calendarViewModel.endDate != nil ? "Request" : "Done")

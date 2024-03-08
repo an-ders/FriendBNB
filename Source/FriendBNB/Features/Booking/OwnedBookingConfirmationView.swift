@@ -40,6 +40,12 @@ struct OwnedBookingConfirmationView: View {
 				VStack(spacing: 50) {
 					ErrorView(error: error)
 					
+					if booking.isRequested {
+						Text("Please note that one or more of these dates are not set the availability!")
+							.styled(.caption)
+							.foregroundStyle(Color.systemOrange)
+					}
+					
 					BookingStatusIndicatorView(currentStatus: booking.status)
 					
 					VStack(alignment: .leading, spacing: 8) {
@@ -189,7 +195,7 @@ struct OwnedBookingConfirmationView: View {
 							dismiss()
 						}
 					}, label: {
-						Text(!changed ? "Update" : "Decline")
+						Text(!changed ? "Update" : "Cancel booking")
 							.styled(.bodyBold)
 							.padding(.horizontal, 20)
 							.padding(.vertical, 8)

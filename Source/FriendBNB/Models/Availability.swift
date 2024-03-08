@@ -7,6 +7,7 @@
 
 import Foundation
 import FirebaseFirestore
+import SwiftUI
 
 protocol DateRange {
 	var start: Date { get set }
@@ -39,6 +40,14 @@ struct Availability: DateRange, Identifiable, Equatable {
 		//print(start)
 		return (start ... end).contains(date)
 	}
+	
+	func daysBetween() -> Int {
+		let fromDate = Calendar.current.startOfDay(for: start) // <1>
+		let toDate = Calendar.current.startOfDay(for: end) // <2>
+		let numberOfDays = Calendar.current.dateComponents([.day], from: fromDate, to: toDate) // <3>
+			
+			return numberOfDays.day! + 1
+		}
 	
 	static func == (lhs: Availability, rhs: Availability) -> Bool {
 		return lhs.start == rhs.start && lhs.end == rhs.end
