@@ -1186,7 +1186,6 @@
 				CODE_SIGN_ENTITLEMENTS = FriendBNB/FriendBNB.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"FriendBNB/Preview Content\"";
 				DEVELOPMENT_TEAM = Z4H6YA468R;
 				ENABLE_PREVIEWS = YES;
@@ -1224,7 +1223,6 @@
 				CODE_SIGN_ENTITLEMENTS = FriendBNB/FriendBNB.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"FriendBNB/Preview Content\"";
 				DEVELOPMENT_TEAM = Z4H6YA468R;
 				ENABLE_PREVIEWS = YES;
